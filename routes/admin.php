@@ -20,7 +20,10 @@ Route::group(['middleware' => 'auth:api'], function(){
 	Route::get('rubah_produk/{id}','admin\AdminController@produk_get');
 	Route::put('produk_update/{id}','admin\AdminController@produk_update');
 	Route::delete('produk_delete/{id}','admin\AdminController@produk_delete');
-	
+
+	// color
+	Route::post('add_color','admin\AdminController@add_color');
+	Route::get('get_color','admin\AdminController@get_color');
 
 	//Packet
 	Route::post('add_list_packet','admin\AdminController@add_packet');

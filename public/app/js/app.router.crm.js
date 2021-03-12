@@ -141,12 +141,22 @@ angular.module('app')
                         resolve: {
                             deps: ['$ocLazyLoad',
                                 function($ocLazyLoad) {
-                                    return $ocLazyLoad.load('angularFileUpload','cgNotify','colorpicker.module').then(
+                                    return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
                                         function() {
-                                            return $ocLazyLoad.load(['app/js/controllers/file-upload.js','bower_components/font-awesome/css/font-awesome.css','app/js/controllers/colorpicker.js']);
+                                            return $ocLazyLoad.load('colorpicker.module');
                                         }
                                     );
                                 }
+                                // function($ocLazyLoad) {
+                                //     return $ocLazyLoad.load('colorpicker.module').then(
+                                        
+                                //     )
+                                //     return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
+                                //         function() {
+                                //             return $ocLazyLoad.load('app/js/controllers/file-upload.js','bower_components/font-awesome/css/font-awesome.css');
+                                //         }
+                                //     );
+                                // }
                             ]
                         }
                     })

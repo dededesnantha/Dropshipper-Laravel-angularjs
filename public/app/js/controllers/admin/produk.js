@@ -100,6 +100,16 @@ app.controller('ProdukAdd', ['$scope', '$http','FileUploader','$state','$locatio
     }, function(x) {
     });
 
+    // get color
+    $scope.colors = function() {
+        $http.get(baseurl+'admin/get_color',$scope.auth_config).then(function(data) {
+                $scope.color = data.data
+        }, function(x) {
+        });
+      }
+
+  $scope.colors();
+
     $scope.form = {};
 
     $scope.save = function() {
@@ -178,43 +188,51 @@ app.controller('ProdukAdd', ['$scope', '$http','FileUploader','$state','$locatio
         }
       });
       modalInstance.result.then(function () {
+          $scope.colors();
+          $http.get(baseurl+'bower_components/chosen/chosen.jquery.min.js').then(function(data) {
+            }, function(x) {
+          });
+          $http.get(baseurl+'bower_components/bootstrap-chosen/bootstrap-chosen.css').then(function(data) {
+            }, function(x) {
+          });
           }, function () {
+            $scope.colors();
       });
     };
+
+    $scope.list_color = [];
+    $scope.add_input_color = function (text) {
+      
+      $scope.list_color = [
+      text
+      ];
+      console.log($scope.list_color)
+    }
+    
 
 }]);
 
 
 app.controller('Modalcolor', ['$scope','$uibModalInstance','items','$http','$location','notify','$uibModal', function($scope, $modalInstance, items,$http,$location,notify,$modal) { 
     $scope.items = items;
-    $scope.form = {};
+    $scope.hexPicker = {};
 
     $scope.hexPicker = { color: '' };
-        $scope.rgbPicker = { color: '' };
-        $scope.rgbaPicker = { color: '' };
+    $scope.rgbPicker = { color: '' };
+    $scope.rgbaPicker = { color: '' };
         $scope.nonInput = { color: '' };
         $scope.resetColor = function () {
             $scope.hexPicker = { color: '#ff0000' };
         };
-        $scope.resetRBGColor = function () {
-            $scope.rgbPicker = { color: 'rgb(255,0,0)' };
-        };
-        $scope.resetRBGAColor = function () {
-            $scope.rgbaPicker = { color: 'rgba(255,0,0, 0.25)' };
-        };
-        $scope.resetNonInputColor = function () {
-            $scope.nonInput = { color: '#ffffff' };
-        };
         
 
     $scope.save = function () {
-    $scope.form.syarat_ketentuan = document.getElementById('syarat_ketentuan').innerHTML
-      $http.post(baseurl+'admin/profile_update_text/'+$scope.items,$scope.form,$scope.auth_config)
-            .then(function successCallback(response) {
-              notify({ message:'Data Berhasil Diupdate', position:'right', duration:'10000', classes: 'alert-success' });  
-            }, function errorCallback(response) {                    
-                notify({ message:'Data Error',  position:'right', duration:'10000', classes: 'alert-danger' }); 
-            });  
+      $http.post(baseurl+'admin/add_color',$scope.hexPicker,$scope.auth_config)
+          .then(function (response){
+            notify({ message:'Color Berhasil Ditambah', position:'right', duration:'10000', classes: 'alert-success' }); 
+           },function (error){
+            notify({ message:'Data Error',  position:'right', duration:'10000', classes: 'alert-danger' }); 
+           });
       $modalInstance.close($scope.items);
     };
 

@@ -88,6 +88,7 @@ colorpicker-alpha,
 }
 .colorpicker.dropdown {
   position: absolute;
+  z-index: 999999;
 }
 .colorpicker.colorpicker-fixed-position {
   position: fixed;

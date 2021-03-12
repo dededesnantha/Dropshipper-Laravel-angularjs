@@ -19,6 +19,7 @@ use App\Models\home_setting_fitur;
 use App\Models\profile_web;
 use App\Models\profile_team;
 use App\Models\list_pertanyaan;
+use App\Models\Color;
 
 
 use DB;
@@ -1010,5 +1011,17 @@ class AdminController extends Controller
     {
         return list_pertanyaan::where('id',$id)->delete();
     }
-}
+    
 
+    // color
+    public function add_color(Request $request)
+    {
+        $post = $request->input();
+        return Color::create($post);
+    }
+    public function get_color()
+    {
+        $data = Color::get();
+        return $data;
+    }
+}

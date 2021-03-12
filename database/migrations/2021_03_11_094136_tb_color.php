@@ -16,6 +16,7 @@ class TbColor extends Migration
         Schema::create('tb_color', function (Blueprint $table) {
             $table->id();
             $table->string('color', 200)->nullable();
+            $table->string('text', 100)->nullable();
             $table->timestamps();
         });
     }

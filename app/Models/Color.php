@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class tb_color extends Model
+class Color extends Model
 {
     protected $table = 'tb_color';
-    protected $fillable = ['id','color'];
+    protected $fillable = ['id','color','text'];
 }

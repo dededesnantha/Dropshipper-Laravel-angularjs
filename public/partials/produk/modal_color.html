@@ -1,14 +1,18 @@
 <div class="modal-header" style="background-color: #59c2e6;">
-    <h3 class="modal-title" style="color: #fff">Tambah Color</h3>
+    <h3 class="modal-title" style="color: #fff">Tambah Warna</h3>
 </div>
 <div class="modal-body" >
     <div class="form-group">
-            <label class="form-label" for="daterange-1">HEX</label>
+            <label class="form-label" for="daterange-1">Kode Warna</label>
             <div class="input-group" inputgroup>
                 <span class="input-group-addon">
                     <i class="sel-color" style="background-color:{{ hexPicker.color }};"></i>
                 </span>
                 <input colorpicker class="form-control" ng-model="hexPicker.color" type="text" />
+            </div>
+            <label class="form-label" for="daterange-1">Text Warna</label>
+            <div class="input-group">
+                <input class="form-control" ng-model="hexPicker.text" type="text" />
             </div>
     </div>
 </div>
