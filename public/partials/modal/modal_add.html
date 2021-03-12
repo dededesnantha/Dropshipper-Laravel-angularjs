@@ -1,0 +1,33 @@
+<div class="modal-header" style="background-color: #FF6E40;">
+    <h3 class="modal-title" style="color: #fff">Tambah Packet</h3>
+</div>
+<div class="modal-body">
+    <div class="form-group">
+    	<label class="form-label" for="field-1">Title</label>
+    	<span class="desc"></span>
+    	<div class="controls">
+    		<input type="text" class="form-control" ng-model="form.title" id="field-1">
+        </div>
+    </div>
+
+    <div class="form-group">
+    	<label class="form-label" for="field-1">Special Text</label>
+    	<span class="desc"></span>
+    	<div class="controls">
+    		<input type="text" class="form-control" ng-model="form.spesial_text" id="field-1">
+        </div>
+    </div>
+
+    <div class="form-group">
+    	<label class="form-label" for="field-3">Harga (IDR)</label>
+    	<span class="desc">"IDR 100,000"</span>
+    	<div class="controls">
+    		<input type="number" ui-mask="IDR" placeholder="IDR" class="form-control" ng-model="form.harga" required>
+    	</div>
+    </div>
+
+</div>
+<div class="modal-footer">                  
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-primary" style="background-color: #85af27" ng-click="ok()">OK</button>
+</div>

@@ -1,0 +1,39 @@
+
+<div class='content-wrapper' ng-controller="KategoriAll">
+    <button type="button" ui-sref="app.kategori.kategori_add" class="btn btn-sm btn-success">
+        <i class="glyphicon glyphicon-plus"></i> Tambah Kategori
+    </button>
+    <div class="col-lg-12">
+        <section class="box ">
+            <header class="panel_header">
+                <h2 class="title pull-left">Semua Kategori</h2>
+            </header>
+            <div class="content-body padding-bottom-15">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+                        <table class="table table-striped" ui-jq="dataTable" ui-options="{
+          sAjaxSource: 'data/blo-tags.json',
+          aoColumns: [
+            { mData: 'id' },
+            { mData: 'catname' },
+            { mData: 'description' },
+            { mData: 'totalblogs' }
+          ]
+        }" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width:10%">ID</th>
+                                        <th style="width:15%">Category Name</th>
+                                    <th style="width:50%">Description</th>
+                                        <th style="width:10%">No. of blogs</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

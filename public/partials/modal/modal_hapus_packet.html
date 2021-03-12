@@ -1,0 +1,18 @@
+<div class="modal-header" style="background-color: #ff5f40;">
+    <h3 class="modal-title" style="color: #fff">Hapus Packet</h3>
+</div>
+<div class="modal-body">
+    <div class="form-group">
+        <label class="form-label" for="field-1">Kategori Packet</label>
+        <div class="input-group" inputgroup>
+            <select class="form-control" ng-model="form.id_kategori" required>
+                <option value="" ng-selected="true">--  Kategori  --</option>
+                <option ng-repeat="key in datass" ng-value="{{key.id}}" >{{key.title}}</option>
+            </select>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">                  
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-danger" ng-click="hapus_kategori()"><i class="fa fa-trash-o"></i> Hapus</button>
+</div>

@@ -1,0 +1,39 @@
+<div class='content-wrapper' >
+    <button type="button" ui-sref="app.team.team_add" class="btn btn-sm btn-success">
+        <i class="glyphicon glyphicon-plus"></i> Tambah Team
+    </button>
+    <div class='content-wrapper'>
+        <div class="col-lg-12" ng-controller="TeamAll">
+            <section class="box ">
+                <header class="panel_header">
+                    <h2 class="title pull-left">Semua Team</h2>
+                </header>
+                <div class="content-body padding-bottom-0">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12 col-md-12" ng-repeat="member in datass">
+                                    <div class="team-member" >
+                                        <div class="col-md-2 col-sm-5 col-xs-12">
+                                            <img class="img-responsive" ng-src="{{url_image}}{{member.image}}" alt="">
+                                        </div>
+                                        <div class="team-info col-md-10 col-sm-7 col-xs-12">
+                                            <h3 class='text-primary'>{{member.nama}}</h3>
+                                        <div class="clearfix"></div>
+                                        <p class="margin-top-30">{{member.jabatan}}</p>
+                                        <ul class="social-icons list-inline list-unstyled">
+                                            <li><a lass="btn btn-secondary btn-border btn-sm" href="#!/app/team/team_rubah/{{member.id}}" tooltip-class="info animated fadeIn " uib-tooltip="Rubah Profile" ><i class="fa fa-pencil-square icon-bordered icon-primary icon-m"></i></a></li>
+                                            <li><a lass="btn btn-secondary btn-border btn-sm" ng-click="hapus(member.id)" tooltip-class="danger animated fadeIn " uib-tooltip="Hapus Profile" ><i class="fa fa-trash icon-bordered icon-primary icon-m"></i></a></li>
+                                        </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

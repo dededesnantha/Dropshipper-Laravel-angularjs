@@ -1,0 +1,64 @@
+<!-- <div class="login_page">
+<div class="register-wrapper" ng-controller="RegisterFormController">
+    <div id="register" class="login loginpage col-lg-offset-4 col-lg-4 col-md-offset-3 col-md-6 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8">
+        <h1><a href="#" title="Login Page" tabindex="-1">Slant Admin - Angular</a></h1>
+
+        <form  name="form" class="form-validation">
+          <div class="wrapper text-center" style="color: #b7530f" ng-show="authError">
+              {{authError_msg}}
+          </div>
+            <p>
+
+                    <input type="text" name="name" id="user_name" class="input"  ng-model="user.name" placeholder="Name" required /></label>
+            </p>
+            <p>
+
+                    <input type="email" name="log" id="user_login" class="input" ng-model="user.email" placeholder="Email" required /></label>
+            </p>
+            <p>
+
+                    <input type="password" name="pwd" id="user_pass" class="input" ng-model="user.password" placeholder="Password" required/></label>
+            </p>
+            <p class="submit">
+            <button type="submit" name="wp-submit" id="wp-submit" class="btn btn-accent btn-block" ng-click="register()" ng-disabled='form.$invalid'>Sign Up</button>
+            </p>
+        </form>
+
+        <p id="nav">
+            <a class="pull-right"  ui-sref="access.signin" title="Sign Up">Sign In</a>
+        </p>
+        <div class="clearfix"></div>
+       
+
+    </div>
+</div>
+</div> -->
+
+<div class="container" ng-controller="RegisterFormController">
+      <div class="login-header">
+        <img src="app/img/PharmAppColor.png" alt="" style="width: 200px">
+      </div>
+      <div style="text-align: center;">
+        <h3><strong>Register</strong></h3>  
+      </div>
+      <form name="form" class="form-validation">
+          <div class="input_area">
+            <input type="text" name="name" id="user_login" ng-model="user.name" placeholder="Username" required/>
+            <input type="email" name="log" id="user_login" ng-model="user.email" placeholder="Email" required/>
+            <input type="password" name="pwd" id="user_login" ng-model="user.password" placeholder="Password" required/>
+          </div>
+          <div class="actions">
+            <button type="submit" ng-click="register()" >Register</button>
+          </div>
+      </form>
+      <div class="actions">
+        <p>
+          Kehalaman Login
+          <a ui-sref="access.signin" class="Sign_up_link">Login</a>
+        </p>
+      </div>
+    </div>
+
+
+
+

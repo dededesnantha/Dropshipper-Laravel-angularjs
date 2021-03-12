@@ -1,0 +1,43 @@
+
+<div class='content-wrapper'  ng-controller="SosialMediaAll">
+    <div class="col-lg-12">
+        <section class="box ">
+            <header class="panel_header">
+                <h2 class="title pull-left">Semua Sosial Media</h2>
+            </header>
+            <div class="content-body padding-bottom-0">
+                <div class="row">
+                    
+                    <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                        <th style="width:5%">No</th>
+                                        <th style="width:10%">Judul</th>
+                                        <th style="width:10%">Image</th>
+                                        <th style="width:5%">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr ng-repeat="row in datass">
+                                    <td>{{$index+1}}</td>
+                                    <td data-value="{{row.title}}">{{row.judul}}</td>  
+                                    <td>
+                                        <img ng-src="{{url_icon}}{{row.image}}" width="50">
+                                    </td> 
+                                    <td>
+                                        <a href="#!/app/sosial/sosial_rubah/{{row.id}}" class="btn btn-info"><i class="fa fa-edit"></i> Rubah</a>
+                                        <a ng-click="hapus(row.id)" class="btn btn-danger"><i class="fa fa-trash"></i> Hapus</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" ng-click="selectPage(currentPage)"></uib-pagination>
+        <div class="clearfix"></div>
+    </div>
+</div>
