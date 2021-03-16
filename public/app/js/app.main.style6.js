@@ -52,7 +52,7 @@ angular.module('app').controller('AppCtrl', ['$scope', '$http','$rootScope', '$l
             'Content-Type': undefined
         }
         $rootScope.auth_config_multi =  {
-            'Authorization': 'Bearer '+$localStorage.token        
+            'Authorization': 'Bearer '+$localStorage.token
         }
         //check token ke server
         console.log($scope.auth_config)

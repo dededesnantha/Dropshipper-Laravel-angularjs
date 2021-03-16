@@ -6,17 +6,20 @@ app.controller('ProdukAll', ['$scope', '$http','$log','$uibModal','notify',
     $scope.url_image = baseurl+'image/';
     $scope.url_icon = baseurl+'media/icon/';
 
+    $scope.form = {};
 
-    $scope.init = function (paging = '', search ='') {
-      $scope.form = {};
+    $scope.form={
+    much : '10',    
+    order : 'desc',
+    search : '',
+    field_search: 'tb_produk.nama_produk'
+    };
+
+    $scope.init = function (paging = '') {
       if ( paging  == '') {
           $scope.currentPage = 1;
       }
-      if (search == '') {
-          $scope.form.serach = ''; 
-      }else{
-          $scope.form.serach = search;
-      }
+
       $scope.maxSize = 20;
     $http.post(baseurl+'admin/all_produk?page='+$scope.currentPage,$scope.form,$scope.auth_config)
           .then(function(data) {
@@ -30,12 +33,13 @@ app.controller('ProdukAll', ['$scope', '$http','$log','$uibModal','notify',
                       classes: 'alert-danger'
                     });
           });
+
+          $scope.itemsPerPage = $scope.form.much;
         };
         
         $scope.init();
 
           $scope.currentPage = 1;
-          $scope.itemsPerPage = 5;
 
             $scope.selectPage = function (pageNo) {
               $scope.currentPage = pageNo;
@@ -106,15 +110,26 @@ app.controller('ProdukAdd', ['$scope', '$http','FileUploader','$state','$locatio
                 $scope.color = data.data
         }, function(x) {
         });
-      }
+    }
 
+    // get color
+    $scope.sizes = function() {
+        $http.get(baseurl+'admin/get_size',$scope.auth_config).then(function(data) {
+                $scope.size = data.data
+        }, function(x) {
+
+        });
+    }
   $scope.colors();
-
+  $scope.sizes();
     $scope.form = {};
+
+     $scope.change=function($event, money){
+      form.harga = qwerty;
+    };
 
     $scope.save = function() {
         $scope.form.deskripsi = document.getElementById('desc_text').innerHTML
-        
         $http.post(baseurl+'admin/add_produk',$scope.form,$scope.auth_config)
           .then(function(response) {
               $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');
@@ -189,34 +204,110 @@ app.controller('ProdukAdd', ['$scope', '$http','FileUploader','$state','$locatio
       });
       modalInstance.result.then(function () {
           $scope.colors();
-          $http.get(baseurl+'bower_components/chosen/chosen.jquery.min.js').then(function(data) {
-            }, function(x) {
-          });
-          $http.get(baseurl+'bower_components/bootstrap-chosen/bootstrap-chosen.css').then(function(data) {
-            }, function(x) {
-          });
           }, function () {
             $scope.colors();
       });
     };
+    // remove color
+    $scope.remove_color = function (id) {
+      var modalInstance = $modal.open({
+        templateUrl: 'partials/Hapusmodal.html',
+        controller: 'Hapus',
+        resolve: {
+          items: function () {
+            return $scope.items;
+          }
+        }
+      });
 
-    $scope.list_color = [];
-    $scope.add_input_color = function (text) {
-      
-      $scope.list_color = [
-      text
-      ];
-      console.log($scope.list_color)
-    }
-    
+      modalInstance.result.then(function () {
+        $http.delete(baseurl+'admin/color_delete/'+id,$scope.auth_config)
+        .then(function successCallback(response) {
+          $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');
+          notify({ message:'Berhasil Menghapus Data', 
+            position:'right',
+            duration:'10000',
+            classes: 'alert-success'
+          });  
+          $scope.colors();
+        }, function errorCallback(response) {   
+          $scope.colors();
+          $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');                 
+          notify({ message:'Data Error', 
+            position:'right',
+            duration:'10000',
+            classes: 'alert-danger'
+          });       
+        });   
+
+      }, function () {
+
+      });
+    };
+
+    // modal size
+    $scope.add_size = function () {
+      var modalInstance = $modal.open({
+        templateUrl: 'partials/produk/modal_size.html',
+        controller: 'Modalsize',
+        resolve: {
+          items: function () {
+            return $scope.form.id;
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+          $scope.sizes();
+          console.log("dedeesss")
+          }, function () {
+            console.log("dedee")
+          $scope.sizes();
+      });
+    };
+
+    // remove size
+    $scope.remove_size = function (id) {
+      var modalInstance = $modal.open({
+        templateUrl: 'partials/Hapusmodal.html',
+        controller: 'Hapus',
+        resolve: {
+          items: function () {
+            return $scope.items;
+          }
+        }
+      });
+
+      modalInstance.result.then(function () {
+        $http.delete(baseurl+'admin/size_delete/'+id,$scope.auth_config)
+        .then(function successCallback(response) {
+          $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');
+          notify({ message:'Berhasil Menghapus Data', 
+            position:'right',
+            duration:'10000',
+            classes: 'alert-success'
+          });  
+         $scope.sizes();
+        }, function errorCallback(response) {   
+          $scope.sizes();
+          $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');                 
+          notify({ message:'Data Error', 
+            position:'right',
+            duration:'10000',
+            classes: 'alert-danger'
+          });       
+        });   
+
+      }, function () {
+
+      });
+    };
+
 
 }]);
-
 
 app.controller('Modalcolor', ['$scope','$uibModalInstance','items','$http','$location','notify','$uibModal', function($scope, $modalInstance, items,$http,$location,notify,$modal) { 
     $scope.items = items;
     $scope.hexPicker = {};
-
     $scope.hexPicker = { color: '' };
     $scope.rgbPicker = { color: '' };
     $scope.rgbaPicker = { color: '' };
@@ -224,8 +315,6 @@ app.controller('Modalcolor', ['$scope','$uibModalInstance','items','$http','$loc
         $scope.resetColor = function () {
             $scope.hexPicker = { color: '#ff0000' };
         };
-        
-
     $scope.save = function () {
       $http.post(baseurl+'admin/add_color',$scope.hexPicker,$scope.auth_config)
           .then(function (response){
@@ -235,11 +324,27 @@ app.controller('Modalcolor', ['$scope','$uibModalInstance','items','$http','$loc
            });
       $modalInstance.close($scope.items);
     };
-
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
-    
+}]);
+
+app.controller('Modalsize', ['$scope','$uibModalInstance','items','$http','$location','notify','$uibModal', function($scope, $modalInstance, items,$http,$location,notify,$modal) { 
+    $scope.items = items;
+    $scope.form = {};
+
+    $scope.save = function () {
+      $http.post(baseurl+'admin/add_size',$scope.form,$scope.auth_config)
+          .then(function (response){
+            notify({ message:'Size Berhasil Ditambah', position:'right', duration:'10000', classes: 'alert-success' }); 
+           },function (error){
+            notify({ message:'Data Error',  position:'right', duration:'10000', classes: 'alert-danger' }); 
+           });
+      $modalInstance.close($scope.items);
+    };
+    $scope.cancel = function (){
+      $modalInstance.dismiss('cancel');
+    };
 }]);
 
 app.controller('ProdukRubah', ['$scope', '$http','$log','$uibModal','notify','$stateParams','$state','FileUploader','$location',
@@ -329,3 +434,61 @@ app.controller('Hapus', ['$scope', '$uibModalInstance', 'items', function($scope
     };
 }]);
 
+app.controller('FileUploadCtrl', ['$scope', 'FileUploader','$stateParams','notify', function($scope, FileUploader,$stateParams,notify) {
+  console.log(token)
+    var uploader = $scope.uploader = new FileUploader({
+        url: baseurl+'admin/do/upload_gambar/'+$stateParams.id,
+        headers: {
+          'X-CSRF-TOKEN': token
+        }
+    });
+
+    // FILTERS
+
+    uploader.filters.push({
+        name: 'customFilter',
+        fn: function(item /*{File|FileLikeObject}*/, options) {
+            var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+          return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        }
+    });
+
+    // CALLBACKS
+
+    uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/, filter, options) {
+        console.info('onWhenAddingFileFailed', item, filter, options);
+    };
+    uploader.onAfterAddingFile = function(fileItem) {
+        console.info('onAfterAddingFile', fileItem);
+    };
+    uploader.onAfterAddingAll = function(addedFileItems) {
+        console.info('onAfterAddingAll', addedFileItems);
+    };
+    uploader.onBeforeUploadItem = function(item) {
+        console.info('onBeforeUploadItem', item);
+    };
+    uploader.onProgressItem = function(fileItem, progress) {
+        console.info('onProgressItem', fileItem, progress);
+    };
+    uploader.onProgressAll = function(progress) {
+        console.info('onProgressAll', progress);
+    };
+    uploader.onSuccessItem = function(fileItem, response, status, headers) {
+        console.info('onSuccessItem', fileItem, response, status, headers);
+    };
+    uploader.onErrorItem = function(fileItem, response, status, headers) {
+        console.info('onErrorItem', fileItem, response, status, headers);
+        notify({ message:'Server Error',position:'right',duration:'10000',classes: 'alert-danger'});
+    };
+    uploader.onCancelItem = function(fileItem, response, status, headers) {
+        console.info('onCancelItem', fileItem, response, status, headers);
+    };
+    uploader.onCompleteItem = function(fileItem, response, status, headers) {
+        console.info('onCompleteItem', fileItem, response, status, headers);
+    };
+    uploader.onCompleteAll = function() {
+        console.info('onCompleteAll');
+        notify({ message:'Berhasil Upload Gambar', position:'right',duration:'10000',classes: 'alert-success'});
+            $location.path('/app/produk/produk_semua');
+    };
+}]);

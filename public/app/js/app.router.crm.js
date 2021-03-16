@@ -140,41 +140,46 @@ angular.module('app')
                         templateUrl: 'partials/produk/produk-tambah.html',
                         resolve: {
                             deps: ['$ocLazyLoad',
-                                function($ocLazyLoad) {
-                                    return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
-                                        function() {
-                                            return $ocLazyLoad.load('colorpicker.module');
-                                        }
+                            function($ocLazyLoad) {
+                                return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
+                                    function() {
+                                        return $ocLazyLoad.load('colorpicker.module');
+                                    }
                                     );
-                                }
-                                // function($ocLazyLoad) {
-                                //     return $ocLazyLoad.load('colorpicker.module').then(
-                                        
-                                //     )
-                                //     return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
-                                //         function() {
-                                //             return $ocLazyLoad.load('app/js/controllers/file-upload.js','bower_components/font-awesome/css/font-awesome.css');
-                                //         }
-                                //     );
-                                // }
+                            }
                             ]
                         }
                     })
                     .state('app.produk.produk_rubah', {
-                                url: '/produk_rubah/:id',
-                                templateUrl: 'partials/produk/produk-rubah.html',
-                                resolve: {
-                                    deps: ['$ocLazyLoad',
-                                        function($ocLazyLoad) {
-                                            return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
-                                                function() {
-                                                    return $ocLazyLoad.load('app/js/controllers/file-upload.js','bower_components/font-awesome/css/font-awesome.css');
-                                                }
-                                            );
-                                        }
-                                    ]
-                                }
-                            })
+                        url: '/produk_rubah/:id',
+                        templateUrl: 'partials/produk/produk-rubah.html',
+                        resolve: {
+                            deps: ['$ocLazyLoad',
+                            function($ocLazyLoad) {
+                                return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
+                                    function() {
+                                        return $ocLazyLoad.load('app/js/controllers/file-upload.js','bower_components/font-awesome/css/font-awesome.css');
+                                    }
+                                    );
+                            }
+                            ]
+                        }
+                    })
+                    .state('app.produk.gambar_rubah', {
+                        url: '/produk_gambar/:id',
+                        templateUrl: 'partials/produk/produk-gambar.html',
+                        resolve: {
+                            deps: ['$ocLazyLoad',
+                            function($ocLazyLoad) {
+                                return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
+                                    function() {
+                                        return $ocLazyLoad.load('bower_components/font-awesome/css/font-awesome.css');
+                                    }
+                                    );
+                            }
+                            ]
+                        }
+                    })
 
                     // packet
                     .state('app.packet', {

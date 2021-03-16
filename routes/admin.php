@@ -1,7 +1,11 @@
 <?php
 use Illuminate\Support\Facades\Route;
 
+// upload image
+Route::post('do/upload_gambar/{id}','upload\UploadImage@image_produk');
+
 Route::group(['middleware' => 'auth:api'], function(){
+
    	// Route::get('session', function(){            
     //         return response()->json(['success' => true], 200);            
     // });
@@ -24,6 +28,14 @@ Route::group(['middleware' => 'auth:api'], function(){
 	// color
 	Route::post('add_color','admin\AdminController@add_color');
 	Route::get('get_color','admin\AdminController@get_color');
+	Route::delete('color_delete/{id}','admin\AdminController@color_delete');
+	
+
+	// size
+	Route::post('add_size','admin\AdminController@add_size');
+	Route::get('get_size','admin\AdminController@get_size');
+	Route::delete('size_delete/{id}','admin\AdminController@size_delete');
+	
 
 	//Packet
 	Route::post('add_list_packet','admin\AdminController@add_packet');
@@ -105,9 +117,6 @@ Route::group(['middleware' => 'auth:api'], function(){
 	Route::get('rubah_pertanyaan/{id}','admin\AdminController@rubah_pertanyaan');
 	Route::put('pertanyaan_update/{id}','admin\AdminController@pertanyaan_update');
 	Route::delete('pertanyaan_delete/{id}','admin\AdminController@pertanyaan_delete');
-	
-	
-	
 	
 	
 });

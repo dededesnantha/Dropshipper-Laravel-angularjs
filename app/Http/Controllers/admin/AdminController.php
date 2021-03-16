@@ -20,6 +20,7 @@ use App\Models\profile_web;
 use App\Models\profile_team;
 use App\Models\list_pertanyaan;
 use App\Models\Color;
+use App\Models\Size;
 
 
 use DB;
@@ -139,24 +140,35 @@ class AdminController extends Controller
     public function add_produk(Request $request)
     {
         $post = $request->input();
-        if (empty($post['image'])) {
-            $post['image'] = '';
-        }
-        if (empty($post['status_unggulan'])) {
-            $post['status_unggulan'] = 0;
-        }
-        
-        if (empty($post['icon'])) {
-            $post['icon'] = '';
-        }
+        $post['gambar'] = '';
 
-        $title_slug = strip_tags($post['title']);        
+        // size
+        $list_size = [];
+        foreach ($post['size'] as $key => $value) {
+            if ($value) {
+                $get_size = Size::where('id',$key)->select('id','size')->first();
+                $list_size[] = $get_size->size;
+            }
+        }
+        $post['size'] = implode(', ', $list_size);
+        
+        // color
+        $list_color = [];
+        foreach ($post['warna'] as $key => $value) {
+            if ($value) {
+                $get_size = Color::where('id',$key)->select('id','text')->first();
+                $list_color[] = $get_size->text;
+            }
+        }
+        $post['warna'] = implode(', ', $list_color);
+        
+        $title_slug = strip_tags($post['nama_produk']);        
         $string_replace = array('\'', ';', '[', ']', '{', '}', '|', '^', '~','?','/','.');
         $slug = str_replace(' ','-',str_replace($string_replace, '', $title_slug)); 
-        $tc = DB::table('produk')->where('title', $post['title'])->get();                                    
+        $tc = DB::table('tb_produk')->where('nama_produk', $post['nama_produk'])->get();                                    
         if (count($tc) > 0 ) {                 
             $slugs = $slug.'-'.count($tc);            
-            $sc = DB::table('produk')->where('slug', $tc[0]->slug)->count();                
+            $sc = DB::table('tb_produk')->where('slug', $tc[0]->slug)->count();                
             if ($sc > 0) {
                 $finisslug = $slugs.'-'.$sc;
             }else{
@@ -173,22 +185,36 @@ class AdminController extends Controller
     {
         $post = $request->input();
         
-        if ($post['serach'] == ' ') {
-            $data = DB::table('produk')
-                            ->join('kategori', 'produk.id_kategori', 'kategori.id')
-                            ->select('produk.id','produk.title','produk.deskripsi','produk.image','produk.status','produk.status_unggulan','produk.icon','produk.harga','kategori.title as name_kategori')
-                            ->orderBy('produk.id','DESC')
-                            ->paginate(5);
+        if ($post['search'] == NULL) {
+            $data = DB::table('tb_produk')
+                            ->join('tb_kategori', 'tb_produk.id_kategori', 'tb_kategori.id')
+                            ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.deskripsi','tb_produk.gambar','tb_produk.status','tb_produk.stok','tb_produk.harga','tb_kategori.title as name_kategori')
+                            ->orderBy('tb_produk.id',$post['order'])
+                            ->paginate($post['much']);
           
+        }else if ($post['field_search'] == 'tb_produk.nama_produk' || $post['field_search'] == 'tb_kategori.title') {
+            $data = DB::table('tb_produk')
+                            ->join('tb_kategori', 'tb_produk.id_kategori', 'tb_kategori.id')
+                            ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.deskripsi','tb_produk.gambar','tb_produk.status','tb_produk.stok','tb_produk.harga','tb_kategori.title as name_kategori')
+                            ->orderBy('tb_produk.id',$post['order'])
+                            ->where($post['field_search'],'like','%'.$post['search'].'%')
+                            ->paginate($post['much']);
+        }else if ($post['field_search'] == 'tb_produk.stok'){
+            $data = DB::table('tb_produk')
+                            ->join('tb_kategori', 'tb_produk.id_kategori', 'tb_kategori.id')
+                            ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.deskripsi','tb_produk.gambar','tb_produk.status','tb_produk.stok','tb_produk.harga','tb_kategori.title as name_kategori')
+                            ->orderBy('tb_produk.id',$post['order'])
+                            ->where($post['field_search'],$post['search'])
+                            ->paginate($post['much']);
         }else{
-            $data = DB::table('produk')
-                            ->join('kategori', 'produk.id_kategori', 'kategori.id')
-                            ->select('produk.id','produk.title','produk.deskripsi','produk.image','produk.status','produk.status_unggulan','produk.icon','produk.harga','kategori.title as name_kategori')
-                            ->orderBy('produk.id','DESC')
-                            ->where('produk.title','like','%'.$post['serach'].'%')
-                            ->paginate(5);
-
+            $data = DB::table('tb_produk')
+                            ->join('tb_kategori', 'tb_produk.id_kategori', 'tb_kategori.id')
+                            ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.deskripsi','tb_produk.gambar','tb_produk.status','tb_produk.stok','tb_produk.harga','tb_kategori.title as name_kategori')
+                            ->orderBy('tb_produk.id',$post['order'])
+                            ->where($post['field_search'],'>=',$post['search'])
+                            ->paginate($post['much']);
         }
+        
         return $data;
     }
 
@@ -1024,4 +1050,25 @@ class AdminController extends Controller
         $data = Color::get();
         return $data;
     }
+    public function color_delete($id)
+    {
+        return Color::where('id',$id)->delete();
+    }
+
+    // size
+    public function add_size(Request $request)
+    {
+        $post = $request->input();
+        return Size::create($post);
+    }
+    public function get_size()
+    {
+        $data = Size::get();
+        return $data;
+    }
+    public function size_delete($id)
+    {
+        return Size::where('id',$id)->delete();
+    }
+    
 }

@@ -85,61 +85,28 @@
                         </div>
                     </div>
                 </div>
-                <div nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">
-                    <section class="nobox box ">
-                        <div class="content-body">
-                            <div class="row">
-                                <div class="col-md-12"style="margin-bottom: 20px">
-                                    <input type="file" nv-file-select="" uploader="uploader" />
-                                </div>
-                                <div class="col-md-12">
-                                    <h3>Upload Gambar</h3>
-                                    <p>Jumlah Upload Gambar: {{ uploader.queue.length }}</p>
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th width="50%">Nama</th>
-                                                            <th ng-show="uploader.isHTML5">Size</th>
-                                                            <th ng-show="uploader.isHTML5">Progress</th>
-                                                            <th>Status</th>
-                                                            <th>Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr ng-repeat="item in uploader.queue">
-                                                            <td><strong>{{ item.file.name }}</strong></td>
-                                                            <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
-                                                            <td ng-show="uploader.isHTML5">
-                                                                <div class="progress" style="margin-bottom: 0;">
-                                                                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-                                                                <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-                                                                <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-                                                            </td>
-                                                            <td nowrap>
-                                                                <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
-                                                                    <span class="glyphicon glyphicon-upload"></span> Upload
-                                                                </button>
-                                                                <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
-                                                                    <span class="glyphicon glyphicon-ban-circle"></span> Cancel
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section>
-                            <h3>Gambar</h3>
-                            <div style="max-height: 500px;overflow: hidden;padding-bottom: 40px;">
-                                <img ng-src="{{url}}{{form.gambar}}" width="300" style="border: 3px solid #e0e0e0">
-                            </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-accent btn-corner" ng-click="add_color()" style="color: #fff;background: #2193b0;background: -webkit-linear-gradient(to bottom, #6dd5ed, #2193b0);background: linear-gradient(to bottom, #37474f, #37474f);margin-top: 15px">Tambah Warna</button>
+                    <button type="button" class="btn btn-accent btn-corner" ng-click="add_size()" style="color: #fff;background: #2193b0;background: -webkit-linear-gradient(to bottom, #6dd5ed, #2193b0);background: linear-gradient(to bottom, #37474f, #37474f);margin-top: 15px">Tambah Size</button>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="field-3">Pilih Warna</label>
+                    <div class="btn-group">
+                        <span ng-repeat="row in color">
+                            <label class="btn btn-default" ng-model="form.warna[row.id]" uib-btn-checkbox style="margin: 5px 5px;" ><i class="sel-color" style="background-color:{{ row.color }};display: inline-block;margin-right: 5px"></i>{{row.text}}</label> <a ng-click="remove_color(row.id)" style="position: relative;background: #e1e1e1;padding: 8px;left: -8px;top: 2px;"><i class="fa fa-trash" style="color: red;"></i></a>
+                        </span>
                     </div>
-                    <input type="text" name="image" value="{{form.gambar}}" ng-model="form.gambar" hidden>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="field-2">Pilih Size</label>
+                    <div class="btn-group">
+                        <span ng-repeat="row in size">
+                            <label class="btn btn-default" ng-model="form.size[row.id]" uib-btn-checkbox style="margin: 5px 5px;" >{{row.size}}</label><a ng-click="remove_size(row.id)" style="position: relative;background: #e1e1e1;padding: 8px;left: -8px;top: 2px;"><i class="fa fa-trash" style="color: red;"></i></a>
+                        </span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
             </div>
         </section>
     </div>
@@ -170,46 +137,17 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" for="field-3">Harga (IDR)</label>
-                                <span class="desc">"IDR 100,000"</span>
+                                <label class="form-label" for="field-3">Harga</label>
                                 <div class="controls">
                                     <input type="number" name="masked" ui-mask="IDR" placeholder="IDR" class="form-control" ng-model="form.harga" required>
+                                    <pre>{{form.harga | currency : "IDR " : 0}}</pre>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-accent btn-corner" ng-click="add_color()" style="color: #fff;background: #2193b0;background: -webkit-linear-gradient(to bottom, #6dd5ed, #2193b0);background: linear-gradient(to bottom, #6dd5ed, #2193b0);">Tambah Warna</button>
-                            </div>
-                            <!-- <div class="form-group" data-ng-init="colors()">
-                                <label class="form-label" for="field-1">warna</label>
-                                <div class="controls">
-                                    <select ui-jq="chosen"  multiple class="form-control" data-placeholder="Pilih Warna">
-                                        <option value=""></option>
-                                        <optgroup label="Warna">
-                                            <option ng-repeat="key in color" value="{{key.id}}" style="background: {{ key.color }};color: #e1e1e1">{{key.text}}</option>
-                                        </optgroup>
-                                    </select>
-                                </div>
-                            </div> -->
-
-                            <div class="form-group">
-                                <pre>{{checkModel || 'null'}}</pre>
-                                <div class="btn-group">
-                                    <label class="btn btn-primary" ng-model="checkModel.left" uib-btn-checkbox>Left</label>
-                                    <label class="btn btn-primary" ng-model="checkModel.middle" uib-btn-checkbox>Middle</label>
-                                    <label class="btn btn-primary" ng-model="checkModel.right" uib-btn-checkbox>Right</label>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-
-                            <div class="form-group">
-                                <button type="button" ng-click="add_input_color(key.text)" class="btn btn-secondary btn-icon  right15 margin-bottom-15" ng-repeat="key in color">
-                                <i class="sel-color" style="background-color:{{ key.color }};"></i> &nbsp; <span>{{key.text}}</span>
-                            </button>
-                            </div>
+                            
                     </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padding-bottom-30">
                             <div class="text-left">
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Save</button>
                                 <button type="button" class="btn" ui-sref="app.produk.produk_semua" >Cancel</button>
                             </div>
                         </div>

@@ -4,7 +4,6 @@ app.controller('KategoriAll', ['$scope', '$http','$log','$uibModal','notify',
   function ($scope, $http, $log, $modal,notify) {
     $scope.load_sign();
     $scope.url_link = baseurl+'category/';
-    $scope.url_image = baseurl+'image/';
 
     $scope.form = {};
 
