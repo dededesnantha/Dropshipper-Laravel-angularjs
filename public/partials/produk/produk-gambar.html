@@ -65,9 +65,72 @@
                                 <span class="glyphicon glyphicon-trash"></span> Remove all
                             </button>
                         </div>
+
+                        <div class="col-md-12 col-sm-12 col-xs-12 table-responsive" style="margin-top: 30px">
+                            <div id="user_table_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="dataTables_length" id="user_table_length">
+                                            <label style="font-weight: normal">Show 
+
+                                                <select name="user_table_length" aria-controls="user_table" class="form-control input-sm" ng-model="form.much" style="margin: 3px;" ng-change="init()">
+                                                    <option value="5">5</option>
+                                                    <option value="10">10</option>
+                                                    <option value="25">25</option>
+                                                    <option value="50">50</option>
+                                                    <option value="100">100</option>
+                                                </select>  
+                                                <select name="user_table_length" aria-controls="user_table" class="form-control input-sm" ng-model="form.order"ng-change="init()">
+                                                    <option value="desc">Terbaru</option>
+                                                    <option value="asc">Terlama</option>
+                                                </select>
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:5%">No</th>
+                                                <th style="width:23%">Gambar Utama</th>
+                                                <th style="width:20%">Gambar</th>
+                                                <th style="width:30%">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                    <tr ng-repeat="row in image">
+                                        <td>{{$index+1}}</td>
+                                        <td>
+                                             <div class="radio">
+                                                <label class="icheck icheck-success">
+                                                    <input type="radio" ng-checked="row.active === 'true'" ng-click="chacked_gambar(row.gambar)">
+                                                    <i></i> Gambar Utama
+                                                </label>
+                                            </div>
+                                         </td>
+                                        <td>
+                                            <img ng-src="{{url}}{{row.gambar}}" width="100">
+                                        </td>
+                                        <td>
+                                            <a ng-click="hapus_gambar(row.id)" class="btn btn-danger" style="margin-bottom: 5px"><i class="fa fa-trash"></i> Hapus</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" ng-click="selectPage(currentPage)"></uib-pagination>
+                    <div class="clearfix"></div>
                     </div>
                 </div>
             </div>
         </section>
+
     </div>
 </div>

@@ -25,6 +25,13 @@ Route::group(['middleware' => 'auth:api'], function(){
 	Route::put('produk_update/{id}','admin\AdminController@produk_update');
 	Route::delete('produk_delete/{id}','admin\AdminController@produk_delete');
 
+	Route::post('all_produk_gambar/{id}','admin\AdminController@all_produk_gambar');
+	Route::put('update_gambar_produk/{id}','admin\AdminController@update_gambar_produk');
+	Route::delete('delete_gambar/{id}','admin\AdminController@delete_gambar');
+	
+	
+	
+
 	// color
 	Route::post('add_color','admin\AdminController@add_color');
 	Route::get('get_color','admin\AdminController@get_color');

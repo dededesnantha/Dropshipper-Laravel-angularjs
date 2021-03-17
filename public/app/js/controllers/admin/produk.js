@@ -4,7 +4,6 @@ app.controller('ProdukAll', ['$scope', '$http','$log','$uibModal','notify',
   function ($scope, $http, $log, $modal,notify) {
     $scope.load_sign();
     $scope.url_image = baseurl+'image/';
-    $scope.url_icon = baseurl+'media/icon/';
 
     $scope.form = {};
 
@@ -434,8 +433,38 @@ app.controller('Hapus', ['$scope', '$uibModalInstance', 'items', function($scope
     };
 }]);
 
-app.controller('FileUploadCtrl', ['$scope', 'FileUploader','$stateParams','notify', function($scope, FileUploader,$stateParams,notify) {
-  console.log(token)
+
+
+app.controller('FileUploadCtrl', ['$scope', 'FileUploader','$stateParams','notify','$http','$uibModal', function($scope, FileUploader,$stateParams,notify,$http,$modal) {
+    $scope.url = baseurl+'image/'
+    $scope.form = {};
+
+    $scope.form={
+    much : '10',    
+    order : 'desc',
+    };
+
+    $scope.init = function (paging = '') {
+      if ( paging  == '') {
+          $scope.currentPage = 1;
+      }
+      $scope.maxSize = 20;
+    $http.post(baseurl+'admin/all_produk_gambar/'+$stateParams.id+'/?page='+$scope.currentPage,$scope.form,$scope.auth_config)
+          .then(function(data) {
+              $scope.list=data.data
+              $scope.image=$scope.list.data
+              $scope.totalItems = $scope.list.total;
+          }, function(x) {
+              notify({ message:'Server Error', 
+                      position:'right',
+                      duration:'10000',
+                      classes: 'alert-danger'
+                    });
+          });
+
+          $scope.itemsPerPage = $scope.form.much;
+        };
+
     var uploader = $scope.uploader = new FileUploader({
         url: baseurl+'admin/do/upload_gambar/'+$stateParams.id,
         headers: {
@@ -479,6 +508,7 @@ app.controller('FileUploadCtrl', ['$scope', 'FileUploader','$stateParams','notif
     uploader.onErrorItem = function(fileItem, response, status, headers) {
         console.info('onErrorItem', fileItem, response, status, headers);
         notify({ message:'Server Error',position:'right',duration:'10000',classes: 'alert-danger'});
+        $scope.init();
     };
     uploader.onCancelItem = function(fileItem, response, status, headers) {
         console.info('onCancelItem', fileItem, response, status, headers);
@@ -489,6 +519,73 @@ app.controller('FileUploadCtrl', ['$scope', 'FileUploader','$stateParams','notif
     uploader.onCompleteAll = function() {
         console.info('onCompleteAll');
         notify({ message:'Berhasil Upload Gambar', position:'right',duration:'10000',classes: 'alert-success'});
-            $location.path('/app/produk/produk_semua');
-    };
+        $scope.init();
+    };        
+        $scope.init();
+        $scope.currentPage = 1;
+
+        $scope.selectPage = function (pageNo) {
+          $scope.currentPage = pageNo;
+          $scope.init(pageNo);
+
+        };
+
+        $scope.pageChanged = function() {
+          $scope.currentPage = $scope.currentPage;
+          $scope.init($scope.currentPage);
+
+        };
+
+        $scope.chacked_gambar = function(gambar) {
+          $scope.gambar = {
+            gambar : gambar,
+          };
+          $http.put(baseurl+'admin/update_gambar_produk/'+$stateParams.id,$scope.gambar,$scope.auth_config)
+          .then(function(data) {
+              notify({ message:'Berhasil Update Gambar', position:'right',duration:'10000',classes: 'alert-success'});
+             $scope.init();
+          }, function(x) {
+              notify({ message:'Server Error', 
+                      position:'right',
+                      duration:'10000',
+                      classes: 'alert-danger'
+                    });
+          });
+        }
+
+      $scope.hapus_gambar = function (id) {
+      var modalInstance = $modal.open({
+        templateUrl: 'partials/Hapusmodal.html',
+        controller: 'Hapus',
+        resolve: {
+          items: function () {
+            return $scope.items;
+          }
+        }
+      });
+
+      modalInstance.result.then(function () {
+        $http.delete(baseurl+'admin/delete_gambar/'+id,$scope.auth_config)
+        .then(function successCallback(response) {
+          $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');
+          notify({ message:'Berhasil Menghapus Data', 
+            position:'right',
+            duration:'10000',
+            classes: 'alert-success'
+          });  
+         $scope.init();
+        }, function errorCallback(response) {   
+          $scope.init();
+          $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');                 
+          notify({ message:'Data Error', 
+            position:'right',
+            duration:'10000',
+            classes: 'alert-danger'
+          });       
+        });   
+
+      }, function () {
+
+      });
+    };  
 }]);

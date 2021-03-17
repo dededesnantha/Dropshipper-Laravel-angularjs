@@ -21,7 +21,7 @@ use App\Models\profile_team;
 use App\Models\list_pertanyaan;
 use App\Models\Color;
 use App\Models\Size;
-
+use App\Models\tb_produk_gambar;
 
 use DB;
 use File;
@@ -253,7 +253,7 @@ class AdminController extends Controller
             }else{
               $finisslug = $slug;  
             }
-        return DB::table('produk')
+        return DB::table('tb_produk')
                     ->where('id',$id)
                     ->update([
                         'title'=> $post['title'],
@@ -271,6 +271,45 @@ class AdminController extends Controller
     public function produk_delete($id)
     {
         return produk::where('id',$id)->delete();
+    }
+
+    // produk gambar
+    public function all_produk_gambar(Request $request, $id)
+    {
+        $post = $request->input();
+        $data_id = (int)$id;
+        $produks = produk::where('id','=',$data_id)->first();
+        
+        $data = DB::table('tb_produk_gambar')
+                            ->select('id','id_produk','gambar')
+                            ->where('id_produk', $id)
+                            ->orderBy('id',$post['order'])
+                            ->paginate($post['much']);
+        $data = json_decode( json_encode($data), true);
+         
+        foreach ($data['data'] as $key => $rows) {
+            if ($produks->gambar == $rows['gambar']) {
+                $data['data'][$key]['active'] = "true";
+            }else{
+                $data['data'][$key]['active'] = "false";
+            }
+        }
+        return $data;
+    }
+    public function update_gambar_produk(Request $request, $id)
+    {
+        $post = $request->input();
+        return DB::table('tb_produk')
+                    ->where('id',$id)
+                    ->update(['gambar' => $post['gambar']]);
+    }
+    public function delete_gambar($id)
+    {
+        $gambar_check = tb_produk_gambar::select('gambar')->where('id',$id)->get();        
+        if (file_exists(public_path('image/'.$gambar_check[0]['gambar']))) {
+            @unlink(public_path('image/'.$gambar_check[0]['gambar']));
+        }        
+        return tb_produk_gambar::where('id',$id)->delete();
     }
 
     //packet
