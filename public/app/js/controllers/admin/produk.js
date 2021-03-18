@@ -92,6 +92,44 @@ app.controller('ProdukAll', ['$scope', '$http','$log','$uibModal','notify',
             
           });
         };
+
+        // revisi
+    $scope.revisi = function (id) {
+      var modalInstance = $modal.open({
+        templateUrl: 'partials/produk/modal_revisi.html',
+        controller: 'Modalrevisi',
+        resolve: {
+          items: function () {
+            return id;
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+          $scope.init();
+          }, function () {
+            $scope.init();
+      });
+    };
+}]);
+
+app.controller('Modalrevisi', ['$scope','$uibModalInstance','items','$http','$location','notify','$uibModal', function($scope, $modalInstance, items,$http,$location,notify,$modal) { 
+    $scope.items = items;
+    $scope.save = function () {
+      $http.post(baseurl+'admin/add_color',$scope.hexPicker,$scope.auth_config)
+          .then(function (response){
+            if (response.data === "data_same") {
+                notify({ message:'Data Sudah Ada',  position:'right', duration:'10000', classes: 'alert-danger' });
+            }else{
+              notify({ message:'Color Berhasil Ditambah', position:'right', duration:'10000', classes: 'alert-success' }); 
+            }
+           },function (error){
+            notify({ message:'Data Error',  position:'right', duration:'10000', classes: 'alert-danger' }); 
+           });
+      $modalInstance.close($scope.items);
+    };
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
 }]);
 
 app.controller('ProdukAdd', ['$scope', '$http','FileUploader','$state','$location','notify','$uibModal',
@@ -146,49 +184,8 @@ app.controller('ProdukAdd', ['$scope', '$http','FileUploader','$state','$locatio
                     });
           });  
     }
-
-    var uploader = $scope.uploader = new FileUploader({
-        url: 'upload_image.php'
-    });
-
     
     $scope.form.status = "1";
-    $scope.url = baseurl+'image/'
-    // FILTERS
-    uploader.filters.push({
-        name: 'customFilter',
-        fn: function(item /*{File|FileLikeObject}*/, options) {
-            return this.queue.length < 10;
-        }
-    });
-
-    // CALLBACKS
-    uploader.onCompleteItem = function(fileItem, response, status, headers) {
-        $scope.form.image = fileItem.file.name;
-    };
-
-    // icon
-    var uploader_icon = $scope.uploader_icon = new FileUploader({
-        url: 'upload_image_icon.php'
-    });
-    $scope.url_icon = baseurl+'media/icon/'
-    // FILTERS
-    uploader_icon.filters.push({
-        name: 'customFilter',
-        fn: function(item /*{File|FileLikeObject}*/, options) {
-            return this.queue.length < 10;
-        }
-    });
-
-    // CALLBACKS
-    uploader_icon.onCompleteItem = function(fileItem, response, status, headers) {
-        if (response.error) {
-          notify({ message:response.error, position:'right', duration:'10000',classes: 'alert-danger'});
-        }else{
-          $scope.form.icon = fileItem.file.name;
-          notify({ message:'Gambar berhasil diupload', position:'right', duration:'10000',classes: 'alert-success'});
-        }
-    };
 
     // modal color
     $scope.add_color = function () {
@@ -257,9 +254,7 @@ app.controller('ProdukAdd', ['$scope', '$http','FileUploader','$state','$locatio
       });
       modalInstance.result.then(function () {
           $scope.sizes();
-          console.log("dedeesss")
           }, function () {
-            console.log("dedee")
           $scope.sizes();
       });
     };
@@ -317,7 +312,11 @@ app.controller('Modalcolor', ['$scope','$uibModalInstance','items','$http','$loc
     $scope.save = function () {
       $http.post(baseurl+'admin/add_color',$scope.hexPicker,$scope.auth_config)
           .then(function (response){
-            notify({ message:'Color Berhasil Ditambah', position:'right', duration:'10000', classes: 'alert-success' }); 
+            if (response.data === "data_same") {
+                notify({ message:'Data Sudah Ada',  position:'right', duration:'10000', classes: 'alert-danger' });
+            }else{
+              notify({ message:'Color Berhasil Ditambah', position:'right', duration:'10000', classes: 'alert-success' }); 
+            }
            },function (error){
             notify({ message:'Data Error',  position:'right', duration:'10000', classes: 'alert-danger' }); 
            });
@@ -335,7 +334,11 @@ app.controller('Modalsize', ['$scope','$uibModalInstance','items','$http','$loca
     $scope.save = function () {
       $http.post(baseurl+'admin/add_size',$scope.form,$scope.auth_config)
           .then(function (response){
-            notify({ message:'Size Berhasil Ditambah', position:'right', duration:'10000', classes: 'alert-success' }); 
+            if (response.data === "data_same") {
+                notify({ message:'Data Sudah Ada',  position:'right', duration:'10000', classes: 'alert-danger' });
+            }else{
+                notify({ message:'Size Berhasil Ditambah', position:'right', duration:'10000', classes: 'alert-success' }); 
+            }
            },function (error){
             notify({ message:'Data Error',  position:'right', duration:'10000', classes: 'alert-danger' }); 
            });
@@ -364,46 +367,24 @@ app.controller('ProdukRubah', ['$scope', '$http','$log','$uibModal','notify','$s
     });
 
 
-    var uploader = $scope.uploader = new FileUploader({
-        url: 'upload_image.php'
-    });
+    // get color
+    $scope.colors = function() {
+        $http.get(baseurl+'admin/get_color',$scope.auth_config).then(function(data) {
+                $scope.color = data.data
+        }, function(x) {
+        });
+    }
 
-    
-    $scope.url = baseurl+'image/'
-    // FILTERS
-    uploader.filters.push({
-        name: 'customFilter',
-        fn: function(item /*{File|FileLikeObject}*/, options) {
-            return this.queue.length < 10;
-        }
-    });
+    // get color
+    $scope.sizes = function() {
+        $http.get(baseurl+'admin/get_size',$scope.auth_config).then(function(data) {
+                $scope.size = data.data
+        }, function(x) {
 
-    // CALLBACKS
-    uploader.onCompleteItem = function(fileItem, response, status, headers) {
-        $scope.form.image = fileItem.file.name;
-    }; 
-
-    // icon
-    var uploader_icon = $scope.uploader_icon = new FileUploader({
-        url: 'upload_image_icon.php'
-    });
-    $scope.url_icon = baseurl+'media/icon/'
-    // FILTERS
-    uploader_icon.filters.push({
-        name: 'customFilter',
-        fn: function(item /*{File|FileLikeObject}*/, options) {
-            return this.queue.length < 10;
-        }
-    });
-    // CALLBACKS
-    uploader_icon.onCompleteItem = function(fileItem, response, status, headers) {
-        if (response.error) {
-          notify({ message:response.error, position:'right', duration:'10000',classes: 'alert-danger'});
-        }else{
-          $scope.form.icon = fileItem.file.name;
-          notify({ message:'Gambar berhasil diupload', position:'right', duration:'10000',classes: 'alert-success'});
-        }
-    };
+        });
+    }
+  $scope.colors();
+  $scope.sizes();
 
     $scope.save = function() {  
       $('#load').removeClass('glyphicon glyphicon-floppy-saved').addClass('fa fa-circle-o-notch fa-spin');  
@@ -416,6 +397,117 @@ app.controller('ProdukRubah', ['$scope', '$http','$log','$uibModal','notify','$s
         notify({ message:'Server Error',position:'right',duration:'10000',classes: 'alert-danger'});
       });          
     }
+
+
+    // modal color
+    $scope.add_color = function () {
+      var modalInstance = $modal.open({
+        templateUrl: 'partials/produk/modal_color.html',
+        controller: 'Modalcolor',
+        resolve: {
+          items: function () {
+            return $scope.form.id;
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+          $scope.colors();
+          }, function () {
+            $scope.colors();
+      });
+    };
+    // remove color
+    $scope.remove_color = function (id) {
+      var modalInstance = $modal.open({
+        templateUrl: 'partials/Hapusmodal.html',
+        controller: 'Hapus',
+        resolve: {
+          items: function () {
+            return $scope.items;
+          }
+        }
+      });
+
+      modalInstance.result.then(function () {
+        $http.delete(baseurl+'admin/color_delete/'+id,$scope.auth_config)
+        .then(function successCallback(response) {
+          $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');
+          notify({ message:'Berhasil Menghapus Data', 
+            position:'right',
+            duration:'10000',
+            classes: 'alert-success'
+          });  
+          $scope.colors();
+        }, function errorCallback(response) {   
+          $scope.colors();
+          $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');                 
+          notify({ message:'Data Error', 
+            position:'right',
+            duration:'10000',
+            classes: 'alert-danger'
+          });       
+        });   
+
+      }, function () {
+
+      });
+    };
+
+    // modal size
+    $scope.add_size = function () {
+      var modalInstance = $modal.open({
+        templateUrl: 'partials/produk/modal_size.html',
+        controller: 'Modalsize',
+        resolve: {
+          items: function () {
+            return $scope.form.id;
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+          $scope.sizes();
+          }, function () {
+          $scope.sizes();
+      });
+    };
+
+    // remove size
+    $scope.remove_size = function (id) {
+      var modalInstance = $modal.open({
+        templateUrl: 'partials/Hapusmodal.html',
+        controller: 'Hapus',
+        resolve: {
+          items: function () {
+            return $scope.items;
+          }
+        }
+      });
+
+      modalInstance.result.then(function () {
+        $http.delete(baseurl+'admin/size_delete/'+id,$scope.auth_config)
+        .then(function successCallback(response) {
+          $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');
+          notify({ message:'Berhasil Menghapus Data', 
+            position:'right',
+            duration:'10000',
+            classes: 'alert-success'
+          });  
+         $scope.sizes();
+        }, function errorCallback(response) {   
+          $scope.sizes();
+          $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');                 
+          notify({ message:'Data Error', 
+            position:'right',
+            duration:'10000',
+            classes: 'alert-danger'
+          });       
+        });   
+
+      }, function () {
+
+      });
+    };
+
 }]);
 
 app.controller('Hapus', ['$scope', '$uibModalInstance', 'items', function($scope, $modalInstance, items) {

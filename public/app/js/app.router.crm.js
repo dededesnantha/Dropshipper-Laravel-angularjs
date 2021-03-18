@@ -141,7 +141,7 @@ angular.module('app')
                         resolve: {
                             deps: ['$ocLazyLoad',
                             function($ocLazyLoad) {
-                                return $ocLazyLoad.load('cgNotify').then(
+                                return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
                                     function() {
                                         return $ocLazyLoad.load('colorpicker.module');
                                     }
@@ -156,9 +156,9 @@ angular.module('app')
                         resolve: {
                             deps: ['$ocLazyLoad',
                             function($ocLazyLoad) {
-                                return $ocLazyLoad.load('cgNotify').then(
+                                return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
                                     function() {
-                                        return $ocLazyLoad.load('bower_components/font-awesome/css/font-awesome.css');
+                                        return $ocLazyLoad.load('colorpicker.module');
                                     }
                                     );
                             }

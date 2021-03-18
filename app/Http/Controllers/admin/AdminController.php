@@ -119,17 +119,6 @@ class AdminController extends Controller
     }
 
     // produk
-    public function get_cion()
-    {
-        $images = \File::allFiles(public_path('icon'));
-        $data['icon'] = array();
-        foreach ($images as $key => $value) {
-            $data['icon'][] = [
-                'icon' => $value->getFilename()
-            ];
-        }
-     return $data;   
-    }
 
     public function get_kategori_list()
     {
@@ -142,25 +131,34 @@ class AdminController extends Controller
         $post = $request->input();
         $post['gambar'] = '';
 
-        // size
-        $list_size = [];
-        foreach ($post['size'] as $key => $value) {
-            if ($value) {
-                $get_size = Size::where('id',$key)->select('id','size')->first();
-                $list_size[] = $get_size->size;
+        if (!empty($post['size'])) {
+            // size
+            $list_size = [];
+            foreach ($post['size'] as $key => $value) {
+                if ($value) {
+                    $get_size = Size::where('id',$key)->select('id','size')->first();
+                    $list_size[] = $get_size->size;
+                }
             }
+            $post['size'] = implode(', ', $list_size);
+        }else{
+            $post['size'] = '';
         }
-        $post['size'] = implode(', ', $list_size);
+
+        if (!empty($post['warna'])) {
+            // color
+            $list_color = [];
+            foreach ($post['warna'] as $key => $value) {
+                if ($value) {
+                    $get_size = Color::where('id',$key)->select('id','text')->first();
+                    $list_color[] = $get_size->text;
+                }
+            }
+            $post['warna'] = implode(', ', $list_color);
+        }else{
+            $post['warna'] = '';
+        }
         
-        // color
-        $list_color = [];
-        foreach ($post['warna'] as $key => $value) {
-            if ($value) {
-                $get_size = Color::where('id',$key)->select('id','text')->first();
-                $list_color[] = $get_size->text;
-            }
-        }
-        $post['warna'] = implode(', ', $list_color);
         
         $title_slug = strip_tags($post['nama_produk']);        
         $string_replace = array('\'', ';', '[', ']', '{', '}', '|', '^', '~','?','/','.');
@@ -220,31 +218,71 @@ class AdminController extends Controller
 
     public function produk_get($id)
     {
-        return produk::find($id);
+        $get_produk = produk::find($id);
+        if ($get_produk->size !== '') {
+            $size = explode(', ', $get_produk->size);
+            $get_size = Size::whereIn('size',$size)->select('id','size')->get();
+            foreach ($get_size as $key => $values) {
+                $datas_size[$values->id] = true;
+            }
+            $get_produk->size = $datas_size;
+        }else{
+            $get_produk->size = [];
+        }
+
+        if ($get_produk->warna !== '') {
+            $warna = explode(', ', $get_produk->warna);
+            $get_size = Color::whereIn('text',$warna)->select('id','text')->get();
+            foreach ($get_size as $key => $values) {
+                $datas_color[$values->id] = true;
+            }
+            $get_produk->warna = $datas_color;
+        }else{
+            $get_produk->warna = [];
+        }
+
+        return $get_produk;
     }
 
     public function produk_update(Request $request, $id)
     {
         $post = $request->input();
 
-        if (empty($post['image'])) {
-            $post['image'] = '';
+        if (!empty($post['size'])) {
+            // size
+            $list_size = [];
+            foreach ($post['size'] as $key => $value) {
+                if ($value) {
+                    $get_size = Size::where('id',$key)->select('id','size')->first();
+                    $list_size[] = $get_size->size;
+                }
+            }
+            $post['size'] = implode(', ', $list_size);
+        }else{
+            $post['size'] = '';
         }
 
-        if (empty($post['status_unggulan'])) {
-            $post['status_unggulan'] = 0;
+        if (!empty($post['warna'])) {
+            // color
+            $list_color = [];
+            foreach ($post['warna'] as $key => $value) {
+                if ($value) {
+                    $get_size = Color::where('id',$key)->select('id','text')->first();
+                    $list_color[] = $get_size->text;
+                }
+            }
+            $post['warna'] = implode(', ', $list_color);
+        }else{
+            $post['warna'] = '';
         }
-        
-        if (empty($post['icon'])) {
-            $post['icon'] = '';
-        }
-            $title_slug = strip_tags($post['title']);        
+
+            $title_slug = strip_tags($post['nama_produk']);        
             $string_replace = array('\'', ';', '[', ']', '{', '}', '|', '^', '~','?','/','.');
             $slug = str_replace(' ','-',str_replace($string_replace, '', $title_slug)); 
-            $tc = DB::table('produk')->where('title', $post['title'])->get();                                    
+            $tc = DB::table('tb_produk')->where('nama_produk', $post['nama_produk'])->get();                                    
             if (count($tc) > 0 ) {                 
                 $slugs = $slug.'-'.count($tc);            
-                $sc = DB::table('produk')->where('slug', $tc[0]->slug)->count();                
+                $sc = DB::table('tb_produk')->where('slug', $tc[0]->slug)->count();                
                 if ($sc > 0) {
                     $finisslug = $slugs.'-'.$sc;
                 }else{
@@ -256,15 +294,15 @@ class AdminController extends Controller
         return DB::table('tb_produk')
                     ->where('id',$id)
                     ->update([
-                        'title'=> $post['title'],
+                        'nama_produk'=> $post['nama_produk'],
                         'id_kategori' => $post['id_kategori'],
                         'deskripsi' => $post['deskripsi'],
-                        'image' => $post['image'],
                         'status'=> $post['status'],
                         'slug' => $finisslug,
-                        'status_unggulan' => $post['status_unggulan'],
-                        'harga' => $post['harga'],
-                        'icon' => $post['icon']
+                        'stok' => $post['stok'],
+                        'size' => $post['size'],
+                        'warna' => $post['warna'],
+                        'harga' => $post['harga']
                     ]);
     }
 
@@ -1082,7 +1120,13 @@ class AdminController extends Controller
     public function add_color(Request $request)
     {
         $post = $request->input();
-        return Color::create($post);
+        $get_color = DB::table('tb_color')->where('text', $post['text'])->count();
+        if ($get_color == 0) {
+            return Color::create($post);
+        }else{
+            $data = "data_same";
+            return $data;
+        }
     }
     public function get_color()
     {
@@ -1098,7 +1142,13 @@ class AdminController extends Controller
     public function add_size(Request $request)
     {
         $post = $request->input();
-        return Size::create($post);
+        $get_color = DB::table('tb_size')->where('size', $post['size'])->count();
+        if ($get_color == 0) {
+            return Size::create($post);
+        }else{
+            $data = "data_same";
+            return $data;
+        }
     }
     public function get_size()
     {

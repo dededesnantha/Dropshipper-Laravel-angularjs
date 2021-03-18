@@ -1,0 +1,36 @@
+<div class="modal-header" style="background-color: #37474f;">
+    <h3 class="modal-title" style="color: #fff">Revisi Produk</h3>
+</div>
+<div class="modal-body" >
+	<div class="form-group">
+           <label class="form-label" for="daterange-1">Jenis Label</label>
+            <div class="input-group">
+            	<select class="form-control" ng-model="form.jenis_label">
+            		<option value="" ng-selected="true">--  Jenis Label  --</option>
+            		<option ng-value="disc"> 
+            			<i class="sel-color" style="background-color:#ea4c62;display: inline-block;margin-right: 5px"></i> s Discount</option>
+            		<option ng-value="{{key.id}}" >{{key.title}}</option>
+            		<option ng-value="{{key.id}}" >{{key.title}}</option>
+            		<option ng-value="{{key.id}}" >{{key.title}}</option>
+
+            	</select>
+            </div>
+    </div>
+    <div class="form-group">
+           <label class="form-label" for="daterange-1">Text Label</label>
+            <div class="input-group">
+                <input class="form-control" ng-model="form.text_label" type="text" />
+            </div>
+    </div>
+    <div class="form-group">
+    	<label class="form-label" for="field-3">Harga Promo</label>
+    	<div class="controls">
+    		<input type="number" name="masked" ui-mask="IDR" placeholder="IDR" class="form-control" ng-model="form.harga_promo" required>
+    		<pre>{{form.harga_promo | currency : "IDR " : 0}}</pre>
+    	</div>
+    </div>
+</div>
+<div class="modal-footer">                  
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-success" ng-click="save()"><i class="fa fa-check"></i> Simpan</button>
+</div>
