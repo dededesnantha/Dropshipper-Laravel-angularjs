@@ -181,6 +181,35 @@ angular.module('app')
                         }
                     })
 
+                    // Provinsi
+                    .state('app.provinsi', {
+                        url: '/provinsi',
+                        template: '<div ui-view class=""></div>',
+                        resolve: {
+                            deps: ['uiLoad',
+                                function(uiLoad) {
+                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css', 'app/js/controllers/admin/provinsi.js'
+                                    ]);
+                                }
+                            ]
+                        }
+                    })
+                    .state('app.provinsi.all', {
+                        url: '/produk_semua',
+                        templateUrl: 'partials/provinsi/provinsi-all.html',
+                        resolve: {
+                            deps: ['$ocLazyLoad',
+                                function($ocLazyLoad) {
+                                    return $ocLazyLoad.load('cgNotify').then(
+                                        function() {
+                                            return $ocLazyLoad.load('xeditable');
+                                        }
+                                    );
+                                }
+                            ]
+                        }
+                    })
+
                     // packet
                     .state('app.packet', {
                         url: '/packet',

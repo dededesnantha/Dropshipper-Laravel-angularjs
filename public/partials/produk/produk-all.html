@@ -59,9 +59,10 @@
                                         <th style="width:10%">Kategori</th>
                                         <th style="width:5%">Status</th>
                                         <th style="width:5%">Stok</th>
-                                        <th style="width:5%">Harga</th>
+                                        <th style="width:8%">Harga</th>
+                                        <th style="width:8%">Harga Promo</th>
                                         <th style="width:10%">Gambar</th>
-                                        <th style="width:30%">Action</th>
+                                        <th style="width:20%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,15 +80,16 @@
                                         <span class="label label-danger" ng-if="row.stok < 1">{{row.stok}}</span>
                                     </td>
                                     <td>{{row.harga | currency : "" : 0}}</td>  
+                                    <td>{{row.harga_promo | currency : "" : 0}}</td>  
                                     <td>
                                         <img ng-src="{{url_image}}{{row.gambar}}" width="100">
                                     </td>
-                                    <td>
+                                    <td >
                                         <a href="#!/app/produk/produk_rubah/{{row.id}}" class="btn btn-info" style="margin-bottom: 5px"><i class="fa fa-edit"></i> Rubah</a>
                                         <a href="#!/app/produk/produk_gambar/{{row.id}}" class="btn" style="margin-bottom: 5px;background-color: #318963;color: #fff"><i class="fa fa-image"></i> Gambar</a>
                                         <a ng-click="revisi(row.id)" class="btn" style="margin-bottom: 5px;background-color: #5c5a5a;color: #fff"><i class="fa fa-wrench"></i> Revisi</a>
-                                        <a ng-click="hapus(row.id)" class="btn" style="margin-bottom: 5px;background-color: #f6cb40;color: #fff"><i class="fa fa-bell"></i> Kirim Notifikasi</a>
                                         <a ng-click="hapus(row.id)" class="btn btn-danger" style="margin-bottom: 5px"><i class="fa fa-trash"></i> Hapus</a>
+                                        <a ng-click="notif(row.id)" class="btn" style="margin-bottom: 5px;background-color: #f6cb40;color: #fff"><i class="fa fa-bell"></i> Kirim Notifikasi</a>
                                     </td>
                                 </tr>
                             </tbody>

@@ -28,6 +28,10 @@ Route::group(['middleware' => 'auth:api'], function(){
 	Route::post('all_produk_gambar/{id}','admin\AdminController@all_produk_gambar');
 	Route::put('update_gambar_produk/{id}','admin\AdminController@update_gambar_produk');
 	Route::delete('delete_gambar/{id}','admin\AdminController@delete_gambar');
+	Route::post('update_revisi/{id}','admin\AdminController@update_revisi');
+	Route::get('get_revisi/{id}','admin\AdminController@get_revisi');
+	
+	
 	
 	
 	

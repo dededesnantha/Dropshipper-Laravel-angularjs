@@ -119,7 +119,6 @@ class AdminController extends Controller
     }
 
     // produk
-
     public function get_kategori_list()
     {
         $data = kategori::where('status', 1)->get();
@@ -186,28 +185,28 @@ class AdminController extends Controller
         if ($post['search'] == NULL) {
             $data = DB::table('tb_produk')
                             ->join('tb_kategori', 'tb_produk.id_kategori', 'tb_kategori.id')
-                            ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.deskripsi','tb_produk.gambar','tb_produk.status','tb_produk.stok','tb_produk.harga','tb_kategori.title as name_kategori')
+                            ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.deskripsi','tb_produk.gambar','tb_produk.status','tb_produk.stok','tb_produk.harga','tb_produk.harga_promo','tb_kategori.title as name_kategori')
                             ->orderBy('tb_produk.id',$post['order'])
                             ->paginate($post['much']);
           
         }else if ($post['field_search'] == 'tb_produk.nama_produk' || $post['field_search'] == 'tb_kategori.title') {
             $data = DB::table('tb_produk')
                             ->join('tb_kategori', 'tb_produk.id_kategori', 'tb_kategori.id')
-                            ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.deskripsi','tb_produk.gambar','tb_produk.status','tb_produk.stok','tb_produk.harga','tb_kategori.title as name_kategori')
+                            ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.deskripsi','tb_produk.gambar','tb_produk.status','tb_produk.stok','tb_produk.harga','tb_produk.harga_promo','tb_kategori.title as name_kategori')
                             ->orderBy('tb_produk.id',$post['order'])
                             ->where($post['field_search'],'like','%'.$post['search'].'%')
                             ->paginate($post['much']);
         }else if ($post['field_search'] == 'tb_produk.stok'){
             $data = DB::table('tb_produk')
                             ->join('tb_kategori', 'tb_produk.id_kategori', 'tb_kategori.id')
-                            ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.deskripsi','tb_produk.gambar','tb_produk.status','tb_produk.stok','tb_produk.harga','tb_kategori.title as name_kategori')
+                           ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.deskripsi','tb_produk.gambar','tb_produk.status','tb_produk.stok','tb_produk.harga','tb_produk.harga_promo','tb_kategori.title as name_kategori')
                             ->orderBy('tb_produk.id',$post['order'])
                             ->where($post['field_search'],$post['search'])
                             ->paginate($post['much']);
         }else{
             $data = DB::table('tb_produk')
                             ->join('tb_kategori', 'tb_produk.id_kategori', 'tb_kategori.id')
-                            ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.deskripsi','tb_produk.gambar','tb_produk.status','tb_produk.stok','tb_produk.harga','tb_kategori.title as name_kategori')
+                            ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.deskripsi','tb_produk.gambar','tb_produk.status','tb_produk.stok','tb_produk.harga','tb_produk.harga_promo','tb_kategori.title as name_kategori')
                             ->orderBy('tb_produk.id',$post['order'])
                             ->where($post['field_search'],'>=',$post['search'])
                             ->paginate($post['much']);
@@ -308,6 +307,13 @@ class AdminController extends Controller
 
     public function produk_delete($id)
     {
+        $gambar_check = tb_produk_gambar::select('gambar')->where('id_produk',$id)->get();  
+        foreach ($gambar_check as $key => $rows) {
+            if (file_exists(public_path('image/'.$rows['gambar']))) {
+                @unlink(public_path('image/'.$rows['gambar']));
+            }        
+        }      
+        tb_produk_gambar::where('id_produk',$id)->delete();
         return produk::where('id',$id)->delete();
     }
 
@@ -1160,4 +1166,24 @@ class AdminController extends Controller
         return Size::where('id',$id)->delete();
     }
     
+    public function update_revisi(Request $request, $id)
+    {
+        $post = $request->input();
+        if (empty($post['text_label'])) {
+            $post['text_label'] = NULL;
+        }
+        if (empty($post['jenis_label'])) {
+            $post['jenis_label'] = NULL;
+        }
+        if (empty($post['harga_promo'])) {
+            $post['harga_promo'] = NULL;
+        }
+        return DB::table('tb_produk')
+                    ->where('id',$id)
+                    ->update($post);
+    }
+    public function get_revisi($id)
+    {
+        return produk::where('id',$id)->select('harga_promo','jenis_label','text_label')->first();
+    }
 }

@@ -19,12 +19,13 @@ class Produk extends Migration
             $table->string('title', 300);
             $table->integer('id_kategori');
             $table->text('deskripsi');
-            $table->string('image', 300);
+            $table->string('gambar', 300);
             $table->integer('status');
             $table->string('slug', 300);
-            $table->integer('status_unggulan');
             $table->integer('harga');
-            $table->string('icon', 300);
+            $table->integer('harga_promo')->nullable();
+            $table->string('jenis_label', 300)->nullable();
+            $table->string('text_label', 300)->nullable();
             $table->timestamps();
         });
     }

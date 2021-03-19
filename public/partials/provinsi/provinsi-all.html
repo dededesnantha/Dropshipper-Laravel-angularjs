@@ -1,0 +1,87 @@
+<div class="col-lg-12" ng-controller="FormXeditableCtrl">
+        <section class="box ">
+            <header class="panel_header">
+                <h2 class="title pull-left">Provinsi</h2>
+                
+            </header>
+            <div class="content-body">
+                <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+                <div id="user_table_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="dataTables_length" id="user_table_length">
+                                <label style="font-weight: normal">Show 
+
+                                    <select name="user_table_length" aria-controls="user_table" class="form-control input-sm" ng-model="form.much" style="margin: 3px;" ng-change="init()">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>  
+                                    <select name="user_table_length" aria-controls="user_table" class="form-control input-sm" ng-model="form.order"ng-change="init()">
+                                        <option value="desc">Terbaru</option>
+                                        <option value="asc">Terlama</option>
+                                    </select>
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div id="user_table_filter" class="dataTables_filter" style="float: right;">
+                            <form ng-submit="search()">
+                                <label style="font-weight: normal">Search : 
+
+                                    <select name="user_table_length" aria-controls="user_table" class="form-control input-sm" ng-model="form.field_search" style="margin: 3px;" ng-change="init()">
+                                        <option value="tb_produk.nama_produk">Nama</option>
+                                        <option value="tb_kategori.title">Kategori</option>
+                                        <option value="tb_produk.stok">Stok</option>
+                                        <option value="tb_produk.harga">Harga</option>
+                                    </select>
+                                </label><input type="search"  ng-model="form.search" class="form-control input-sm" placeholder="" aria-controls="user_table">
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+                        <table class="table table-bordered table-hover bg-white-only">
+                            <tr style="font-weight: bold">
+                                <td style="width:5%">No</td>
+                                <td style="width:35%">Provinsi</td>
+                                <td style="width:25%">Edit</td>
+                            </tr>
+                            <tr ng-repeat="user in users">
+                                 <td>{{$index+1}}</td>
+                                 <td class="v-middle">
+                                    <!-- editable username (text with validation) -->
+                                        <span editable-text="user.provinsi" e-name="provinsi" e-form="rowform" onbeforesave="checkName($data, user.id)" e-required>
+                                          {{ user.name || 'empty' }}
+                                      </span>
+                                  </td>
+                                <td style="white-space: nowrap">
+                                    <!-- form -->
+                                    <form editable-form name="rowform" onbeforesave="saveUser($data, user.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == user">
+                                        <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-xs btn-info">
+                                            save
+                                        </button>
+                                        <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-xs btn-default">
+                                            cancel
+                                        </button>
+                                    </form>
+                                    <div class="buttons" ng-show="!rowform.$visible">
+                                        <button class="btn btn-xs btn-info" ng-click="rowform.$show()">edit</button>
+                                        <button class="btn btn-xs btn-danger" ng-click="removeUser($index)">del</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <button class="btn btn-primary btn-sm" ng-click="addUser()">Add row</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>

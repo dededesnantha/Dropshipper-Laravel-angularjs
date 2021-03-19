@@ -76,8 +76,8 @@ app.controller('ProdukAll', ['$scope', '$http','$log','$uibModal','notify',
                       position:'right',
                       duration:'10000',
                       classes: 'alert-success'
-                    });  
-              $location.path('/app/produk/produk_semua');   
+                    });   
+              $scope.init();  
             }, function errorCallback(response) {   
               $scope.init();
             $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');                 
@@ -93,7 +93,7 @@ app.controller('ProdukAll', ['$scope', '$http','$log','$uibModal','notify',
           });
         };
 
-        // revisi
+    // revisi
     $scope.revisi = function (id) {
       var modalInstance = $modal.open({
         templateUrl: 'partials/produk/modal_revisi.html',
@@ -110,23 +110,69 @@ app.controller('ProdukAll', ['$scope', '$http','$log','$uibModal','notify',
             $scope.init();
       });
     };
+
+    // Notififkasi
+    $scope.notif = function (id) {
+      var modalInstance = $modal.open({
+        templateUrl: 'partials/produk/modal_notif.html',
+        controller: 'Modalnotif',
+        resolve: {
+          items: function () {
+            return id;
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+          $scope.init();
+          }, function () {
+            $scope.init();
+      });
+    };
+
+    
 }]);
 
 app.controller('Modalrevisi', ['$scope','$uibModalInstance','items','$http','$location','notify','$uibModal', function($scope, $modalInstance, items,$http,$location,notify,$modal) { 
     $scope.items = items;
+    $scope.form ={};
+    // get revisi
+    $http.get(baseurl+'admin/get_revisi/'+items,$scope.auth_config).then(function(data) {
+              $scope.form = data.data
+      }, function(x) {
+    });
+
     $scope.save = function () {
-      $http.post(baseurl+'admin/add_color',$scope.hexPicker,$scope.auth_config)
+      $http.post(baseurl+'admin/update_revisi/'+items,$scope.form,$scope.auth_config)
           .then(function (response){
-            if (response.data === "data_same") {
-                notify({ message:'Data Sudah Ada',  position:'right', duration:'10000', classes: 'alert-danger' });
-            }else{
-              notify({ message:'Color Berhasil Ditambah', position:'right', duration:'10000', classes: 'alert-success' }); 
-            }
+            notify({ message:'Update Berhasil Ditambah', position:'right', duration:'10000', classes: 'alert-success' }); 
            },function (error){
             notify({ message:'Data Error',  position:'right', duration:'10000', classes: 'alert-danger' }); 
            });
       $modalInstance.close($scope.items);
     };
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+}]);
+
+app.controller('Modalnotif', ['$scope','$uibModalInstance','items','$http','$location','notify','$uibModal', function($scope, $modalInstance, items,$http,$location,notify,$modal) { 
+    $scope.items = items;
+    $scope.form ={};
+    // get revisi
+    // $http.get(baseurl+'admin/get_revisi/'+items,$scope.auth_config).then(function(data) {
+    //           $scope.form = data.data
+    //   }, function(x) {
+    // });
+
+    // $scope.save = function () {
+    //   $http.post(baseurl+'admin/update_revisi/'+items,$scope.form,$scope.auth_config)
+    //       .then(function (response){
+    //         notify({ message:'Update Berhasil Ditambah', position:'right', duration:'10000', classes: 'alert-success' }); 
+    //        },function (error){
+    //         notify({ message:'Data Error',  position:'right', duration:'10000', classes: 'alert-danger' }); 
+    //        });
+    //   $modalInstance.close($scope.items);
+    // };
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
