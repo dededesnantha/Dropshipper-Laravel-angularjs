@@ -30,22 +30,21 @@ Route::group(['middleware' => 'auth:api'], function(){
 	Route::delete('delete_gambar/{id}','admin\AdminController@delete_gambar');
 	Route::post('update_revisi/{id}','admin\AdminController@update_revisi');
 	Route::get('get_revisi/{id}','admin\AdminController@get_revisi');
-	
-	
-	
-	
-	
 
 	// color
 	Route::post('add_color','admin\AdminController@add_color');
 	Route::get('get_color','admin\AdminController@get_color');
 	Route::delete('color_delete/{id}','admin\AdminController@color_delete');
-	
 
 	// size
 	Route::post('add_size','admin\AdminController@add_size');
 	Route::get('get_size','admin\AdminController@get_size');
 	Route::delete('size_delete/{id}','admin\AdminController@size_delete');
+	
+	// provinsi
+	Route::post('add_provinsi','admin\AdminController@add_provinsi');
+	Route::post('all_provinsi','admin\AdminController@all_provinsi');
+	Route::delete('provinsi_delete/{id}','admin\AdminController@provinsi_delete');
 	
 
 	//Packet

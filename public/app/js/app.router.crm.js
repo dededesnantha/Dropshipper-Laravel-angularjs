@@ -200,10 +200,7 @@ angular.module('app')
                         resolve: {
                             deps: ['$ocLazyLoad',
                                 function($ocLazyLoad) {
-                                    return $ocLazyLoad.load('cgNotify').then(
-                                        function() {
-                                            return $ocLazyLoad.load('xeditable');
-                                        }
+                                    return $ocLazyLoad.load('xeditable','cgNotify').then(
                                     );
                                 }
                             ]

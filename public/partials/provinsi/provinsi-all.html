@@ -33,10 +33,7 @@
                                 <label style="font-weight: normal">Search : 
 
                                     <select name="user_table_length" aria-controls="user_table" class="form-control input-sm" ng-model="form.field_search" style="margin: 3px;" ng-change="init()">
-                                        <option value="tb_produk.nama_produk">Nama</option>
-                                        <option value="tb_kategori.title">Kategori</option>
-                                        <option value="tb_produk.stok">Stok</option>
-                                        <option value="tb_produk.harga">Harga</option>
+                                        <option value="provinsi">Provinsi</option>
                                     </select>
                                 </label><input type="search"  ng-model="form.search" class="form-control input-sm" placeholder="" aria-controls="user_table">
                             </form>
@@ -59,12 +56,12 @@
                                  <td class="v-middle">
                                     <!-- editable username (text with validation) -->
                                         <span editable-text="user.provinsi" e-name="provinsi" e-form="rowform" onbeforesave="checkName($data, user.id)" e-required>
-                                          {{ user.name || 'empty' }}
+                                          {{ user.provinsi || 'empty' }}
                                       </span>
                                   </td>
                                 <td style="white-space: nowrap">
                                     <!-- form -->
-                                    <form editable-form name="rowform" onbeforesave="saveUser($data, user.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == user">
+                                    <form editable-form name="rowform" onbeforesave="saveProvinsi($data, user.id_provinsi)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == user">
                                         <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-xs btn-info">
                                             save
                                         </button>
@@ -74,14 +71,16 @@
                                     </form>
                                     <div class="buttons" ng-show="!rowform.$visible">
                                         <button class="btn btn-xs btn-info" ng-click="rowform.$show()">edit</button>
-                                        <button class="btn btn-xs btn-danger" ng-click="removeUser($index)">del</button>
+                                        <button class="btn btn-xs btn-danger" ng-click="removeUser(user.id_provinsi)">del</button>
                                     </div>
                                 </td>
                             </tr>
                         </table>
-                        <button class="btn btn-primary btn-sm" ng-click="addUser()">Add row</button>
+                        <button class="btn btn-primary btn-sm" ng-click="addUser()">Tambah Provinsi</button>
                     </div>
                 </div>
             </div>
         </section>
+        <uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" ng-click="selectPage(currentPage)"></uib-pagination>
+        <div class="clearfix"></div>
     </div>

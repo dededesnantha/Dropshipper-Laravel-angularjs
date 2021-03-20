@@ -22,6 +22,7 @@ use App\Models\list_pertanyaan;
 use App\Models\Color;
 use App\Models\Size;
 use App\Models\tb_produk_gambar;
+use App\Models\tb_provinsi;
 
 use DB;
 use File;
@@ -1185,5 +1186,48 @@ class AdminController extends Controller
     public function get_revisi($id)
     {
         return produk::where('id',$id)->select('harga_promo','jenis_label','text_label')->first();
+    }
+
+    public function add_provinsi(Request $request)
+    {
+        $post = $request->input();
+        if (empty($post['id_provinsi'])) {
+            tb_provinsi::create(['provinsi' => $post['provinsi']]);
+        }else{
+            tb_provinsi::where('id_provinsi', $post['id_provinsi'])->update(['provinsi'=>$post['provinsi']]);
+        }
+
+        return true;
+    }
+
+    public function all_provinsi(Request $request)
+    {
+        $post = $request->input();
+        
+        if ($post['search'] == NULL) {
+            $data = DB::table('tb_provinsi')
+                            ->select('id_provinsi','provinsi')
+                            ->orderBy('id_provinsi',$post['order'])
+                            ->paginate($post['much']);
+          
+        }else if ($post['field_search'] == 'provinsi') {
+            $data = DB::table('tb_provinsi')
+                            ->select('id_provinsi','provinsi')
+                            ->orderBy('id_provinsi',$post['order'])
+                            ->where($post['field_search'],'like','%'.$post['search'].'%')
+                            ->paginate($post['much']);
+
+        }else{
+            $data = DB::table('tb_provinsi')
+                            ->select('id_provinsi','provinsi')
+                            ->orderBy('id_provinsi',$post['order'])
+                            ->where($post['field_search'],'>=',$post['search'])
+                            ->paginate($post['much']);
+        }
+        return $data;
+    }
+    public function provinsi_delete($id)
+    {
+        return tb_provinsi::where('id_provinsi',$id)->delete();
     }
 }
