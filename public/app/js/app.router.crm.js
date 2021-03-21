@@ -195,8 +195,20 @@ angular.module('app')
                         }
                     })
                     .state('app.provinsi.all', {
-                        url: '/produk_semua',
+                        url: '/provinsi-all',
                         templateUrl: 'partials/provinsi/provinsi-all.html',
+                        resolve: {
+                            deps: ['$ocLazyLoad',
+                                function($ocLazyLoad) {
+                                    return $ocLazyLoad.load('xeditable','cgNotify').then(
+                                    );
+                                }
+                            ]
+                        }
+                    })
+                    .state('app.provinsi.kabupaten', {
+                        url: '/kabupaten/:id',
+                        templateUrl: 'partials/provinsi/kabupaten-all.html',
                         resolve: {
                             deps: ['$ocLazyLoad',
                                 function($ocLazyLoad) {
