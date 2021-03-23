@@ -1,7 +1,7 @@
-<div class="col-lg-12" ng-controller="FormKabupaten">
+<div class="col-lg-12" ng-controller="FormKecamatan">
         <section class="box ">
             <header class="panel_header">
-                <h2 class="title pull-left">Provinsi {{provinsi.provinsi}}</h2>
+                <h2 class="title pull-left">{{ kebupatens.kabupaten }}</h2>
                 
             </header>
             <div class="content-body">
@@ -48,18 +48,18 @@
                         <table class="table table-bordered table-hover bg-white-only">
                             <tr style="font-weight: bold">
                                 <td style="width:5%">No</td>
-                                <td style="width:35%">Kabupaten</td>
+                                <td style="width:35%">Kecamatan</td>
                                 <td style="width:25%">Edit</td>
                             </tr>
                             <tr ng-repeat="user in users">
                                  <td>{{$index+1}}</td>
                                  <td class="v-middle">
-                                        <span editable-text="user.kabupaten" e-name="kabupaten" e-form="rowform" onbeforesave="checkName($data, user.id)" e-required>
-                                          {{ user.kabupaten || 'empty' }}
+                                        <span editable-text="user.kecamatan" e-name="kecamatan" e-form="rowform" onbeforesave="checkName($data, user.id)" e-required>
+                                          {{ user.kecamatan || 'empty' }}
                                       </span>
                                   </td>
                                 <td style="white-space: nowrap">
-                                    <form editable-form name="rowform" onbeforesave="saveKabupaten($data, user.id_kabupaten)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == user">
+                                    <form editable-form name="rowform" onbeforesave="saveKecamatan($data, user.id_kecamatan)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == user">
                                         <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-xs btn-info">
                                             save
                                         </button>
@@ -69,13 +69,13 @@
                                     </form>
                                     <div class="buttons" ng-show="!rowform.$visible">
                                         <button class="btn btn-xs btn-info" ng-click="rowform.$show()">edit</button>
-                                        <a href="#!/app/provinsi/kecamatan/{{user.id_kabupaten}}" class="btn btn-xs btn-info" style="background-color: #7661e7"><i class="fa fa-align-left"></i> List Kecamatan</a>
-                                        <button class="btn btn-xs btn-danger" ng-click="removekabupaten(user.id_kabupaten)">del</button>
+                                        
+                                        <button class="btn btn-xs btn-danger" ng-click="removekecamatan(user.id_kecamatan)">del</button>
                                     </div>
                                 </td>
                             </tr>
                         </table>
-                        <button class="btn btn-primary btn-sm" ng-click="addUser()">Tambah Provinsi</button>
+                        <button class="btn btn-primary btn-sm" ng-click="addUser()">Tambah Kecamatan</button>
                     </div>
                 </div>
             </div>

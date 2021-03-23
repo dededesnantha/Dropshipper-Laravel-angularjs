@@ -45,7 +45,20 @@ Route::group(['middleware' => 'auth:api'], function(){
 	Route::post('add_provinsi','admin\AdminController@add_provinsi');
 	Route::post('all_provinsi','admin\AdminController@all_provinsi');
 	Route::delete('provinsi_delete/{id}','admin\AdminController@provinsi_delete');
+
+	Route::get('get_provinsi/{id}','admin\AdminController@get_provinsi');
 	
+	// kabupaten
+	Route::post('all_kabupaten/{id}','admin\AdminController@all_kabupaten');
+	Route::post('add_kabupaten/{id}','admin\AdminController@add_kabupaten');
+	Route::post('kabupaten_delete/{id}','admin\AdminController@kabupaten_delete');
+
+	Route::get('get_kabupaten/{id}','admin\AdminController@get_kabupaten');
+
+	// kecamatan
+	Route::post('all_kecamatan/{id}','admin\AdminController@all_kecamatan');
+	Route::post('add_kecamatan/{id}','admin\AdminController@add_kecamatan');
+	Route::post('kecamatan_delete/{id}','admin\AdminController@kecamatan_delete');
 
 	//Packet
 	Route::post('add_list_packet','admin\AdminController@add_packet');

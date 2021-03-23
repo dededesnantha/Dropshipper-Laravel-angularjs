@@ -23,6 +23,8 @@ use App\Models\Color;
 use App\Models\Size;
 use App\Models\tb_produk_gambar;
 use App\Models\tb_provinsi;
+use App\Models\tb_kabupaten;
+use App\Models\tb_kecamatan;
 
 use DB;
 use File;
@@ -1228,6 +1230,108 @@ class AdminController extends Controller
     }
     public function provinsi_delete($id)
     {
+        // tb_kabupaten::where('id_provinsi',$id)->delete();
         return tb_provinsi::where('id_provinsi',$id)->delete();
     }
+
+    public function get_provinsi($id)
+    {
+        return tb_provinsi::where('id_provinsi',$id)->first();
+    }
+
+    public function all_kabupaten(Request $request, $id)
+    {
+        $post = $request->input();
+        
+        if ($post['search'] == NULL) {
+
+            $data = DB::table('tb_kabupaten')
+                            ->where('id_provinsi', $id)
+                            ->select('id_kabupaten','id_provinsi','kabupaten')
+                            ->orderBy('id_kabupaten',$post['order'])
+                            ->paginate($post['much']);
+          
+        }else if ($post['field_search'] == 'kabupaten') {
+            $data = DB::table('tb_kabupaten')
+                            ->where('id_provinsi', $id)
+                            ->select('id_kabupaten','id_provinsi','kabupaten')
+                            ->orderBy('id_kabupaten',$post['order'])
+                            ->where($post['field_search'],'like','%'.$post['search'].'%')
+                            ->paginate($post['much']);
+
+        }else{
+            $data = DB::table('tb_kabupaten')
+                            ->where('id_provinsi', $id)
+                            ->select('id_kabupaten','id_provinsi','kabupaten')
+                            ->orderBy('id_kabupaten',$post['order'])
+                            ->where($post['field_search'],'>=',$post['search'])
+                            ->paginate($post['much']);
+        }
+        return $data;
+    }
+    public function add_kabupaten(Request $request, $id)
+    {
+        $post = $request->input();
+        if (empty($post['id_kabupaten'])) {
+            tb_kabupaten::create(['kabupaten' => $post['kabupaten'], 'id_provinsi'=> $id]);
+        }else{
+            tb_kabupaten::where('id_kabupaten', $post['id_kabupaten'])->update(['kabupaten'=>$post['kabupaten'], 'id_provinsi'=> $id]);
+        }
+
+        return true;
+    }
+
+    public function kabupaten_delete(Request $request, $id)
+    {
+        $post = $request->input();
+        // tb_kecamatan::where('id_kabupaten',$post['id_kabupaten'])->delete();
+       return tb_kabupaten::where('id_provinsi',$id)->where('id_kabupaten',$post['id_kabupaten'])->delete();
+    }
+
+    public function all_kecamatan(Request $request, $id_kabupaten)
+    {
+        $post = $request->input();
+        
+        if ($post['search'] == NULL) {
+
+            $data = DB::table('tb_kecamatan')
+                            ->where('id_kabupaten', $id_kabupaten)
+                            ->select('id_kecamatan','id_kabupaten','kecamatan')
+                            ->orderBy('id_kecamatan',$post['order'])
+                            ->paginate($post['much']);
+          
+        }else if ($post['field_search'] == 'kecamatan') {
+            $data = DB::table('tb_kecamatan')
+                            ->where('id_kabupaten', $id_kabupaten)
+                            ->select('id_kecamatan','id_kabupaten','kecamatan')
+                            ->orderBy('id_kecamatan',$post['order'])
+                            ->where($post['field_search'],'like','%'.$post['search'].'%')
+                            ->paginate($post['much']);
+
+        }
+        return $data;
+    }
+    public function add_kecamatan(Request $request, $id)
+    {
+        $post = $request->input();
+        if (empty($post['id_kecamatan'])) {
+            tb_kecamatan::create(['kecamatan' => $post['kecamatan'], 'id_kabupaten'=> $id]);
+        }else{
+            tb_kecamatan::where('id_kecamatan', $post['id_kecamatan'])->update(['kecamatan'=>$post['kecamatan'], 'id_kabupaten'=> $id]);
+        }
+
+        return true;
+    }
+
+    public function kecamatan_delete(Request $request, $id)
+    {
+        $post = $request->input();
+       return tb_kecamatan::where('id_kabupaten',$id)->where('id_kecamatan',$post['id_kecamatan'])->delete();
+    }
+    public function get_kabupaten($id)
+    {
+        $data = tb_kabupaten::where('id_kabupaten',$id)->first();
+        return $data;
+    }
+    
 }

@@ -218,6 +218,18 @@ angular.module('app')
                             ]
                         }
                     })
+                    .state('app.provinsi.kecamatan', {
+                        url: '/kecamatan/:id',
+                        templateUrl: 'partials/provinsi/kecamatan-all.html',
+                        resolve: {
+                            deps: ['$ocLazyLoad',
+                                function($ocLazyLoad) {
+                                    return $ocLazyLoad.load('xeditable','cgNotify').then(
+                                    );
+                                }
+                            ]
+                        }
+                    })
 
                     // packet
                     .state('app.packet', {
