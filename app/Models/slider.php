@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class slider extends Model
 {
-    protected $table = 'slider';
+    protected $table = 'tb_slider';
     protected $fillable = ['id','judul','image','posisi'];
 }

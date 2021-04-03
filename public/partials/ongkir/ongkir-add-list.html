@@ -1,0 +1,124 @@
+<div class="col-lg-12" ng-controller="AddOngkir">
+	<div class="content-body" style="margin-top: 20px;padding: 10px 20px">
+		<header class="panel_header">
+	            <h1 style="padding: 0px" class="title pull-left">Kurir {{kurir.judul}}</h1>
+	    </header>
+	</div>
+<div class="row" >
+	<div class="col-sm-4">
+		 <section class="box ">
+            <header class="panel_header">
+                <h2 class="title pull-left">Pilih Provinsi</h2>
+            </header>
+            <div class="content-body padding-bottom-0">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="controls">
+                                <!-- <select ui-jq="chosen" id="countriesList" class="form-control" ng-model="form.provinsi" ng-change="get_provinsi(form.provinsi)"> -->
+                                <select  ui-jq="chosen" id="countriesList_kab" tabindex="4" class="form-control"  ng-model="form.provinsi" ng-change="get_provinsi(form.provinsi)"  ng-options="item.id_provinsi as item.provinsi for item in prov">   
+                                	<option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+	</div>
+		<div class="col-sm-4">
+			<section class="box">
+            <header class="panel_header">
+                <h2 class="title pull-left">Pilih Kabupaten</h2>
+            </header>
+            <div class="content-body padding-bottom-0">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="controls">
+                                <select id="countriesList" tabindex="4" class="form-control"  ng-model="form.kabupaten" ng-change="get_kecamatan(form.kabupaten)"  ng-options="item.id_kabupaten as item.kabupaten for item in kab">   
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+		</div>
+        <div class="col-sm-4">
+            <section class="box">
+            <header class="panel_header">
+                <h2 class="title pull-left">Pilih Kecamatan</h2>
+            </header>
+            <div class="content-body padding-bottom-0">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="controls">
+                                <select id="countriesList_kec" tabindex="4" class="form-control"  ng-model="form.kecamatan" ng-options="item.id_kecamatan as item.kecamatan for item in kac">   
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </div>
+        <div class="col-lg-12" ng-show ="form.kecamatan" style="text-align: right;">
+            <button class="btn btn-primary btn-sm" ng-click="addongkir(form.kecamatan, form.kabupaten)" style="background-color: #e8c213">Tambah Ongkir</button>
+        </div>
+	</div>
+
+        <section class="box ">
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+                        <table class="table table-bordered table-hover bg-white-only">
+                            <tr style="font-weight: bold">
+                                <td style="width:5%">No</td>
+                                <td style="width:35%">Kecamatan</td>
+                                <td style="width:35%">Ongkir</td>
+                                <td style="width:35%">Harga</td>
+                                <td style="width:25%">Edit</td>
+                            </tr>
+                            <tr ng-repeat="ongkirs in ongkir">
+                                 <td>{{$index+1}}</td>
+                                 <td class="v-middle">
+                                        <span>
+                                          {{ ongkirs.kecamatan || 'empty' }}
+                                      </span>
+                                  </td>
+                                  <td class="v-middle">
+                                        <span>
+                                          {{ ongkirs.judul || 'empty' }}
+                                      </span>
+                                  </td>
+                                  <td class="v-middle">
+                                        <span editable-text="ongkirs.harga" e-name="harga" e-form="rowform" onbeforesave="checkName($data, ongkirs.id_ongkir)" e-required>
+                                          {{ongkirs.harga | currency : "" : 0}}
+                                      </span>
+                                  </td>
+                                <td style="white-space: nowrap">
+                                    <!-- form -->
+                                    <form editable-form name="rowform" onbeforesave="saveOngkir($data, ongkirs.id_ongkir, ongkirs.id_kabupaten)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == user">
+                                        <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-xs btn-info">
+                                            save
+                                        </button>
+                                        <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-xs btn-default">
+                                            cancel
+                                        </button>
+                                    </form>
+                                    <div class="buttons" ng-show="!rowform.$visible">
+                                        <button class="btn btn-xs btn-info" ng-click="rowform.$show()">edit</button>
+                                        <button class="btn btn-xs btn-danger" ng-click="removeOngkir(ongkirs.id_ongkir, ongkirs.id_kabupaten)">del</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+</div>

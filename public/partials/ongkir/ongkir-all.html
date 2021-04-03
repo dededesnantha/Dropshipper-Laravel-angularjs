@@ -1,0 +1,75 @@
+<div class="col-lg-12" ng-controller="OngkirAll">
+        <section class="box ">
+            <header class="panel_header">
+                <h2 class="title pull-left">Semua Kurir</h2>
+            </header>
+            <div class="content-body">
+                <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+                	<div style="margin-bottom: 30px">
+                    	<button type="button" ng-click="add_kurir()" class="btn btn-sm btn-success" style="font-size: 15px;background-color: #4a7f9a">
+                       	 	<i class="fa fa-truck"></i> Tambah Kurir
+                    	</button>
+	                </div>
+                <div id="user_table_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="dataTables_length" id="user_table_length">
+                                <label style="font-weight: normal">Show 
+
+                                    <select name="user_table_length" aria-controls="user_table" class="form-control input-sm" ng-model="form.much" style="margin: 3px;" ng-change="init()">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>  
+                                    <select name="user_table_length" aria-controls="user_table" class="form-control input-sm" ng-model="form.order"ng-change="init()">
+                                        <option value="desc">Terbaru</option>
+                                        <option value="asc">Terlama</option>
+                                    </select>
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div id="user_table_filter" class="dataTables_filter" style="float: right;">
+                            <form ng-submit="search()">
+                                <label style="font-weight: normal">Search : 
+
+                                    <select name="user_table_length" aria-controls="user_table" class="form-control input-sm" ng-model="form.field_search" style="margin: 3px;" ng-change="init()">
+                                        <option value="judul">judul</option>
+                                    </select>
+                                </label><input type="search"  ng-model="form.search" class="form-control input-sm" placeholder="" aria-controls="user_table">
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+                        <table class="table table-bordered">
+                            <tr style="font-weight: bold">
+                                <td style="width:5%">No</td>
+                                <td style="width:35%">Kurir</td>
+                                <td style="width:25%">Action</td>
+                            </tr>
+                            <tr ng-repeat="kurirs in kurir">
+                                 <td>{{$index+1}}</td>
+                                 <td>{{kurirs.judul}}</td>
+                                 <td>
+                                	<a ng-click="ruabh_kurir(kurirs.id_kurir)" class="btn btn-xs btn-info" style="margin-bottom: 5px"><i class="fa fa-edit"></i> Rubah</a>
+                                	<a href="#!/app/ongkir/kurir/{{kurirs.id_kurir}}" class="btn btn-xs " style="margin-bottom: 5px;background-color: #5c5a5a;color: #fff"><i class="fa fa-wrench"></i> Ongkir</a>
+                                	<a ng-click="hapus(row.id)" class="btn btn-xs btn-danger" style="margin-bottom: 5px"><i class="fa fa-trash"></i> Hapus</a>
+                                 </td>
+
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+		        <uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" ng-click="selectPage(currentPage)"></uib-pagination>
+		        <div class="clearfix"></div>
+            </div>
+        </section>
+    </div>

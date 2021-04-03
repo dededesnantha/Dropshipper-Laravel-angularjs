@@ -1,51 +1,17 @@
-<!-- <div class="login_page">
-<div class="login-wrapper" ng-controller="LoginFormController">
-    <div id="login" class="login loginpage col-lg-offset-4 col-lg-4 col-md-offset-3 col-md-6 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8">
-        <h1><a href="#" title="Login Page" tabindex="-1">Slant Admin - Angularss</a></h1>
-        <img src="app/img/PharmAppColor.png" alt="">
-        <form name="form" class="form-validation">
-          <p>
-                <input type="text" name="name" id="user_login" class="input" ng-model="user.name" placeholder="Username" required/></label>
-            </p>
-            <p>
-                <input type="password" name="pwd" id="user_login" class="input" ng-model="user.password" placeholder="Password" required/></label>
-            </p>
-            <p class="submit">
-            <button type="submit" ng-click="login()" ng-disabled='form.$invalid' class="btn btn-accent btn-block">Sign In</button>
-            </p>
-        </form>
-        <p id="nav">
-            <a class="pull-right" ui-sref="access.register" title="Sign Up">Sign Up</a>
-        </p>
-
-
-    </div>
+<div class="card" ng-controller="LoginFormController">
+   <form>
+      <h2 class="title"> Login</h2>
+      <p class="subtitle">login untuk ke Dashboard Dropshipper</p>
+      <p class="or"></p>
+      <div class="email-login">
+         <label for="email"> <b>Username</b></label>
+         <input type="text" placeholder="Enter Username" ng-model="user.name" required style="padding: 20px 20px;margin-top: 8px;margin-bottom: 15px;border: 1px solid #ccc;border-radius: 8px;box-sizing: border-box;">
+         <label for="psw"><b>Password</b></label>
+         <input type="password" placeholder="Enter Password" name="psw" ng-model="user.password" required style="padding: 20px 20px;margin-top: 8px;margin-bottom: 15px;border: 1px solid #ccc;border-radius: 8px;box-sizing: border-box;">
+      </div>
+      <button class="cta-btn" type="submit" ng-click="login()">Login</button>
+   </form>
 </div>
-</div> -->
-
-  <div class="container" ng-controller="LoginFormController">
-      <div class="login-header">
-        <img src="app/img/PharmAppColor.png" alt="" style="width: 200px">
-      </div>
-      <div style="text-align: center;">
-        <h3><strong>LOGIN</strong></h3>  
-      </div>
-      <form name="form" class="form-validation">
-          <div class="input_area">
-            <input type="text" name="name" id="user_login" ng-model="user.name" placeholder="Username" required/>
-            <input type="password" name="pwd" id="user_login" ng-model="user.password" placeholder="Password" required/>
-          </div>
-          <div class="actions">
-            <button type="submit" ng-click="login()" >Login</button>
-          </div>
-      </form>
-      <div class="actions">
-        <p>
-          Tidak Punya Akun ?
-          <a ui-sref="access.register" class="Sign_up_link">Register</a>
-        </p>
-      </div>
-    </div>
 
 
 

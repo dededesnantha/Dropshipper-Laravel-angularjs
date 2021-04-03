@@ -231,26 +231,88 @@ angular.module('app')
                         }
                     })
 
-                    // packet
-                    .state('app.packet', {
-                        url: '/packet',
+                    // ongkir
+                    .state('app.ongkir', {
+                        url: '/ongkir',
                         template: '<div ui-view class=""></div>',
                         resolve: {
                             deps: ['uiLoad',
                                 function(uiLoad) {
-                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css', 'app/js/controllers/admin/packet.js'
+                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css', 'app/js/controllers/admin/ongkir.js'
                                     ]);
                                 }
                             ]
                         }
                     })
-                    .state('app.packet.list', {
-                        url: '/list',
-                        templateUrl: 'partials/packet/packet_list.html',
+                    .state('app.ongkir.list', {
+                        url: '/ongkir-all',
+                        templateUrl: 'partials/ongkir/ongkir-all.html',
+                        resolve: {
+                            deps: ['$ocLazyLoad',
+                                function($ocLazyLoad) {
+                                    return $ocLazyLoad.load('xeditable','cgNotify').then(
+                                    );
+                                }
+                            ]
+                        }
+                    })
+                    .state('app.ongkir.ongkir_all', {
+                        url: '/kurir/:id',
+                        templateUrl: 'partials/ongkir/ongkir-add-list.html',
+                        resolve: {
+                            deps: ['$ocLazyLoad',
+                                function($ocLazyLoad) {
+                                    return $ocLazyLoad.load('xeditable','cgNotify').then(
+                                    );
+                                }
+                            ]
+                        }
+                    })
+
+                    // User 
+                    .state('app.user', {
+                        url: '/user',
+                        template: '<div ui-view class=""></div>',
                         resolve: {
                             deps: ['uiLoad',
                                 function(uiLoad) {
-                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css']);
+                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css', 'app/js/controllers/admin/user.js'
+                                    ]);
+                                }
+                            ]
+                        }
+                    })
+                    .state('app.user.list', {
+                        url: '/user-all',
+                        templateUrl: 'partials/user/user-all.html',
+                        resolve: {
+                            deps: ['$ocLazyLoad',
+                                function($ocLazyLoad) {
+                                    return $ocLazyLoad.load('cgNotify').then(
+                                    );
+                                }
+                            ]
+                        }
+                    })
+                    .state('app.user.user_add', {
+                        url: '/user_add',
+                        templateUrl: 'partials/user/user_add.html',
+                        resolve: {
+                            deps: ['$ocLazyLoad',
+                                function($ocLazyLoad) {
+                                    return $ocLazyLoad.load('xeditable','cgNotify').then(
+                                    );
+                                }
+                            ]
+                        }
+                    }).state('app.user.user_update', {
+                        url: '/user_rubah/:id',
+                        templateUrl: 'partials/user/user_rubah.html',
+                        resolve: {
+                            deps: ['$ocLazyLoad',
+                                function($ocLazyLoad) {
+                                    return $ocLazyLoad.load('cgNotify').then(
+                                    );
                                 }
                             ]
                         }
@@ -296,268 +358,6 @@ angular.module('app')
                                     ]
                                 }
                     })
-
-                    // client
-                    .state('app.client', {
-                        url: '/client',
-                        template: '<div ui-view class=""></div>',
-                        resolve: {
-                            deps: ['uiLoad',
-                                function(uiLoad) {
-                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css', 'app/js/controllers/admin/client.js'
-                                    ]);
-                                }
-                            ]
-                        }
-                    }).state('app.client.add', {
-                        url: '/add',
-                        templateUrl: 'partials/client/client_add.html',
-                        resolve: {
-                                    deps: ['$ocLazyLoad',
-                                        function($ocLazyLoad) {
-                                            return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
-                                                function() {
-                                                    return $ocLazyLoad.load('app/js/controllers/file-upload.js','bower_components/font-awesome/css/font-awesome.css');
-                                                }
-                                            );
-                                        }
-                                    ]
-                                }
-                    }).state('app.client.all', {
-                        url: '/list',
-                        templateUrl: 'partials/client/client_list.html',
-                        resolve: {
-                            deps: ['uiLoad',
-                                function(uiLoad) {
-                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css']);
-                                }
-                            ]
-                        }
-                    }).state('app.client.testimoni_rubah', {
-                                url: '/testimoni_rubah/:id',
-                                templateUrl: 'partials/client/testimoni_rubah.html',
-                                resolve: {
-                                    deps: ['$ocLazyLoad',
-                                        function($ocLazyLoad) {
-                                            return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
-                                                function() {
-                                                    return $ocLazyLoad.load('app/js/controllers/file-upload.js','bower_components/font-awesome/css/font-awesome.css');
-                                                }
-                                            );
-                                        }
-                                    ]
-                                }
-                    }).state('app.client.add_client', {
-                        url: '/add_client',
-                        templateUrl: 'partials/client/client_tambah.html',
-                        resolve: {
-                                    deps: ['$ocLazyLoad',
-                                        function($ocLazyLoad) {
-                                            return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
-                                                function() {
-                                                    return $ocLazyLoad.load('bower_components/font-awesome/css/font-awesome.css');
-                                                }
-                                            );
-                                        }
-                                    ]
-                                }
-                    }).state('app.client.all_client', {
-                        url: '/all_client',
-                        templateUrl: 'partials/client/client_all.html',
-                        resolve: {
-                            deps: ['uiLoad',
-                                function(uiLoad) {
-                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css']);
-                                }
-                            ]
-                        }
-                    })
-
-
-                    // Menu
-                    .state('app.menu', {
-                        url: '/menu',
-                        template: '<div ui-view class=""></div>',
-                        resolve: {
-                            deps: ['uiLoad',
-                                function(uiLoad) {
-                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css', 'app/js/controllers/admin/menu.js'
-                                    ]);
-                                }
-                            ]
-                        }
-                    }).state('app.menu.list', {
-                        url: '/list',
-                        templateUrl: 'partials/menu/menu_list.html',
-                        resolve: {
-                            deps: ['uiLoad',
-                                function(uiLoad) {
-                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css']);
-                                }
-                            ]
-                        }
-                    })
-                    .state('app.sosial', {
-                        url: '/sosial',
-                        template: '<div ui-view class=""></div>',
-                        resolve: {
-                            deps: ['uiLoad',
-                                function(uiLoad) {
-                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css', 'app/js/controllers/admin/sosial.js'
-                                    ]);
-                                }
-                            ]
-                        }
-                    })
-                    .state('app.sosial.add', {
-                        url: '/add',
-                        templateUrl: 'partials/sosial_media/sosial_media_add.html',
-                        resolve: {
-                                    deps: ['$ocLazyLoad',
-                                        function($ocLazyLoad) {
-                                            return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
-                                                function() {
-                                                    return $ocLazyLoad.load('bower_components/font-awesome/css/font-awesome.css');
-                                                }
-                                            );
-                                        }
-                                    ]
-                                }
-                    })  
-                    .state('app.sosial.all', {
-                        url: '/list',
-                        templateUrl: 'partials/sosial_media/sosial_media_all.html',
-                        resolve: {
-                            deps: ['uiLoad',
-                                function(uiLoad) {
-                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css']);
-                                }
-                            ]
-                        }
-                    })
-                    .state('app.sosial.sosial_rubah', {
-                                url: '/sosial_rubah/:id',
-                                templateUrl: 'partials/sosial_media/sosial_rubah.html',
-                                resolve: {
-                                    deps: ['$ocLazyLoad',
-                                        function($ocLazyLoad) {
-                                            return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
-                                                function() {
-                                                    return $ocLazyLoad.load('bower_components/font-awesome/css/font-awesome.css');
-                                                }
-                                            );
-                                        }
-                                    ]
-                                }
-                            })                 
-                    //  Team
-                    .state('app.team', {
-                        url: '/team',
-                        template: '<div ui-view class=""></div>',
-                        resolve: {
-                            deps: ['uiLoad',
-                                function(uiLoad) {
-                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css', 'app/js/controllers/admin/team.js'
-                                    ]);
-                                }
-                            ]
-                        }
-                    })
-                    .state('app.team.list', {
-                        url: '/list',
-                        templateUrl: 'partials/team/team_all.html',
-                        resolve: {
-                            deps: ['uiLoad',
-                                function(uiLoad) {
-                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css']);
-                                }
-                            ]
-                        }
-                    })
-                    .state('app.team.team_add', {
-                        url: '/team_add',
-                        templateUrl: 'partials/team/team_add.html',
-                        resolve: {
-                            deps: ['$ocLazyLoad',
-                                        function($ocLazyLoad) {
-                                            return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
-                                                function() {
-                                                    return $ocLazyLoad.load('bower_components/font-awesome/css/font-awesome.css');
-                                                }
-                                            );
-                                        }
-                                ]
-                        }
-                    })
-                    .state('app.team.team_rubah', {
-                                url: '/team_rubah/:id',
-                                templateUrl: 'partials/team/team-rubah.html',
-                                resolve: {
-                                    deps: ['$ocLazyLoad',
-                                        function($ocLazyLoad) {
-                                            return $ocLazyLoad.load('angularFileUpload','cgNotify').then(
-                                                function() {
-                                                    return $ocLazyLoad.load('bower_components/font-awesome/css/font-awesome.css');
-                                                }
-                                            );
-                                        }
-                                    ]
-                                }
-                            })
-
-                    // pertanyaan
-                    .state('app.pertanyaan', {
-                        url: '/pertanyaan',
-                        template: '<div ui-view class=""></div>',
-                        resolve: {
-                            deps: ['uiLoad',
-                                function(uiLoad) {
-                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css', 'app/js/controllers/admin/pertanyaan.js'
-                                    ]);
-                                }
-                            ]
-                        }
-                    })
-                    .state('app.pertanyaan.list', {
-                        url: '/list',
-                        templateUrl: 'partials/pertanyaan/pertanyaan_all.html',
-                        resolve: {
-                            deps: ['uiLoad',
-                                function(uiLoad) {
-                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css']);
-                                }
-                            ]
-                        }
-                    })
-                    .state('app.pertanyaan.pertanyaan_add', {
-                        url: '/add',
-                        templateUrl: 'partials/pertanyaan/pertanyaan_add.html',
-                        resolve: {
-                            deps: ['uiLoad',
-                                function(uiLoad) {
-                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css']);
-                                }
-                            ]
-                        }
-                    })
-                    .state('app.pertanyaan.pertanyaan_rubah', {
-                                url: '/pertanyaan_rubah/:id',
-                                templateUrl: 'partials/pertanyaan/pertanyaan-rubah.html',
-                                resolve: {
-                                    deps: ['$ocLazyLoad',
-                                        function($ocLazyLoad) {
-                                            return $ocLazyLoad.load('cgNotify').then(
-                                                function() {
-                                                    return $ocLazyLoad.load('bower_components/font-awesome/css/font-awesome.css');
-                                                }
-                                            );
-                                        }
-                                    ]
-                                }
-                            })
-                    
-                    
-
                     // setting
                     .state('app.setting', {
                         url: '/setting',

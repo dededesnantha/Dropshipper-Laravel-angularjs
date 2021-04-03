@@ -42,7 +42,7 @@
     <script src="{{asset('bower_components/angular-animate/angular-animate.js')}}"></script>
     <script src="{{asset('bower_components/angular-cookies/angular-cookies.js') }}"></script>
     <script src="{{asset('bower_components/angular-resource/angular-resource.js')}}"></script>
-        <script src="{{asset('bower_components/angular-sanitize/angular-sanitize.js')}}"></script>
+    <script src="{{asset('bower_components/angular-sanitize/angular-sanitize.js')}}"></script>
     <script src="{{asset('bower_components/angular-touch/angular-touch.js')}}"></script>
     <script src="{{asset('bower_components/angular-ui-router/release/angular-ui-router.js')}}"></script>
     <script src="{{asset('bower_components/ngstorage/ngStorage.js') }}"></script>
@@ -58,6 +58,7 @@
     <!-- JS FRAMEWORK - END -->
     <!-- alert -->
     <script src="{{asset('bower_components/angular-notify/angular-notify.js')}}" type="text/javascript"></script>
+
 
     
 
@@ -81,6 +82,7 @@
     <script src="{{asset('app/js/controllers/chat.js')}}"></script>
     <!-- App JS - End -->
     <script src="{{asset('bower_components/Chart.js/Chart.js')}}"></script>
+
 </body>
 
 </html>

@@ -127,9 +127,7 @@ app.controller('ProdukAll', ['$scope', '$http','$log','$uibModal','notify',
           }, function () {
             $scope.init();
       });
-    };
-
-    
+    };    
 }]);
 
 app.controller('Modalrevisi', ['$scope','$uibModalInstance','items','$http','$location','notify','$uibModal', function($scope, $modalInstance, items,$http,$location,notify,$modal) { 

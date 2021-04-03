@@ -20,9 +20,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('login', 'admin\ProtectController@login');
-Route::post('register', 'admin\ProtectController@register');
 Route::group(['middleware' => 'auth:api'], function(){
    	Route::get('session', function(){            
             return response()->json(['success' => true], 200);            
     });
 });
+
+Route::post('login_user', 'UserDropshipperController@login_send');
+Route::post('logout', 'UserDropshipperController@logout');
+
+Route::get('session_user', 'UserDropshipperController@session_user');
+

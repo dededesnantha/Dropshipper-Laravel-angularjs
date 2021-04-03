@@ -1,0 +1,18 @@
+<div class="modal-header" style="background-color: #37474f;">
+    <h3 class="modal-title" style="color: #fff">Tambah Ongkir</h3>
+</div>
+<div class="modal-body">
+    <div class="form-group">
+    	<label class="form-label" for="field-1">Harga</label>
+    	<span class="desc"></span>
+    	<div class="controls">
+    		<input type="text" class="form-control" ng-model="form.harga" id="field-1">
+            <pre>{{form.harga | currency : "IDR " : 0}}</pre>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">                  
+    <button class="btn btn-default btn-icon margin-bottom-15" ng-click="cancel()"><span>Cancel</span></button>
+    <!-- <button class="btn btn-primary" style="background-color: #85af27" ng-click="save()"><i class="material-icons"></i> Save</button> -->
+    <button class="btn btn-secondary btn-icon margin-bottom-15" style="background-color: #85af27" ng-click="save()"><i class="fa fa-check-circle" style="font-size: 21px"></i> &nbsp; <span>Save</span></button>
+</div>

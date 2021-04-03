@@ -1,0 +1,95 @@
+<!-- header --> 
+    <div data-ng-include=" 'views/components/header.html' "> 
+    </div>
+    <!-- / header -->
+
+    <!-- sidebar --> 
+    <div data-ng-include=" 'views/components/sidebar.html' "> 
+    </div>
+    <!-- / sidebar -->
+
+
+    <div class="page-content-wrapper" ng-controller="ProfileController">
+      <div class="container">
+        <!-- Profile Wrapper-->
+        <div class="profile-wrapper-area py-3">
+          <!-- User Information-->
+          <div class="card user-info-card">
+            <div class="card-body p-4 d-flex align-items-center">
+              <div class="user-profile me-3"><img ng-src="{{src}}" style="height: 100%">
+                <div class="change-user-thumb">
+                    <!-- <input class="form-control-file" type="file"> -->
+                     <input type="file" ng-model="myFile" class="form-control-file" accept="image/*"  onchange="angular.element(this).scope().uploadedFile(this)">
+                    <button><i class="lni lni-pencil"></i></button>
+                </div>
+              </div>
+              <div class="user-info">
+                <p class="mb-0 text-white">{{user_datass.username}}</p>
+                <h5 class="mb-0">{{user_datass.nama}}</h5>
+              </div>
+            </div>
+          </div>
+          <!-- User Meta Data-->
+          <div class="card user-data-card">
+            <div class="card-body">
+              <form action="" method="">
+                <div class="mb-3">
+                  <div class="title mb-2"><i class="lni lni-user"></i><span>Username</span></div>
+                  <input class="form-control" type="text" ng-model="user_datass.username">
+                </div>
+                <div class="mb-3">
+                  <div class="title mb-2"><i class="lni lni-user"></i><span>Nama</span></div>
+                  <input class="form-control" type="text" ng-model="user_datass.nama">
+                </div>
+                <div class="mb-3">
+                  <div class="title mb-2"><i class="lni lni-phone"></i><span>Telephone</span></div>
+                  <input class="form-control" type="number" ng-model="user_datass.telephone">
+                </div>
+                <div class="mb-3">
+                  <div class="title mb-2"><i class="lni lni-envelope"></i><span>Email</span></div>
+                  <input class="form-control" type="email" ng-model="user_datass.email">
+                </div>
+
+                <div class="mb-3">
+                  <div class="title mb-2"><i class="lni lni-map-marker"></i><span>Provinsi</span></div>
+                  	<select class="form-control"  ng-model="user_datass.provinsi" ng-change="get_kabupaten(user_datass.provinsi)">   
+                        <option value="" ng-selected="true">--  Provinsi  --</option>
+                        <option ng-repeat="key in provinsi" value="{{key.id_provinsi}}" >{{key.provinsi}}</option>
+                    </select>
+                </div>
+
+                <div class="mb-3" ng-if="user_datass.provinsi">
+                  <div class="title mb-2"><i class="lni lni-map-marker"></i><span>Kabupaten</span></div>
+                  	<select class="form-control"  ng-model="user_datass.kabupaten" ng-change="get_kecamatan(user_datass.kabupaten)">   
+                        <option value="" ng-selected="true">--  Kabupaten  --</option>
+                        <option ng-repeat="key in kabupaten" value="{{key.id_kabupaten}}" >{{key.kabupaten}}</option>
+                    </select>
+                </div>
+
+                <div class="mb-3" ng-if="user_datass.kabupaten">
+                  <div class="title mb-2"><i class="lni lni-map-marker"></i><span>Kecamatan</span></div>
+                  	<select class="form-control"  ng-model="user_datass.kecamatan">   
+                        <option value="" ng-selected="true">--  Kecamatan  --</option>
+                        <option ng-repeat="key in kecamatan" value="{{key.id_kecamatan}}" >{{key.kecamatan}}</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                  <div class="title mb-2"><i class="lni lni-text-align-center"></i><span>Alamat</span></div>
+                  <textarea  class="form-control" ng-model="user_datass.address"
+	                  rows="5" cols="33">
+	                  
+	              </textarea>
+                </div>
+
+                <button class="btn btn-success w-100" type="submit">Save All Changes</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- footer --> 
+    <div data-ng-include=" 'views/components/footer.html' "> 
+    </div>

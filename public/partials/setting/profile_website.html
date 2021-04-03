@@ -158,64 +158,7 @@
                                 </section>
                     </div>
                     <input type="text" name="logo" value="{{form.logo}}" ng-model="form.logo" hidden>
-
                     <hr>
-                    <div nv-file-drop="" uploader="uploader_profile" filters="queueLimit, customFilter">
-                    <section class="nobox box ">
-                        <div class="content-body">
-                            <div class="row">
-                                <div class="col-md-12" style="margin-top: 40px">
-                                    <h3>Upload Profile</h3>
-                                    <div class="col-md-12">
-                                        <input type="file" nv-file-select="" uploader="uploader_profile" />
-                                    </div>
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th width="50%">Nama</th>
-                                                            <th ng-show="uploader_profile.isHTML5">Size</th>
-                                                            <th ng-show="uploader_profile.isHTML5">Progress</th>
-                                                            <th>Status</th>
-                                                            <th>Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr ng-repeat="item in uploader_profile.queue">
-                                                            <td><strong>{{ item.file.name }}</strong></td>
-                                                            <td ng-show="uploader_profile.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
-                                                            <td ng-show="uploader_profile.isHTML5">
-                                                                <div class="progress" style="margin-bottom: 0;">
-                                                                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-                                                                <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-                                                                <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-                                                            </td>
-                                                            <td nowrap>
-                                                                <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
-                                                                    <span class="glyphicon glyphicon-upload"></span> Upload
-                                                                </button>
-                                                                <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
-                                                                    <span class="glyphicon glyphicon-ban-circle"></span> Cancel
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h3>Profile</h3>
-                                        <div style="max-height: 500px;overflow: hidden;">
-                                            <img ng-src="{{url}}{{form.image_profile}}" alt="" style="width: 285px">
-                                        </div>
-                                    </div>
-                                </section>
-                    </div>
-                    <input type="text" name="image_profile" value="{{form.image_profile}}" ng-model="form.image_profile" hidden>
             </div>
         </section>
     </div>
@@ -224,43 +167,12 @@
         <section class="box ">
             <div class="content-body padding-bottom-0">
                 <div class="row">
-                    <div class="col-lg-8 col-md-8 col-sm-9 col-xs-12">
-                        
-                            <div class="form-group">
-                                <label class="form-label" for="field-5">PopUp F&Q</label>
-                                <br>
-                                <label class="iswitch iswitch-md bg-success ">
-                                    <input type="checkbox" ng-model="form.status_popup_pertanyaan"  ng-checked="form.status_popup_pertanyaan === 'true'">
-                                    <i></i>
-                                    
-                                </label>
-                                <i></i>
-                            </div>
-                    </div>
                         <div class="col-lg-8 col-md-8 col-sm-9 col-xs-12 padding-bottom-30">
                             <div class="text-left">
                                 <button type="submit" class="btn btn-primary">Save</button>
                             </div>
                         </div>
                 </div>
-            </div>
-        </section>
-
-        <section class="box ">
-            <div class="content-body padding-bottom-0">
-                <div class="row">
-                        <div class="btn-group">
-                            <label class="btn btn-accent btn-icon  right15 margin-bottom-15" ng-click="pop_up1()" style="margin: 5px 5px;" ><i class="fa fa-align-justify"></i> &nbsp; Syarat dan ketentuan
-                            </label>
-                            <!-- <button class="btn btn-accent btn-icon  right15 margin-bottom-15">
-                                <i class="fa fa-car"></i> &nbsp; <span>Launch</span>
-                            </button> -->
-
-                            <label class="btn btn-accent btn-icon  right15 margin-bottom-15" ng-click="pop_up2()" style="margin: 5px 5px;" ><i class="fa fa-align-justify"></i> &nbsp; Kebijakan Privasi
-                            </label>
-                            <label class="btn btn-accent btn-icon  right15 margin-bottom-15" ng-click="pop_up3()" style="margin: 5px 5px;" ><i class="fa fa-align-justify"></i> &nbsp; Tentang Kami
-                            </label>
-                        </div>
             </div>
         </section>
 

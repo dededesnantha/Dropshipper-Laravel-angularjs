@@ -21,12 +21,25 @@ Route::post('upload/gambar', 'upload\UploadImgae@index');
 Route::get('dashboard', function(){
 	return view('admin.dashboard');
 });
-Route::view('/', 'landing');
 Route::match(['get', 'post'], '/login');
 Route::view('/pages/slick', 'pages.slick');
 Route::view('/pages/datatables', 'pages.datatables');
 Route::view('/pages/blank', 'pages.blank');
 Auth::routes();
+
+// Front-End
+Route::get('/','UserDropshipperController@login');
+
+// get user
+Route::post('user','UserDropshipperController@get_user');
+
+// area
+Route::get('provinsi','AreaContoller@provinsi');
+Route::get('kabupaten/{id}','AreaContoller@kabupaten');
+Route::get('kecamatan/{id}','AreaContoller@kecamatan');
+
+
+
 
 
 
