@@ -30,7 +30,7 @@ class UserDropshipperController extends Controller
         $user = tb_user::where('username', $request->username)->first();
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
-                $set_Cookie = Cookie::forever('username', $request->username);
+                $set_Cookie = Cookie::forever('id_user', $user->id_user);
                 return response()->json(200)->withCookie($set_Cookie);
             } else {
                 $response = ["message" => "Login Gagal"];
@@ -43,8 +43,8 @@ class UserDropshipperController extends Controller
 
     public function session_user()
     {
-    	$datass = Cookie::get('username');
-        $get_user = tb_user::select('nama','foto_user','username')->where('username', $datass)->first();
+    	$datass = Cookie::get('id_user');
+        $get_user = tb_user::select('id_user','nama','foto_user','username')->where('id_user', $datass)->first();
     	if ($datass) {
     		return $get_user;
     	}else{
@@ -55,9 +55,9 @@ class UserDropshipperController extends Controller
     public function logout(Request $request)
     {
         $post = $request->input();
-        $get_user = tb_user::where('username', $post['username'])->count();
+        $get_user = tb_user::where('id_user', $post['id_user'])->count();
         if ($get_user > 0) {
-            $cookie = Cookie::forget('username');
+            $cookie = Cookie::forget('id_user');
             return response()->json(200)->withCookie($cookie);
         }else{
             return Response::json($get_user, 500);
@@ -67,6 +67,53 @@ class UserDropshipperController extends Controller
     public function get_user(Request $request)
     {
         $post = $request->input();
-        return tb_user::select('username','nama','email','foto_user','id_kecamatan','id_provinsi','id_kabupaten','telephone','address')->where('username', $post['username'])->first();
+        return tb_user::leftJoin('tb_provinsi', 'tb_user.id_provinsi', '=','tb_provinsi.id_provinsi')
+                ->select('username','nama','email','foto_user','tb_user.id_kecamatan','tb_user.id_provinsi','tb_user.id_kabupaten','telephone','address','provinsi','kabupaten','kecamatan')->where('id_user', $post['id_user'])
+                ->leftJoin('tb_kecamatan', 'tb_user.id_kecamatan', '=','tb_kecamatan.id_kecamatan')
+                ->leftJoin('tb_kabupaten', 'tb_user.id_kabupaten', '=', 'tb_kabupaten.id_kabupaten')->first();
     }
+
+    public function update_user(Request $request, $id)
+    {
+        $post = $request->input();
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string|max:255',
+            'email' => 'required',
+            'telephone' => 'required',
+            'id_provinsi' => 'required',
+            'id_kabupaten' => 'required',
+            'id_kecamatan' => 'required',
+            'address' => 'required',
+        ]);
+        if ($validator->fails()){
+                return response(['errors'=>$validator->errors()->all()], 422);
+        }else{
+            if ($post['foto_user']['data'] !== NULL) {
+                $data = [
+                'nama' => $post['nama'],
+                'username' => $post['username'],
+                'email' => $post['email'],
+                'telephone' => $post['telephone']?? '',
+                'foto_user' => $post['foto_user']['data'],
+                'id_provinsi' => $post['id_provinsi'],
+                'id_kabupaten' => $post['id_kabupaten'],
+                'id_kecamatan' => $post['id_kecamatan'],
+                'address' => $post['address'] ?? ''
+                ];
+                }else{
+                    $data = [
+                        'nama' => $post['nama'],
+                        'username' => $post['username'],
+                        'email' => $post['email'],
+                        'telephone' => $post['telephone'] ?? '',
+                        'id_provinsi' => $post['id_provinsi'],
+                        'id_kabupaten' => $post['id_kabupaten'],
+                        'id_kecamatan' => $post['id_kecamatan'],
+                        'address' => $post['address'] ?? ''
+                    ];
+                }
+            tb_user::where('id_user', $id)->update($data);
+            return response(200);
+            }
+        } 
 }

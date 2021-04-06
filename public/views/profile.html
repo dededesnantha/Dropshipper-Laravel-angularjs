@@ -15,7 +15,7 @@
           <!-- User Information-->
           <div class="card user-info-card">
             <div class="card-body p-4 d-flex align-items-center">
-              <div class="user-profile me-3"><img src="img/bg-img/9.jpg" alt=""></div>
+              <div class="user-profile me-3"><img ng-src="{{image_user}}" alt=""></div>
               <div class="user-info">
                 <p class="mb-0 text-white">{{user_datass.username}}</p>
                 <h5 class="mb-0">{{user_datass.nama}}</h5>
@@ -43,7 +43,10 @@
               </div>
               <div class="single-profile-data d-flex align-items-center justify-content-between">
                 <div class="title d-flex align-items-center"><i class="lni lni-map-marker"></i><span>Lokasi</span></div>
-                <div class="data-content">28/C Green Road, BD</div>
+                <div class="data-content">{{user_datass.provinsi}}, {{user_datass.kabupaten}}, {{user_datass.kecamatan}}
+                  <br>
+                  {{user_datass.address}}
+                </div>
               </div>
               <!-- Edit Profile-->
               <div class="edit-profile-btn mt-3"><a class="btn btn-info w-100" href="#!edit-profile"><i class="lni lni-pencil me-2"></i>Edit Profile</a></div>

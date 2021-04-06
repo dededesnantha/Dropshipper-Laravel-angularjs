@@ -1,0 +1,26 @@
+<div class="product-catagories-wrapper py-3" ng-controller="KategoriController">
+        <div class="container">
+          <div class="section-heading">
+            <h6>Produk Kategori</h6>
+          </div>
+          <div class="product-catagory-wrap">
+            <div class="row g-3">
+              <!-- Single Catagory Card-->
+              <div class="col-6 col-md-4 col-lg-4" ng-repeat="item in kategori">
+                <div class="card catagory-card">
+                  <div class="card-body p-0">
+                    <div class="row">
+                        <a class="text-danger" href="#!kategori/{{item.slug}}">
+                          <div style="max-height: 112px;overflow: hidden;">
+                            <img class="img-kat" ng-src="{{item.gambar}}" alt="{{item.title}}" style="width: 100%;">
+                          </div>
+                          <span class="text-kat">{{item.title}}</span>
+                        </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>

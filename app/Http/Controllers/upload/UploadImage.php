@@ -37,4 +37,27 @@ class UploadImage extends Controller
             return response()->json(['data'=>'','status' => 400]);
         }
     }
+
+    public function image_user(Request $request)
+    {
+        if($request->file('file') != null){
+            
+            $file = $request->file('file');
+            
+            $while = 0;
+            $string_replace = array('\'', ';', '[', ']', '{', '}', '|', '^', '~','?','/');            
+            $file_name = str_replace(' ','-',str_replace($string_replace, '',$file->getClientOriginalName()));           
+            $temp_file_name = $file_name;
+            $file_same = 1;
+            while (file_exists(public_path('image/'.$file_name))) {
+                $file_name = str_replace('.','-'.$file_same.'.',$temp_file_name);
+                $file_same++;
+            }
+            $file->move('image/', $file_name); 
+            public_path() . DIRECTORY_SEPARATOR . 'image' .DIRECTORY_SEPARATOR . $file_name;
+            return response()->json(['data'=>$file_name,'status' => 200]);
+        }else{
+            return response()->json(['data'=>'','status' => 400]);
+        }
+    }
 }

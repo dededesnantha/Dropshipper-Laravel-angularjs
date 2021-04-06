@@ -3,26 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\slider;
+use App\Models\kategori;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function slider()
     {
-        $this->middleware('auth');
+        $data = slider::select('judul','image','posisi')->orderBy('posisi','ASC')->get();
+        return $data;        
     }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
+    public function get_kategori()
     {
-        return view('dashboard');
+    	$data = kategori::select('title','gambar','status','slug')->where('status','=',1)->get();
+        return $data; 
     }
 }

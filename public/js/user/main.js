@@ -7,6 +7,7 @@ myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope',
           $http.get(base_url+'api/session_user').then(function(response){
             if (response.status == 200) {
                 $rootScope.user = response.data
+                $scope.image_user = base_url+'image/'+$rootScope.user.foto_user
                 if ($location.path() == '/login') {
                     $location.path('/home'); 
                 }

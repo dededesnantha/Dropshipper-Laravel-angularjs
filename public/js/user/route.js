@@ -21,6 +21,10 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
         templateUrl: '../views/edit-profile.html'
     });
     
+    // single kategori
+    $routeProvider.when('/kategori/:slug', {
+        templateUrl: '../views/list_kategori.html',
+    })
  
     // $routeProvider.when('/dashboard',{
     //     templateUrl:'templates/dashboard.html',
@@ -32,7 +36,7 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
     //     controller:'frontendController'
     // });
  
-    $routeProvider.otherwise('/');
+    $routeProvider.otherwise('/home');
     // $locationProvider.html5Mode({
     //   enabled: true,
     //   requireBase: false

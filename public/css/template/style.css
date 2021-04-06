@@ -1485,7 +1485,7 @@ li.suha-dropdown-menu {
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center; }
-    .hero-slides .owl-dots .owl-dot {
+    .hero-slides .owl-dots .owl-dot .owl-page {
       -webkit-transition-duration: 500ms;
               transition-duration: 500ms;
       position: relative;
@@ -1499,9 +1499,9 @@ li.suha-dropdown-menu {
       max-width: 8px;
       background-color: #ebebeb;
       border-radius: 50%; }
-      .hero-slides .owl-dots .owl-dot.active {
+      .hero-slides .owl-dots .owl-dot .owl-page.active {
         background-color: #ffaf00; }
-        .hero-slides .owl-dots .owl-dot.active::after {
+        .hero-slides .owl-dots .owl-dot .owl-page.active::after {
           position: absolute;
           width: calc(100% + 8px);
           height: calc(100% + 8px);
@@ -3854,3 +3854,29 @@ li.suha-dropdown-menu {
     color: #ffaf00; }
   [data-theme="dark"] .my-order-wrapper .card::after {
     border-right: 2px dashed rgba(255, 255, 255, 0.1); }
+
+.card-kat{
+  background-color: transparent;
+    display: inline-block;
+    margin: 0px auto;
+    text-align: center;
+    position: absolute;
+    top: -12px;
+    left: -12px;
+    height: 100px;
+    width: 100px;
+}
+.card-text{
+    margin-left: 116px;
+    position: relative;
+    width: 100%;
+}
+.img-kat{
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+span.text-kat{
+    text-align: center;
+    font-size: 17px;
+    padding: 12px
+}

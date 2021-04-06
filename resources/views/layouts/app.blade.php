@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{{asset('css/template/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/template/animate.css') }}">
     <link rel="stylesheet" href="{{asset('css/template/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{asset('css/template/owl.theme.min.css') }}">
     <link rel="stylesheet" href="{{asset('css/template/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{asset('css/template/lineicons.min.css') }}">
     <!-- Stylesheet-->

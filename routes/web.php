@@ -32,14 +32,23 @@ Route::get('/','UserDropshipperController@login');
 
 // get user
 Route::post('user','UserDropshipperController@get_user');
+Route::post('update_profile/{id}','UserDropshipperController@update_user');
 
 // area
 Route::get('provinsi','AreaContoller@provinsi');
 Route::get('kabupaten/{id}','AreaContoller@kabupaten');
 Route::get('kecamatan/{id}','AreaContoller@kecamatan');
 
+// slider
+Route::get('get_slider','HomeController@slider');
+
+// kategori
+Route::get('get_kategori','HomeController@get_kategori');
 
 
+
+// upload gambar
+Route::post('upload/gambar','upload\UploadImage@image_user');
 
 
 
