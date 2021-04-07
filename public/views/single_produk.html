@@ -1,0 +1,34 @@
+<div ng-controller="SingleProdukController">
+	<!-- header --> 
+	<div data-ng-include=" 'views/components/header_single.html' "> 
+	</div>
+	<!-- / header -->
+
+	<!-- conntent -->
+	<div class="container p-0">
+		
+		<div class="page-content-wrapper">
+	        <data-owl-carousel class="product-slides owl-carousel" data-options="{navigation: true, pagination: false, rewindNav : true,
+	            stopOnHover: true,
+	            slideSpeed: 300,
+	            singleItem: true}">
+	              <div owl-carousel-item="" ng-repeat="item in produks.gambar" class="item">
+	                <div class="single-product-slide">
+	                	<img src="{{item.gambar}}" alt="{{item.nama_produk}}" style="width: 100%">
+	                </div>
+	              </div>
+	        </data-owl-carousel>
+	    </div>
+	</div>
+	<!-- conntent -->
+
+	<!-- sidebar --> 
+	<div data-ng-include=" 'views/components/sidebar.html' "> 
+	</div>
+	<!-- / sidebar -->
+
+	<!-- footer --> 
+	<div data-ng-include=" 'views/components/footer.html' "> 
+	</div>
+	<!-- / sidebar -->
+</div>

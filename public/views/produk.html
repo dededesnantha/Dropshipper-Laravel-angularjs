@@ -1,0 +1,60 @@
+<div class="top-products-area clearfix py-3" ng-controller="ProdukController">
+        <div class="container">
+          <div class="section-heading d-flex align-items-center justify-content-between">
+            <h6>Top Products</h6><a class="btn btn-danger btn-sm" href="#!produk/top">View All</a>
+          </div>
+          <div class="row g-3">
+            <!-- Single Top Product Card-->
+            <div class="col-6 col-md-4 col-lg-3" ng-repeat="item in produk">
+              <div class="card top-product-card">
+                <div class="card-body">
+                  <span class="badge badge-success" ng-if="item.jenis_label === 'bigsale'">{{item.text_label}}</span>
+                  <span class="badge badge-primary" ng-if="item.jenis_label === 'new'">{{item.text_label}}</span>
+                  <span class="badge badge-danger" ng-if="item.jenis_label === 'disc'">{{item.text_label}}</span>
+                  <a class="product-thumbnail d-block" href="#!produk/{{item.slug}}">
+                    <div class="img-card">
+                      <img class="mb-2" src="{{item.gambar}}" alt="{{item.nama_produk}}">
+                    </div>
+                  </a>
+                    <a class="product-title d-block" href="#!produk/{{item.slug}}">{{item.nama_produk}}</a>
+                    <p class="sale-price" ng-if="item.harga_promo">IDR {{item.harga_promo | currency : "" : 0}}<span>IDR {{item.harga | currency : "" : 0}}</span></p>
+                    <p class="sale-price" ng-if="!item.harga_promo">IDR {{item.harga | currency : "" : 0}}</p>
+
+                    <div class="product-rating">
+                      <span class="badge badge-danger" style="position: inherit;">Sisa Barang : {{item.stok}}</span>
+                    </div>
+                    <a class="btn btn-success btn-sm" href="#"><i class="lni lni-plus"></i></a>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+</div>
+
+<div class="weekly-best-seller-area py-3" ng-controller="ProdukAllController">
+        <div class="container">
+          <div class="section-heading d-flex align-items-center justify-content-between">
+            <h6>Semua Produk</h6><a class="btn btn-success btn-sm" href="shop-list.html">View All</a>
+          </div>
+          <div class="row g-3">
+            <!-- Single Weekly Product Card-->
+            <div class="col-12 col-md-6" ng-repeat="items in produkAll">
+              <div class="card weekly-product-card">
+                <div class="card-body d-flex align-items-center">
+                  <div class="product-thumbnail-side">
+                    <a class="product-thumbnail d-block" href="#!produk/{{items.slug}}">
+                      <img src="{{items.gambar}}" alt="{{items.nama_produk}}"></a>
+                    </div>
+                  <div class="product-description">
+                    <a class="product-title d-block" href="#!produk/{{items.slug}}">{{items.nama_produk}}</a>
+                    <p class="sale-price"></i>IDR {{items.harga | currency : "" : 0}}</p>
+                    <div class="product-rating">Sisa Barang : {{items.stok}}</div>
+                    <a class="btn btn-danger btn-sm" href="#!produk/{{items.slug}}">Detail Produk <i class="me-1 lni lni-arrow-right"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>

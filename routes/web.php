@@ -45,6 +45,13 @@ Route::get('get_slider','HomeController@slider');
 // kategori
 Route::get('get_kategori','HomeController@get_kategori');
 
+// produk
+Route::get('get_top_produk','HomeController@get_top_produk');
+Route::get('get_produk','HomeController@get_produk');
+Route::get('produk/{slug}','HomeController@single_produk');
+
+
+
 
 
 // upload gambar

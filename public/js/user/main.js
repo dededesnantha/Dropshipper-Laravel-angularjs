@@ -1,6 +1,6 @@
 'use strict';
-myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope',
-    function($scope,$http,$location,$rootScope) {
+myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','$window',
+    function($scope,$http,$location,$rootScope,$window) {
 
       //check token
       $rootScope.load_sign = function(){
@@ -41,6 +41,10 @@ myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope',
       $scope.suhaNavbarTogglerhide = function(){
         $('#sidenavWrapper').removeClass('nav-active');
         $('.sidenav-black-overlay').removeClass('active');
+      }
+
+      $scope.Back = function () {
+        $window.history.back();
       }
     }
 ]);

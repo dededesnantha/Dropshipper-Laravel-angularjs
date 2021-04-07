@@ -164,7 +164,6 @@ myApp.controller('KategoriController', ['$scope', '$http','SweetAlert','$locatio
               angular.forEach($scope.kategori, function (values, key) {
                	values['gambar'] = base_url +'image/'+values['gambar'];
               });
-              console.log($scope.kategori)
 	}, function(x) {
 	     SweetAlert.swal("Terjadi Kesalahan!", "error")
 	});
@@ -173,6 +172,44 @@ myApp.controller('KategoriController', ['$scope', '$http','SweetAlert','$locatio
 myApp.controller('ListKategoriController', ['$scope', '$http','SweetAlert','$location', '$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
 	console.log($routeParams)
 }]);
+
+myApp.controller('ProdukController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
+	$http.get(base_url+'get_top_produk').then(function(data) {
+              $scope.produk = data.data;
+              angular.forEach($scope.produk, function (values, key) {
+               	values['gambar'] = base_url +'image/'+values['gambar'];
+              });
+	}, function(x) {
+	     SweetAlert.swal("Terjadi Kesalahan!", "error")
+	});
+}]);
+
+myApp.controller('ProdukAllController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
+	$http.get(base_url+'get_produk').then(function(data) {
+              $scope.produkAll = data.data;
+              angular.forEach($scope.produkAll, function (values, key) {
+               	values['gambar'] = base_url +'image/'+values['gambar'];
+              });
+	}, function(x) {
+	     SweetAlert.swal("Terjadi Kesalahan!", "error")
+	});
+}]);
+
+myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$location','$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
+	$scope.load_sign();
+	$http.get(base_url+'produk/'+$routeParams.slug).then(function(data) {
+              $scope.produks = data.data.produk;
+              angular.forEach($scope.produks.gambar, function (values, key) {
+               	values['gambar'] = base_url +'image/'+values['gambar'];
+              });
+              console.log($scope.produks)
+	}, function(x) {
+	     SweetAlert.swal("Terjadi Kesalahan!", "error")
+	});
+}]);
+
+
+
 
 
 

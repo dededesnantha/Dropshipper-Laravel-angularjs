@@ -20,10 +20,13 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
     $routeProvider.when('/edit-profile', {
         templateUrl: '../views/edit-profile.html'
     });
-    
     // single kategori
     $routeProvider.when('/kategori/:slug', {
         templateUrl: '../views/list_kategori.html',
+    })
+    // single produk
+    $routeProvider.when('/produk/:slug', {
+        templateUrl: '../views/single_produk.html',
     })
  
     // $routeProvider.when('/dashboard',{

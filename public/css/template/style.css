@@ -3880,3 +3880,7 @@ span.text-kat{
     font-size: 17px;
     padding: 12px
 }
+.img-card {
+  max-height: 154px;
+  overflow: hidden;
+}
