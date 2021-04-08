@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\slider;
 use App\Models\kategori;
 use App\Models\produk;
+use App\Models\Size;
+use App\Models\Color;
 use App\Models\tb_produk_gambar;
 
 class HomeController extends Controller
@@ -19,6 +21,20 @@ class HomeController extends Controller
     {
     	$data = kategori::select('title','gambar','status','slug')->where('status','=',1)->get();
         return $data; 
+    }
+    public function get_kategori_produk($slug)
+    {
+        $data['kategori'] = kategori::where('slug', $slug)
+                        ->where('status','=',1)
+                        ->select('id', 'title','gambar','status','slug')
+                        ->first();
+        $data['produk'] = produk::where('id_kategori', $data['kategori']->id)
+                        ->where('status','=',1)
+                        ->select('id','nama_produk','gambar','status',
+                                'slug','harga','stok','harga_promo','jenis_label',
+                                'text_label','updated_at')
+                        ->get();
+        return $data;
     }
     public function get_top_produk()
     {
@@ -61,12 +77,32 @@ class HomeController extends Controller
                         
         if ($data['produk']) {
             $data['produk']->gambar = tb_produk_gambar::where('id_produk','=',$data['produk']->id)->get();
-            // if ($data['produk']->size !==NULL) {
-            //     $data['produk']->size = explode(', ', $get_produk->size);
-            // }
-            // if ($data['produk']->warna !==NULL) {
-            //     $data['produk']->warna = explode(', ', $get_produk->warna);
-            // }
+            if ($data['produk']->size !== '') {
+                $size = explode(', ', $data['produk']->size);
+                $get_size = Size::whereIn('size',$size)->select('id','size')->get();
+                foreach ($get_size as $key => $values) {
+                    $datas_size[] = [
+                        'id' => $values->id,
+                        'size' => $values->size
+                    ];
+                }
+                $data['produk']->size = $datas_size;
+                }else{
+                    $data['produk']->size = [];
+            }
+            if ($data['produk']->warna !== '') {
+                $warna = explode(', ', $data['produk']->warna);
+                $get_size = Color::whereIn('text',$warna)->select('id','color')->get();
+                    foreach ($get_size as $key => $values) {
+                        $datas_color[] = [
+                            'id' => $values->id,
+                            'color' => $values->color
+                        ];
+                    }
+                    $data['produk']->warna = $datas_color;
+            }else{
+                    $data['produk']->warna = [];
+            }
         }
         return $data;
     }

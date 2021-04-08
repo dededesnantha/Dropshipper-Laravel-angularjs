@@ -47,6 +47,8 @@
     <script src="{{asset('bower_components/sweetalert/sweet-alert.min.js')}}"></script>
     <script src="{{asset('bower_components/sweetalert/SweetAlert.js')}}"></script>
 
+    <script src="{{asset('bower_components/angular-bootstrap/ui-bootstrap-tpls.js') }}"></script>
+    
     <script src="{{asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{asset('js/jquery.min.js') }}"></script>
     <script src="{{asset('js/waypoints.min.js') }}"></script>

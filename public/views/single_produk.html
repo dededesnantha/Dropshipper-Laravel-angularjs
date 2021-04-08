@@ -5,21 +5,91 @@
 	<!-- / header -->
 
 	<!-- conntent -->
-	<div class="container p-0">
-		
-		<div class="page-content-wrapper">
-	        <data-owl-carousel class="product-slides owl-carousel" data-options="{navigation: true, pagination: false, rewindNav : true,
-	            stopOnHover: true,
-	            slideSpeed: 300,
-	            singleItem: true}">
-	              <div owl-carousel-item="" ng-repeat="item in produks.gambar" class="item">
-	                <div class="single-product-slide">
-	                	<img src="{{item.gambar}}" alt="{{item.nama_produk}}" style="width: 100%">
-	                </div>
-	              </div>
-	        </data-owl-carousel>
+	<div class="page-content-wrapper">
+		<div class="container-fluit" style="background-color: #f5f5f5 !important;height: 467px">
+			<div class="container p-0" >
+				<div class="img-single">
+			        <data-owl-carousel class="product-slides owl-carousel" data-options="{navigation: false, pagination: true, rewindNav : false,
+			            stopOnHover: true,
+			            slideSpeed: 300,
+			            singleItem: true}">
+			              <div owl-carousel-item="" ng-repeat="item in produks.gambar" class="item">
+			                <div>
+			                	<img src="{{item.gambar}}" alt="{{item.nama_produk}}" class="img-center">
+			                </div>
+			              </div>
+			        </data-owl-carousel>
+			    </div>
+			</div>
+		</div>
+		<div class="product-description mb-3">
+	        <div class="product-title-meta-data bg-white py-3" style="margin-top: -67px">
+	          <div class="container d-flex justify-content-between">
+	            <div class="p-title-price">
+	              <h6 class="mb-1">{{produks.nama_produk}}</h6>
+	              <p class="sale-price" ng-if="produks.harga_promo">IDR {{produks.harga_promo | currency : "" : 0}}<span>IDR {{produks.harga | currency : "" : 0}}</span></p>
+	                    <p class="sale-price" ng-if="!produks.harga_promo">IDR {{produks.harga | currency : "" : 0}}</p>
+	            </div>
+	          </div>
+	          <div class="product-ratings">
+	            <div class="container d-flex align-items-center justify-content-between">
+	              	<span class="badge badge-success" ng-if="produks.jenis_label === 'bigsale'">{{produks.text_label}}</span>
+	                <span class="badge badge-primary" ng-if="produks.jenis_label === 'new'">{{produks.text_label}}</span>
+	                <span class="badge badge-danger" ng-if="produks.jenis_label === 'disc'">{{produks.text_label}}</span>
+	              <div class="total-result-of-ratings" ng-if="produks.stok > '5'" ><span>{{produks.stok}}</span><span>Sisa Produk</span></div>
+	              <div class="total-result-of-ratings" ng-if="produks.stok < '5'" ><span style="background-color: #ea4c62">{{produks.stok}}</span><span style="color: #ea4c62">Sisa Produk</span></div>
+	            </div>
+	          </div>
+	        </div>
 	    </div>
+
+        <div class="selection-panel bg-white mb-3 py-3">
+          <div class="container d-flex align-items-center justify-content-between">
+            <div class="choose-color-wrapper">
+              <p class="mb-1 font-weight-bold">Color</p>
+              <div class="choose-color-radio d-flex align-items-center">
+                <div class="form-check mb-0" ng-repeat="color in produks.warna">
+                  <input class="form-check-input" style="background-color: {{color.color}}" id="color-{{color.id}}" type="radio" name="colorRadio">
+                  <label class="form-check-label" for="color-{{color.id}}"></label>
+                </div>
+              </div>
+            </div>
+
+            <div class="choose-size-wrapper text-end">
+              <p class="mb-1 font-weight-bold">Size</p>
+              <div class="choose-size-radio d-flex align-items-center">
+                <div class="form-check mb-0 me-2" ng-repeat="size in produks.size">
+                  <input class="form-check-input" id="size-{{size.id}}" type="radio" name="sizeRadio">
+                  <label class="form-check-label" for="size-{{size.id}}">{{size.size}}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+         <!-- Add To Cart-->
+        <div class="cart-form-wrapper bg-white mb-3 py-3">
+          <div class="container">
+            <form class="cart-form" action="#" method="">
+              <div class="order-plus-minus d-flex align-items-center">
+                <div class="quantity-button-handler">-</div>
+                <input class="form-control cart-quantity-input" type="text" step="1" name="quantity" value="3">
+                <div class="quantity-button-handler">+</div>
+              </div>
+              <button class="btn btn-danger ms-3" type="submit">Add To Cart</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="p-specification bg-white mb-3 py-3">
+          <div class="container">
+            <h6>Detail Produk</h6>
+            <div id="desc_text"></div>
+          </div>
+        </div>
+
 	</div>
+
 	<!-- conntent -->
 
 	<!-- sidebar --> 

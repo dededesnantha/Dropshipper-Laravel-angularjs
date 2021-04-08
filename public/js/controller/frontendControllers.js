@@ -170,7 +170,32 @@ myApp.controller('KategoriController', ['$scope', '$http','SweetAlert','$locatio
 }]);
 
 myApp.controller('ListKategoriController', ['$scope', '$http','SweetAlert','$location', '$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
-	console.log($routeParams)
+	$scope.filteredCustomers = [];
+	$scope.currentPage = 1;
+	$scope.numPerPage = 1;
+	$scope.maxSize = 5;
+	$scope.produks = [];
+
+	$http.get(base_url+'get_kategori_produk/'+$routeParams.slug).then(function(data) {
+              $scope.kategori = data.data.kategori;
+              $scope.kategori.gambar = base_url +'image/'+$scope.kategori.gambar;
+              $scope.produks = data.data.produk
+              angular.forEach($scope.produks, function (values, key) {
+               	values['gambar'] = base_url +'image/'+values['gambar'];
+              });
+	}, function(x) {
+	     SweetAlert.swal("Terjadi Kesalahan!","","error")
+	});
+
+	$scope.$watch('currentPage + numPerPage', updateFilteredItems);
+
+	  function updateFilteredItems() {
+	    var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+	      end = begin + $scope.numPerPage;
+
+	    $scope.filteredCustomers = $scope.produks.slice(begin, end);
+	  }
+
 }]);
 
 myApp.controller('ProdukController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
@@ -180,7 +205,7 @@ myApp.controller('ProdukController', ['$scope', '$http','SweetAlert','$location'
                	values['gambar'] = base_url +'image/'+values['gambar'];
               });
 	}, function(x) {
-	     SweetAlert.swal("Terjadi Kesalahan!", "error")
+	     SweetAlert.swal("Terjadi Kesalahan!","", "error")
 	});
 }]);
 
@@ -191,7 +216,7 @@ myApp.controller('ProdukAllController', ['$scope', '$http','SweetAlert','$locati
                	values['gambar'] = base_url +'image/'+values['gambar'];
               });
 	}, function(x) {
-	     SweetAlert.swal("Terjadi Kesalahan!", "error")
+	     SweetAlert.swal("Terjadi Kesalahan!","", "error")
 	});
 }]);
 
@@ -202,9 +227,9 @@ myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$loc
               angular.forEach($scope.produks.gambar, function (values, key) {
                	values['gambar'] = base_url +'image/'+values['gambar'];
               });
-              console.log($scope.produks)
+              document.getElementById("desc_text").innerHTML = $scope.produks.deskripsi;
 	}, function(x) {
-	     SweetAlert.swal("Terjadi Kesalahan!", "error")
+	     SweetAlert.swal("Terjadi Kesalahan!","","error")
 	});
 }]);
 

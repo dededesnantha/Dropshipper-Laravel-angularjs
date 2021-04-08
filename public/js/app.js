@@ -1,1 +1,1 @@
-var myApp = angular.module("myApp",['ngRoute','ngCookies','oitozero.ngSweetAlert']);
+var myApp = angular.module("myApp",['ngRoute','ngCookies','oitozero.ngSweetAlert','ui.bootstrap']);

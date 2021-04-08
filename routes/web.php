@@ -44,6 +44,8 @@ Route::get('get_slider','HomeController@slider');
 
 // kategori
 Route::get('get_kategori','HomeController@get_kategori');
+Route::get('get_kategori_produk/{slug}','HomeController@get_kategori_produk');
+
 
 // produk
 Route::get('get_top_produk','HomeController@get_top_produk');
