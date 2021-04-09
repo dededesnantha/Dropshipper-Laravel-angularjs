@@ -18,6 +18,14 @@ myApp.controller('login', ['$scope', '$http','SweetAlert', function($scope, $htt
 myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
 	$scope.load_sign();
 	
+	$scope.home = function() {
+        window.location.href = '#!/home';
+	}
+
+	$scope.setting = function() {
+		console.log("asdasdsa")
+        window.location.href = '#!/setting';
+	}
 	// $scope.form = {};
 	// $scope.save = function () {
 	// 	$http.post(base_url+'api/login_user', {username: $scope.form.username, password: $scope.form.password})
@@ -172,29 +180,31 @@ myApp.controller('KategoriController', ['$scope', '$http','SweetAlert','$locatio
 myApp.controller('ListKategoriController', ['$scope', '$http','SweetAlert','$location', '$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
 	$scope.filteredCustomers = [];
 	$scope.currentPage = 1;
-	$scope.numPerPage = 1;
-	$scope.maxSize = 5;
-	$scope.produks = [];
+	$scope.numPerPage = 16;
+	$scope.maxSize = 10;
 
-	$http.get(base_url+'get_kategori_produk/'+$routeParams.slug).then(function(data) {
-              $scope.kategori = data.data.kategori;
-              $scope.kategori.gambar = base_url +'image/'+$scope.kategori.gambar;
-              $scope.produks = data.data.produk
-              angular.forEach($scope.produks, function (values, key) {
-               	values['gambar'] = base_url +'image/'+values['gambar'];
-              });
-	}, function(x) {
-	     SweetAlert.swal("Terjadi Kesalahan!","","error")
-	});
+	$scope.init = function() {
+		$http.get(base_url+'get_kategori_produk/'+$routeParams.slug).then(function(data) {
+	              $scope.kategori = data.data.kategori;
+	              $scope.kategori.gambar = base_url +'image/'+$scope.kategori.gambar;
+	              $scope.produks = data.data.produk;
+	              angular.forEach($scope.produks, function (values, key) {
+	               	values['gambar'] = base_url +'image/'+values['gambar'];
+	              });
 
-	$scope.$watch('currentPage + numPerPage', updateFilteredItems);
+	              $scope.$watch('currentPage + numPerPage', updateFilteredItems);
 
-	  function updateFilteredItems() {
-	    var begin = (($scope.currentPage - 1) * $scope.numPerPage),
-	      end = begin + $scope.numPerPage;
+				  function updateFilteredItems() {
+				    var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+				      end = begin + $scope.numPerPage;
 
-	    $scope.filteredCustomers = $scope.produks.slice(begin, end);
-	  }
+				    $scope.filteredCustomers = $scope.produks.slice(begin, end);
+				  }
+		}, function(x) {
+		     SweetAlert.swal("Terjadi Kesalahan!","","error")
+		});
+	}
+	$scope.init();
 
 }]);
 
@@ -233,6 +243,81 @@ myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$loc
 	});
 }]);
 
+myApp.controller('ListProdukTopController', ['$scope', '$http','SweetAlert','$location','$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
+	$scope.filteredCustomers = [];
+	$scope.currentPage = 1;
+	$scope.numPerPage = 16;
+	$scope.maxSize = 10;
+	$http.get(base_url+'produk_top').then(function(data) {
+              $scope.produks = data.data;
+              
+              angular.forEach($scope.produks, function (values, key) {
+               	values['gambar'] = base_url +'image/'+values['gambar'];
+              });
+              $scope.$watch('currentPage + numPerPage', updateFilteredItems);
+
+				  function updateFilteredItems() {
+				    var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+				      end = begin + $scope.numPerPage;
+
+				    $scope.filteredCustomers = $scope.produks.slice(begin, end);
+				  }
+	}, function(x) {
+	     SweetAlert.swal("Terjadi Kesalahan!","","error")
+	});
+}]);
+
+myApp.controller('ListProdukController', ['$scope', '$http','SweetAlert','$location','$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
+	$scope.filteredCustomers = [];
+	$scope.currentPage = 1;
+	$scope.numPerPage = 16;
+	$scope.maxSize = 10;
+	$http.get(base_url+'produk_all').then(function(data) {
+              $scope.produks = data.data;
+              
+              angular.forEach($scope.produks, function (values, key) {
+               	values['gambar'] = base_url +'image/'+values['gambar'];
+              });
+              $scope.$watch('currentPage + numPerPage', updateFilteredItems);
+
+				  function updateFilteredItems() {
+				    var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+				      end = begin + $scope.numPerPage;
+
+				    $scope.filteredCustomers = $scope.produks.slice(begin, end);
+				  }
+	}, function(x) {
+	     SweetAlert.swal("Terjadi Kesalahan!","","error")
+	});
+}]);
+
+myApp.controller('ListKategoriAllController', ['$scope', '$http','SweetAlert','$location','$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
+	$scope.filteredCustomers = [];
+	$scope.currentPage = 1;
+	$scope.numPerPage = 16;
+	$scope.maxSize = 10;
+	$http.get(base_url+'kategori_all').then(function(data) {
+              $scope.kategori = data.data;
+              
+              angular.forEach($scope.kategori, function (values, key) {
+               	values['gambar'] = base_url +'image/'+values['gambar'];
+              });
+              $scope.$watch('currentPage + numPerPage', updateFilteredItems);
+
+				  function updateFilteredItems() {
+				    var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+				      end = begin + $scope.numPerPage;
+
+				    $scope.filteredCustomers = $scope.kategori.slice(begin, end);
+				  }
+	}, function(x) {
+	     SweetAlert.swal("Terjadi Kesalahan!","","error")
+	});
+}]);
+
+myApp.controller('SettingController', ['$scope', '$http','SweetAlert','$location','$routeParams','$window', function($scope, $http, SweetAlert, $location, $routeParams, $window){
+
+}]);
 
 
 

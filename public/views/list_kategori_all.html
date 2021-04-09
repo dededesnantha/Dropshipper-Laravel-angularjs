@@ -1,0 +1,52 @@
+<div class="product-catagories-wrapper py-3" ng-controller="ListKategoriAllController">
+	<!-- header --> 
+	  <div data-ng-include=" 'views/components/header.html' "> 
+	  </div>
+	  <!-- / header -->
+	  <!-- sidebar --> 
+	  <div data-ng-include=" 'views/components/sidebar.html' "> 
+	  </div>
+	  <!-- / sidebar -->
+
+	  <!-- conntent -->
+	  <div class="page-content-wrapper">
+        <!-- produk -->
+       	<div class="product-catagories-wrapper py-3">
+        	<div class="container">
+	          <div class="section-heading d-flex align-items-center justify-content-between">
+	            <h6>Semua Kategori</h6>
+	          </div>
+	          <div class="row g-3">
+	            <!-- Single Top Product Card-->
+	            <div class="col-6 col-md-4 col-lg-4" ng-repeat="item in filteredCustomers">
+	                <div class="card catagory-card">
+	                  <div class="card-body p-0">
+	                    <div class="row">
+	                        <a class="text-danger" href="#!kategori/{{item.slug}}">
+	                          <div style="max-height: 112px;overflow: hidden;">
+	                            <img class="img-kat" ng-src="{{item.gambar}}" alt="{{item.title}}" style="width: 100%;">
+	                          </div>
+	                          <span class="text-kat">{{item.title}}</span>
+	                        </a>
+	                    </div>
+	                  </div>
+	                </div>
+	            </div>
+			   	<div class="row" data-ng-show="kategori.length > 0">
+			          <div class="col-span-12" style="text-align: center;">
+			            <uib-pagination ng-model="currentPage" total-items="kategori.length" max-size="maxSize" items-per-page="numPerPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;"></uib-pagination>
+		        		<div class="clearfix"></div>
+			          </div>
+			    </div>
+	          </div>
+	        </div>
+       	</div>
+        <!-- end produk -->
+       </div>
+	  <!-- conntent -->
+
+	  <!-- footer --> 
+	  <div data-ng-include=" 'views/components/footer.html' "> 
+	  </div>
+	  <!-- / footer -->
+</div>

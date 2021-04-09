@@ -144,7 +144,6 @@ app.controller('KategoriAdd', ['$scope', '$http','FileUploader','$state','$locat
 
 
     $scope.remove = function(index){  
-        console.log($scope.auth_config)
         $http.post(baseurl+'admin/remove_image/'+index,$scope.auth_config)
           .then(function(response) {
               $localStorage.user = response.data.user;

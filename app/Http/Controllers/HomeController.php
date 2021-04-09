@@ -19,8 +19,13 @@ class HomeController extends Controller
     }
     public function get_kategori()
     {
-    	$data = kategori::select('title','gambar','status','slug')->where('status','=',1)->get();
+    	$data = kategori::select('title','gambar','status','slug')->where('status','=',1)->limit(6)->get();
         return $data; 
+    }
+    public function kategori_all()
+    {
+        $data = kategori::select('title','gambar','status','slug')->where('status','=',1)->get();
+        return $data;
     }
     public function get_kategori_produk($slug)
     {
@@ -105,5 +110,34 @@ class HomeController extends Controller
             }
         }
         return $data;
+    }
+    public function produk_top_all()
+    {
+
+        $produk = produk::join('tb_kategori', 'tb_produk.id_kategori','=','tb_kategori.id')
+                            ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.gambar','tb_produk.status',
+                                    'tb_produk.slug','tb_produk.harga','tb_produk.stok','tb_produk.harga_promo','tb_produk.jenis_label',
+                                    'tb_produk.text_label','tb_produk.updated_at')
+                            ->where('tb_kategori.status','=',1)
+                            ->where('tb_produk.status','=',1)
+                            ->whereNotNull('tb_produk.jenis_label')
+                            ->orderBy('tb_produk.updated_at','DESC')
+                            ->get();
+        
+        return $produk;
+    }
+
+    public function produk_all()
+    {
+        $produk = produk::join('tb_kategori', 'tb_produk.id_kategori','=','tb_kategori.id')
+                            ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.gambar','tb_produk.status',
+                                    'tb_produk.slug','tb_produk.harga','tb_produk.stok','tb_produk.harga_promo','tb_produk.jenis_label',
+                                    'tb_produk.text_label','tb_produk.updated_at')
+                            ->where('tb_kategori.status','=',1)
+                            ->where('tb_produk.status','=',1)
+                            ->whereNull('tb_produk.jenis_label')
+                            ->orderBy('tb_produk.id','DESC')
+                            ->get();
+        return $produk;
     }
 }

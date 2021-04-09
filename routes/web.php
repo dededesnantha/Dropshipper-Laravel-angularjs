@@ -45,12 +45,17 @@ Route::get('get_slider','HomeController@slider');
 // kategori
 Route::get('get_kategori','HomeController@get_kategori');
 Route::get('get_kategori_produk/{slug}','HomeController@get_kategori_produk');
+Route::get('kategori_all','HomeController@kategori_all');
 
 
 // produk
 Route::get('get_top_produk','HomeController@get_top_produk');
 Route::get('get_produk','HomeController@get_produk');
 Route::get('produk/{slug}','HomeController@single_produk');
+Route::get('produk_top','HomeController@produk_top_all');
+Route::get('produk_all','HomeController@produk_all');
+
+
 
 
 

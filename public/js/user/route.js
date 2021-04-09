@@ -24,11 +24,26 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
     $routeProvider.when('/kategori/:slug', {
         templateUrl: '../views/list_kategori.html',
     })
+    //list kategori
+    $routeProvider.when('/kategori-all', {
+        templateUrl: '../views/list_kategori_all.html',
+    })
+    // list produk top
+    $routeProvider.when('/produk/top', {
+        templateUrl: '../views/list_produk_top.html',
+    })
+    //list produk all
+    $routeProvider.when('/produk-all', {
+        templateUrl: '../views/list_produk_all.html',
+    })
     // single produk
     $routeProvider.when('/produk/:slug', {
         templateUrl: '../views/single_produk.html',
     })
- 
+    // setting
+    $routeProvider.when('/setting', {
+        templateUrl: '../views/setting.html',
+    })
     // $routeProvider.when('/dashboard',{
     //     templateUrl:'templates/dashboard.html',
     //     controller:'../controller/frontendController'
