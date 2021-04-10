@@ -55,6 +55,9 @@ Route::get('produk/{slug}','HomeController@single_produk');
 Route::get('produk_top','HomeController@produk_top_all');
 Route::get('produk_all','HomeController@produk_all');
 
+Route::get('card_produk/{id}','HomeController@card_produk');
+
+
 
 
 

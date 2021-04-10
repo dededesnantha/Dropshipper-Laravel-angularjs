@@ -8,7 +8,8 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
         templateUrl:'../views/login.html'
     });
     $routeProvider.when('/home',{
-        templateUrl:'../views/home.html'
+        templateUrl:'../views/home.html',
+        activetab: 'home'
     });
     $routeProvider.when('/logout',{
         controller:'logout'
@@ -43,6 +44,7 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
     // setting
     $routeProvider.when('/setting', {
         templateUrl: '../views/setting.html',
+        activetab: 'setting'
     })
     // $routeProvider.when('/dashboard',{
     //     templateUrl:'templates/dashboard.html',

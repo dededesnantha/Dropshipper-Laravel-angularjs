@@ -15,17 +15,68 @@ myApp.controller('login', ['$scope', '$http','SweetAlert', function($scope, $htt
 	}
 }]);
 
-myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
+myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','$route','$uibModal', 
+	function($scope, $http, SweetAlert, $location, $route, $uibModal){
 	$scope.load_sign();
 	
-	$scope.home = function() {
-        window.location.href = '#!/home';
-	}
+	// $scope.loading = false;
+	// get slider
+	$scope.slider = [];
+	$http.get(base_url+'get_slider').then(function(data) {
+              $scope.slider = data.data;
+              angular.forEach($scope.slider, function (values, key) {
+               	values['image'] = base_url +'gallery/'+values['image'];
+              });
+	}, function(x) {
+	     SweetAlert.swal("Terjadi Kesalahan!", "error")
+	});
 
-	$scope.setting = function() {
-		console.log("asdasdsa")
-        window.location.href = '#!/setting';
-	}
+	$http.get(base_url+'get_kategori').then(function(data) {
+              $scope.kategori = data.data;
+              angular.forEach($scope.kategori, function (values, key) {
+               	values['gambar'] = base_url +'image/'+values['gambar'];
+              });
+	}, function(x) {
+	     SweetAlert.swal("Terjadi Kesalahan!", "error")
+	});
+
+	$http.get(base_url+'get_top_produk').then(function(data) {
+              $scope.produk = data.data;
+              angular.forEach($scope.produk, function (values, key) {
+               	values['gambar'] = base_url +'image/'+values['gambar'];
+              });
+	}, function(x) {
+	     SweetAlert.swal("Terjadi Kesalahan!","", "error")
+	});
+
+	$http.get(base_url+'get_produk').then(function(data) {
+              $scope.produkAll = data.data;
+              angular.forEach($scope.produkAll, function (values, key) {
+               	values['gambar'] = base_url +'image/'+values['gambar'];
+              });
+              $scope.loading = false;
+	}, function(x) {
+	     SweetAlert.swal("Terjadi Kesalahan!","", "error")
+	});
+
+	$scope.add = function(id) {
+		var modalInstance =  $uibModal.open({
+	      templateUrl: "views/modal/modalContent.html",
+	      controller: "ModalContentCtrl",
+	      resolve: {
+              items: function () {
+                return id;
+              }
+           }
+	    });
+	    modalInstance.result.then(function() {
+	        
+	    }, function () {
+            
+        });
+	    
+	  };
+
 	// $scope.form = {};
 	// $scope.save = function () {
 	// 	$http.post(base_url+'api/login_user', {username: $scope.form.username, password: $scope.form.password})
@@ -41,6 +92,29 @@ myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location', 
 
 	// }
 }]);
+
+
+myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$http','SweetAlert','$location','$route', 
+	function($scope, $modalInstance, items, $http,SweetAlert,$location,$route) {
+
+	$http.get(base_url+'card_produk/'+items).then(function(data) {
+              $scope.produks = data.data;
+              $scope.produks.gambar = base_url+'image/'+$scope.produks.gambar;
+	   }, function(x) {
+	        SweetAlert.swal("Terjadi Kesalahan!", "error")
+	    });
+
+  $scope.ok = function(){
+    $uibModalInstance.close("Ok");
+  }
+   
+  $scope.cancel = function(){
+    $uibModalInstance.dismiss();
+  } 
+  
+}]);
+
+
 
 myApp.controller('ProfileController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
 	$scope.load_sign();
@@ -121,19 +195,21 @@ myApp.controller('ProfileController', ['$scope', '$http','SweetAlert','$location
 	}
 }]);
 
-myApp.controller('SliderController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
-	// get slider
-	$scope.slider = [];
-	$http.get(base_url+'get_slider').then(function(data) {
-              $scope.slider = data.data;
-              angular.forEach($scope.slider, function (values, key) {
-               	values['image'] = base_url +'gallery/'+values['image'];
-              });
-	}, function(x) {
-	     SweetAlert.swal("Terjadi Kesalahan!", "error")
-	});
+// myApp.controller('SliderController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
+// 	// get slider
+// 	$scope.slider = [];
+// 	$http.get(base_url+'get_slider').then(function(data) {
+//               $scope.slider = data.data;
+//               angular.forEach($scope.slider, function (values, key) {
+//                	values['image'] = base_url +'gallery/'+values['image'];
+//               });
+// 	}, function(x) {
+// 	     SweetAlert.swal("Terjadi Kesalahan!", "error")
+// 	});
 
-}]).directive("owlCarousel", function() {
+// }])
+
+myApp.directive("owlCarousel", function() {
 	return {
 		restrict: 'E',
 		transclude: false,
@@ -153,7 +229,7 @@ myApp.controller('SliderController', ['$scope', '$http','SweetAlert','$location'
 		}
 	};
 })
-.directive('owlCarouselItem', [function() {
+myApp.directive('owlCarouselItem', [function() {
 	return {
 		restrict: 'A',
 		transclude: false,
@@ -166,16 +242,16 @@ myApp.controller('SliderController', ['$scope', '$http','SweetAlert','$location'
 	};
 }]);
 
-myApp.controller('KategoriController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
-	$http.get(base_url+'get_kategori').then(function(data) {
-              $scope.kategori = data.data;
-              angular.forEach($scope.kategori, function (values, key) {
-               	values['gambar'] = base_url +'image/'+values['gambar'];
-              });
-	}, function(x) {
-	     SweetAlert.swal("Terjadi Kesalahan!", "error")
-	});
-}]);
+// myApp.controller('KategoriController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
+// 	$http.get(base_url+'get_kategori').then(function(data) {
+//               $scope.kategori = data.data;
+//               angular.forEach($scope.kategori, function (values, key) {
+//                	values['gambar'] = base_url +'image/'+values['gambar'];
+//               });
+// 	}, function(x) {
+// 	     SweetAlert.swal("Terjadi Kesalahan!", "error")
+// 	});
+// }]);
 
 myApp.controller('ListKategoriController', ['$scope', '$http','SweetAlert','$location', '$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
 	$scope.filteredCustomers = [];
@@ -199,6 +275,7 @@ myApp.controller('ListKategoriController', ['$scope', '$http','SweetAlert','$loc
 				      end = begin + $scope.numPerPage;
 
 				    $scope.filteredCustomers = $scope.produks.slice(begin, end);
+				    $scope.loading = false;
 				  }
 		}, function(x) {
 		     SweetAlert.swal("Terjadi Kesalahan!","","error")
@@ -208,27 +285,27 @@ myApp.controller('ListKategoriController', ['$scope', '$http','SweetAlert','$loc
 
 }]);
 
-myApp.controller('ProdukController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
-	$http.get(base_url+'get_top_produk').then(function(data) {
-              $scope.produk = data.data;
-              angular.forEach($scope.produk, function (values, key) {
-               	values['gambar'] = base_url +'image/'+values['gambar'];
-              });
-	}, function(x) {
-	     SweetAlert.swal("Terjadi Kesalahan!","", "error")
-	});
-}]);
+// myApp.controller('ProdukController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
+// 	$http.get(base_url+'get_top_produk').then(function(data) {
+//               $scope.produk = data.data;
+//               angular.forEach($scope.produk, function (values, key) {
+//                	values['gambar'] = base_url +'image/'+values['gambar'];
+//               });
+// 	}, function(x) {
+// 	     SweetAlert.swal("Terjadi Kesalahan!","", "error")
+// 	});
+// }]);
 
-myApp.controller('ProdukAllController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
-	$http.get(base_url+'get_produk').then(function(data) {
-              $scope.produkAll = data.data;
-              angular.forEach($scope.produkAll, function (values, key) {
-               	values['gambar'] = base_url +'image/'+values['gambar'];
-              });
-	}, function(x) {
-	     SweetAlert.swal("Terjadi Kesalahan!","", "error")
-	});
-}]);
+// myApp.controller('ProdukAllController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
+// 	$http.get(base_url+'get_produk').then(function(data) {
+//               $scope.produkAll = data.data;
+//               angular.forEach($scope.produkAll, function (values, key) {
+//                	values['gambar'] = base_url +'image/'+values['gambar'];
+//               });
+// 	}, function(x) {
+// 	     SweetAlert.swal("Terjadi Kesalahan!","", "error")
+// 	});
+// }]);
 
 myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$location','$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
 	$scope.load_sign();
@@ -238,12 +315,13 @@ myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$loc
                	values['gambar'] = base_url +'image/'+values['gambar'];
               });
               document.getElementById("desc_text").innerHTML = $scope.produks.deskripsi;
+              $scope.loading = false;
 	}, function(x) {
 	     SweetAlert.swal("Terjadi Kesalahan!","","error")
 	});
 }]);
 
-myApp.controller('ListProdukTopController', ['$scope', '$http','SweetAlert','$location','$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
+myApp.controller('ListProdukTopController', ['$scope', '$http','SweetAlert','$location','$routeParams','$uibModal', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal){
 	$scope.filteredCustomers = [];
 	$scope.currentPage = 1;
 	$scope.numPerPage = 16;
@@ -261,10 +339,29 @@ myApp.controller('ListProdukTopController', ['$scope', '$http','SweetAlert','$lo
 				      end = begin + $scope.numPerPage;
 
 				    $scope.filteredCustomers = $scope.produks.slice(begin, end);
+				    $scope.loading = false;
 				  }
 	}, function(x) {
 	     SweetAlert.swal("Terjadi Kesalahan!","","error")
 	});
+
+	$scope.add = function(id) {
+		var modalInstance =  $uibModal.open({
+	      templateUrl: "views/modal/modalContent.html",
+	      controller: "ModalContentCtrl",
+	      resolve: {
+              items: function () {
+                return id;
+              }
+           }
+	    });
+	    modalInstance.result.then(function() {
+	        
+	    }, function () {
+            
+        });
+	    
+	  };
 }]);
 
 myApp.controller('ListProdukController', ['$scope', '$http','SweetAlert','$location','$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
@@ -285,6 +382,7 @@ myApp.controller('ListProdukController', ['$scope', '$http','SweetAlert','$locat
 				      end = begin + $scope.numPerPage;
 
 				    $scope.filteredCustomers = $scope.produks.slice(begin, end);
+				    $scope.loading = false;
 				  }
 	}, function(x) {
 	     SweetAlert.swal("Terjadi Kesalahan!","","error")
@@ -309,6 +407,7 @@ myApp.controller('ListKategoriAllController', ['$scope', '$http','SweetAlert','$
 				      end = begin + $scope.numPerPage;
 
 				    $scope.filteredCustomers = $scope.kategori.slice(begin, end);
+				    $scope.loading = false;
 				  }
 	}, function(x) {
 	     SweetAlert.swal("Terjadi Kesalahan!","","error")
@@ -316,6 +415,7 @@ myApp.controller('ListKategoriAllController', ['$scope', '$http','SweetAlert','$
 }]);
 
 myApp.controller('SettingController', ['$scope', '$http','SweetAlert','$location','$routeParams','$window', function($scope, $http, SweetAlert, $location, $routeParams, $window){
+	$scope.load_sign();
 
 }]);
 

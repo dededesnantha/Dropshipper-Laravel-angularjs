@@ -1,6 +1,7 @@
 'use strict';
-myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','$window',
-    function($scope,$http,$location,$rootScope,$window) {
+myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','$window','$route',
+    function($scope,$http,$location,$rootScope,$window, $route) {
+      $rootScope.loading = true;
 
       //check token
       $rootScope.load_sign = function(){
@@ -17,6 +18,7 @@ myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','
           },function (error){
                 $location.path('/login');
           });  
+          $rootScope.$route = $route;
       }     
 
        $scope.load_sign();

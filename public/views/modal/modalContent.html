@@ -1,0 +1,32 @@
+<div class="modal-header">
+  <div class="row g-3">
+            <!-- Single Weekly Product Card-->
+            <div class="col-12">
+              <div class="card weekly-product-card">
+                <div class="card-body d-flex align-items-center">
+                  <div class="product-thumbnail-side">
+                      <img src="{{produks.gambar}}" alt="{{produks.nama_produk}}" style="max-height: 200px">
+                    </div>
+                  <div class="product-description">
+                  	  <span class="badge badge-success" ng-if="produks.jenis_label === 'bigsale'">{{produks.text_label}}</span>
+	                  <span class="badge badge-primary" ng-if="produks.jenis_label === 'new'">{{produks.text_label}}</span>
+	                  <span class="badge badge-danger" ng-if="produks.jenis_label === 'disc'">{{produks.text_label}}</span>
+	                  <br>
+                    {{produks.nama_produk}}
+                    <p class="sale-price" ng-if="produks.harga_promo" style="color: red">IDR {{produks.harga_promo | currency : "" : 0}}<span style="color: #747794">IDR {{produks.harga | currency : "" : 0}}</span></p>
+                    <p class="sale-price" ng-if="!produks.harga_promo" style="color: red">IDR {{produks.harga | currency : "" : 0}}</p>
+
+                    <div class="product-rating">Sisa Barang : {{produks.stok}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+</div>
+<div class="modal-body">
+ <h4>Just something random here</h4>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>

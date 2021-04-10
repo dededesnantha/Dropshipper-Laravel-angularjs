@@ -126,7 +126,6 @@ class HomeController extends Controller
         
         return $produk;
     }
-
     public function produk_all()
     {
         $produk = produk::join('tb_kategori', 'tb_produk.id_kategori','=','tb_kategori.id')
@@ -138,6 +137,19 @@ class HomeController extends Controller
                             ->whereNull('tb_produk.jenis_label')
                             ->orderBy('tb_produk.id','DESC')
                             ->get();
+        return $produk;
+    }
+
+    public function card_produk($id)
+    {
+        $produk = produk::join('tb_kategori', 'tb_produk.id_kategori','=','tb_kategori.id')
+                            ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.gambar','tb_produk.status',
+                                    'tb_produk.harga','tb_produk.stok','tb_produk.harga_promo','tb_produk.jenis_label',
+                                    'tb_produk.text_label')
+                            ->where('tb_kategori.status','=',1)
+                            ->where('tb_produk.status','=',1)
+                            ->where('tb_produk.id','=',$id)
+                            ->first();
         return $produk;
     }
 }

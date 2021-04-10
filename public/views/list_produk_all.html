@@ -1,4 +1,9 @@
 <div class="product-catagories-wrapper py-3" ng-controller="ListProdukController">
+	<div class="preloader" id="preloader" ng-show="loading">
+        <div class="spinner-grow text-secondary" role="status">
+            <div class="sr-only">Loading...</div>
+        </div>
+   	</div>
 	<!-- header --> 
 	  <div data-ng-include=" 'views/components/header.html' "> 
 	  </div>
