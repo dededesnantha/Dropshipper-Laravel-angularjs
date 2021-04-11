@@ -145,11 +145,39 @@ class HomeController extends Controller
         $produk = produk::join('tb_kategori', 'tb_produk.id_kategori','=','tb_kategori.id')
                             ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.gambar','tb_produk.status',
                                     'tb_produk.harga','tb_produk.stok','tb_produk.harga_promo','tb_produk.jenis_label',
-                                    'tb_produk.text_label')
+                                    'tb_produk.text_label','tb_produk.size','tb_produk.warna')
                             ->where('tb_kategori.status','=',1)
                             ->where('tb_produk.status','=',1)
                             ->where('tb_produk.id','=',$id)
                             ->first();
+        if ($produk) {
+            if ($produk->size !== '') {
+                $size = explode(', ', $produk->size);
+                $get_size = Size::whereIn('size',$size)->select('id','size')->get();
+                foreach ($get_size as $key => $values) {
+                    $datas_size[] = [
+                        'id' => $values->id,
+                        'size' => $values->size
+                    ];
+                }
+                    $produk->size = $datas_size;
+                }else{
+                    $produk->size = [];
+            }
+            if ($produk->warna !== '') {
+                $warna = explode(', ', $produk->warna);
+                $get_size = Color::whereIn('text',$warna)->select('id','color')->get();
+                    foreach ($get_size as $key => $values) {
+                        $datas_color[] = [
+                            'id' => $values->id,
+                            'color' => $values->color
+                        ];
+                    }
+                    $produk->warna = $datas_color;
+            }else{
+                    $produk->warna = [];
+            }
+        }
         return $produk;
     }
 }

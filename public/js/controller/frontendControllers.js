@@ -95,17 +95,38 @@ myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','
 
 
 myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$http','SweetAlert','$location','$route', 
-	function($scope, $modalInstance, items, $http,SweetAlert,$location,$route) {
-
+	function($scope, $uibModalInstance, items, $http,SweetAlert,$location,$route) {
+	
+	$scope.datass = {};
 	$http.get(base_url+'card_produk/'+items).then(function(data) {
               $scope.produks = data.data;
               $scope.produks.gambar = base_url+'image/'+$scope.produks.gambar;
+              console.log($scope.produks)
 	   }, function(x) {
 	        SweetAlert.swal("Terjadi Kesalahan!", "error")
 	    });
 
-  $scope.ok = function(){
-    $uibModalInstance.close("Ok");
+  $scope.addchart = function(){
+
+  	if ($scope.produks.warna.length > 0 && $scope.produks.size.length === 0) {
+  		if (!$scope.datass.colors) {
+  			SweetAlert.swal("Anda Belum Memilih Warna","", "error")
+  		}else{
+
+  		}
+  	}
+  	else if($scope.produks.warna.length === 0 && $scope.produks.size.length > 0){
+  		if (!$scope.datass.size) {
+  			SweetAlert.swal("Anda Belum Memilih Size","", "error")
+  		}else{
+
+  		}
+  	}
+  	else{
+  		if (!$scope.datass.size && !$scope.datass.colors) {
+  			SweetAlert.swal("Anda Belum Memilih Size Atau Warna","", "error")
+  		}
+  	}
   }
    
   $scope.cancel = function(){
