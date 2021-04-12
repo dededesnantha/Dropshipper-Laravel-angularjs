@@ -107,26 +107,29 @@ myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$
 	    });
 
   $scope.addchart = function(){
-
   	if ($scope.produks.warna.length > 0 && $scope.produks.size.length === 0) {
   		if (!$scope.datass.colors) {
   			SweetAlert.swal("Anda Belum Memilih Warna","", "error")
   		}else{
-
+  			$scope.post($scope.datass, items)
   		}
-  	}
-  	else if($scope.produks.warna.length === 0 && $scope.produks.size.length > 0){
+  	}else if($scope.produks.warna.length === 0 && $scope.produks.size.length > 0){
   		if (!$scope.datass.size) {
   			SweetAlert.swal("Anda Belum Memilih Size","", "error")
   		}else{
-
+  			$scope.post($scope.datass, items)
   		}
-  	}
-  	else{
-  		if (!$scope.datass.size && !$scope.datass.colors) {
+  	}else{
+  		if (!$scope.datass.size || !$scope.datass.colors) {
   			SweetAlert.swal("Anda Belum Memilih Size Atau Warna","", "error")
+  		}else{
+  			$scope.post($scope.datass, items)
   		}
   	}
+  }
+
+  $scope.post = function($datass, $id){
+  	console.log($datass)
   }
    
   $scope.cancel = function(){
