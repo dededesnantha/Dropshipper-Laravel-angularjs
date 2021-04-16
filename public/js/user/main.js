@@ -10,7 +10,7 @@ myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','
                 $rootScope.user = response.data
                 $scope.image_user = base_url+'image/'+$rootScope.user.foto_user
                 if ($location.path() == '/login') {
-                    $location.path('/home'); 
+                    $location.path('/home');
                 }
             }else{
                 $location.path('/login');

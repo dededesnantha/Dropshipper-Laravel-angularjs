@@ -6,8 +6,18 @@ myApp.controller('login', ['$scope', '$http','SweetAlert', function($scope, $htt
 	$scope.save = function () {
 		$http.post(base_url+'api/login_user', {username: $scope.form.username, password: $scope.form.password})
       	.then(function(response) {
-			SweetAlert.swal("Login Berhasil!", "Hay, Selamat Datang", "success")
-			$scope.load_sign();
+			// SweetAlert.swal("Login Berhasil!", "Hay, Selamat Datang", "success")
+			SweetAlert.swal({
+				  title: 'Login Berhasil',
+				  text: '',
+				  timer:100,
+				  type: "success",
+				  showCancelButton: false,
+				  showConfirmButton: false
+				})
+			setTimeout(function () {
+		       $scope.load_sign();
+		    }, 3000);
       }, function(x) {
       		SweetAlert.swal("Login Gagal!", "Username dan Password Salah", "error")
       });
@@ -101,7 +111,6 @@ myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$
 	$http.get(base_url+'card_produk/'+items).then(function(data) {
               $scope.produks = data.data;
               $scope.produks.gambar = base_url+'image/'+$scope.produks.gambar;
-              console.log($scope.produks)
 	   }, function(x) {
 	        SweetAlert.swal("Terjadi Kesalahan!", "error")
 	    });
@@ -128,8 +137,38 @@ myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$
   	}
   }
 
+  	$scope.qty_tambah = function(item){
+    	$scope.datass.qty = item + 1;
+	}
+	$scope.qty_kurang = function(item){
+	    if($scope.datass.qty > 1){
+	       $scope.datass.qty = item - 1;
+	    }
+
+	}
+
   $scope.post = function($datass, $id){
-  	console.log($datass)
+  	$datass.id_produk = $id;
+  	$datass.id_user = $scope.user.id_user;
+  	$http.post(base_url+'add_cart',$datass)
+      	.then(function(response) {
+      		$uibModalInstance.dismiss();
+			SweetAlert.swal({
+			   title: "Ye..Pesanan Berhasil ",
+			   text: "Pesanan mu berhasil disimpan",
+			   type: "success",
+			   showCancelButton: true,
+			   confirmButtonColor: "#00b894",
+			   confirmButtonText: "Lanjut Pembayaran",
+			   cancelButtonText: "Lanjut Belanja",
+			   closeOnConfirm: false}, 
+			function(){ 
+				console.log('keranjang')
+			});
+			$scope.load_sign();
+    }, function(x) {
+      		SweetAlert.swal("Terjadi Kesalahan!", "Mohon Untuk Mengulangi Pesanan Anda", "error")
+    });
   }
    
   $scope.cancel = function(){

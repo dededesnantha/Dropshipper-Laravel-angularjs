@@ -56,6 +56,8 @@ Route::get('produk_top','HomeController@produk_top_all');
 Route::get('produk_all','HomeController@produk_all');
 
 Route::get('card_produk/{id}','HomeController@card_produk');
+Route::post('add_cart','CartController@add_cart');
+
 
 
 

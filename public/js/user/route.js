@@ -46,6 +46,12 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
         templateUrl: '../views/setting.html',
         activetab: 'setting'
     })
+    //cart
+    $routeProvider.when('/cart',{
+        templateUrl:'../views/cart.html',
+        activetab: 'cart'
+    });
+     
     // $routeProvider.when('/dashboard',{
     //     templateUrl:'templates/dashboard.html',
     //     controller:'../controller/frontendController'

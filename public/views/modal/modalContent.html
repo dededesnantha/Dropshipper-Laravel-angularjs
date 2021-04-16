@@ -40,9 +40,9 @@
       <p class="mb-1 font-weight-bold" style="text-align: center;">Qty</p>
       <div class="cart-form">
         <div class="order-plus-minus d-flex align-items-center">
-          <div class="quantity-button-handler">-</div>
-          <input class="form-control cart-quantity-input" type="text" step="1" name="quantity" value="3">
-          <div class="quantity-button-handler">+</div>
+          <div class="quantity-button-handler" ng-click="qty_kurang(datass.qty)" >-</div>
+          <input class="form-control cart-quantity-input" type="number" ng-init="datass.qty=1" name="qty" ng-model="datass.qty" >
+          <div class="quantity-button-handler" ng-click="qty_tambah(datass.qty)" >+</div>
         </div>
       </div>
 
