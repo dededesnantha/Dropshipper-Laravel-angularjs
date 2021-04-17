@@ -161,9 +161,9 @@ myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$
 			   confirmButtonColor: "#00b894",
 			   confirmButtonText: "Lanjut Pembayaran",
 			   cancelButtonText: "Lanjut Belanja",
-			   closeOnConfirm: false}, 
+			   closeOnConfirm: true}, 
 			function(){ 
-				console.log('keranjang')
+				$location.path( "/cart" );
 			});
 			$scope.load_sign();
     }, function(x) {
@@ -481,6 +481,64 @@ myApp.controller('SettingController', ['$scope', '$http','SweetAlert','$location
 	$scope.load_sign();
 
 }]);
+
+myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','$routeParams','$window', function($scope, $http, SweetAlert, $location, $routeParams, $window){
+	
+	$scope.produks = {}; 
+	$scope.datass = function(){
+		$http.post(base_url+'get_cart',$scope.user).then(function(data) {
+				$scope.produks = data.data
+	              angular.forEach($scope.produks, function (values, key) {
+	               	values['gambar'] = base_url +'image/'+values['gambar'];
+	              });
+	              // $scope.loading = false;
+		}, function(x) {
+		     SweetAlert.swal("Terjadi Kesalahan!","","error")
+		});
+	}
+	$scope.datass();
+	$scope.qty_tambah = function(item, id){
+    	angular.forEach($scope.produks, function (values, key) {
+	       	if (values.id_order === id) {
+	       		values['qty'] = item + 1;
+	       	}
+	    });
+	}
+	$scope.qty_kurang = function(item, id){
+		angular.forEach($scope.produks, function (values, key) {
+	       	if (values.id_order === id) {
+			    if(item > 1){
+			       values['qty'] = item - 1;
+			    }
+	       	}
+		});
+	}
+
+	$scope.delete = function(id) {
+		SweetAlert.swal({
+		   title: "Hapus barang?",
+		   text: "Barang yang kamu pilih akan dihapus dari keranjang.",
+		   type: "warning",
+		   showCancelButton: true,
+		   confirmButtonColor: "#DD6B55",
+		   confirmButtonText: "Hapus Barang",
+		   closeOnConfirm: false,
+			closeOnCancel: true}, 
+		function(isConfirm){ 
+			if (isConfirm) {
+				$scope.id = id
+				$http.post(base_url+'delete_cart',$scope.id)
+				.then(function(respone) {
+					$scope.load_sign();
+			       	$scope.datass();
+			   		SweetAlert.swal("Barang Berhasil Dihapus!","","success")
+				});
+			}
+		});
+	}
+	
+}]);
+
 
 
 
