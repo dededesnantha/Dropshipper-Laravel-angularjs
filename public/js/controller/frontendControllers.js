@@ -108,6 +108,7 @@ myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$
 	function($scope, $uibModalInstance, items, $http,SweetAlert,$location,$route) {
 	
 	$scope.datass = {};
+	$scope.produks = {};
 	$http.get(base_url+'card_produk/'+items).then(function(data) {
               $scope.produks = data.data;
               $scope.produks.gambar = base_url+'image/'+$scope.produks.gambar;
@@ -138,7 +139,11 @@ myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$
   }
 
   	$scope.qty_tambah = function(item){
-    	$scope.datass.qty = item + 1;
+  		if ( item >= $scope.produks.stok) {
+  			SweetAlert.swal("Barang Hanya Tersedia "+$scope.produks.stok,"", "warning")
+  		}else{
+			$scope.datass.qty = item + 1;
+  		}
 	}
 	$scope.qty_kurang = function(item){
 	    if($scope.datass.qty > 1){
@@ -491,18 +496,25 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	              angular.forEach($scope.produks, function (values, key) {
 	               	values['gambar'] = base_url +'image/'+values['gambar'];
 	              });
-	              // $scope.loading = false;
+	              $scope.getTotal();
+	              $scope.loading = false;
 		}, function(x) {
 		     SweetAlert.swal("Terjadi Kesalahan!","","error")
 		});
 	}
 	$scope.datass();
 	$scope.qty_tambah = function(item, id){
+
     	angular.forEach($scope.produks, function (values, key) {
 	       	if (values.id_order === id) {
-	       		values['qty'] = item + 1;
+	       		if ( item >= values.stok) {
+		  			SweetAlert.swal("Barang Hanya Tersedia "+values.stok,"", "warning")
+		  		}else{
+					values['qty'] = item + 1;
+		  		}
 	       	}
 	    });
+	    $scope.getTotal();
 	}
 	$scope.qty_kurang = function(item, id){
 		angular.forEach($scope.produks, function (values, key) {
@@ -512,7 +524,36 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 			    }
 	       	}
 		});
+		$scope.getTotal();
 	}
+	$scope.update_totals = function(item, id){
+
+		angular.forEach($scope.produks, function (values, key) {
+	       	if (values.id_order === id) {
+	       		if ( item >= values.stok) {
+		  			SweetAlert.swal("Barang Hanya Tersedia "+values.stok,"", "warning")
+		  			values['qty'] = values.stok;
+		  			$scope.getTotal();
+		  		}else{
+					$scope.getTotal();
+		  		}
+	       	}
+	    });
+	}
+	
+
+	$scope.getTotal = function(){
+	    $scope.produks.totals = 0;
+	    angular.forEach($scope.produks, function (values, key) {
+	    	if (values['harga_promo']) {
+	    		$scope.produks.totals += values['harga_promo'] * values['qty'];
+	    	}else{
+	       		$scope.produks.totals += values['harga'] * values['qty'];
+	    	}
+	    });
+	}
+
+
 
 	$scope.delete = function(id) {
 		SweetAlert.swal({

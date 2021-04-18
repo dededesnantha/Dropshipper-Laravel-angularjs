@@ -1,16 +1,16 @@
   <div ng-controller="HomeController">
-  		<!-- <div class="preloader" id="preloader" ng-show="loading">
+  		<div class="preloader" id="preloader" ng-show="loading">
           <div class="spinner-grow text-secondary" role="status">
             <div class="sr-only">Loading...</div>
           </div>
-        </div> -->
+        </div>
 	  <!-- header --> 
 	  <div data-ng-include=" 'views/components/header.html' "> 
 	  </div>
 	  <!-- / header -->
 
 	  <div class="page-content-wrapper">
-		   <div class="container" ng-controller="CartController">
+		   <div class="container" ng-controller="CartController" ng-if="user.cart > '0'">
 	        <!-- Cart Wrapper-->
 	        <div class="cart-wrapper-area py-3">
 	          <div class="cart-table card mb-3">
@@ -36,7 +36,7 @@
 	                      <div class="quantity cart-form">
 					        <div class="order-plus-minus d-flex align-items-center">
 					          <div class="quantity-button-handler" ng-click="qty_kurang(produk.qty, produk.id_order)" >-</div>
-					          <input class="form-control cart-quantity-input" type="number" name="qty" ng-model="produk.qty" >
+					          <input class="form-control cart-quantity-input" type="number" name="qty" ng-change="update_totals(produk.qty, produk.id_order)" ng-model="produk.qty" >
 					          <div class="quantity-button-handler" ng-click="qty_tambah(produk.qty, produk.id_order)" >+</div>
 					        </div>
 					      </div>
@@ -49,11 +49,20 @@
 	          <!-- Cart Amount Area-->
 	          <div class="card cart-amount-area">
 	            <div class="card-body d-flex align-items-center justify-content-between">
-	              <h5 class="total-price mb-0">Total Harga : $<span class="counter">38.84</span></h5><a class="btn btn-warning" href="checkout.html">Checkout Now</a>
+	              <h5 class="total-price mb-0">Total Harga : IDR <span class="counter">{{produks.totals | currency : "" : 0}}</span></h5><a class="btn btn-warning" href="checkout.html">Beli Sekarang ({{user.cart}})</a>
 	            </div>
 	          </div>
 	        </div>
       	</div>
+	        <div ng-if="user.cart == '0'">
+	        	<div class="empty-card">
+			      <div class="content" style="padding-top: 200px">
+			      	<img src="../css/empty_keranjang.png">
+			        <h5>Wah, keranjang belanjamu kosong</h5>
+			        <p>Yuk, isi dengan barang-barang impianmu!</p><a class="btn btn-warning mt-3" href="#!home">Mulai Belanja</a>
+			      </div>
+			    </div>
+	        </div>
 	  </div>
 
 	  <!-- sidebar --> 

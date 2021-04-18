@@ -29,7 +29,7 @@ class CartController extends Controller
                 ->join('tb_produk','tb_order.id_produk','tb_produk.id')
                 ->leftJoin('tb_color','tb_order.id_color','tb_color.id')
                 ->select('tb_order.kuantitas as qty','tb_order.size','tb_produk.nama_produk','tb_produk.harga','tb_produk.harga_promo',
-                'tb_produk.jenis_label','tb_produk.text_label','tb_produk.gambar','tb_order.id_order','tb_produk.slug')
+                'tb_produk.jenis_label','tb_produk.text_label','tb_produk.gambar','tb_order.id_order','tb_produk.slug','tb_produk.stok')
                 ->orderBy('tb_order.id_order','DESC')
                 ->get();
        return $data;
