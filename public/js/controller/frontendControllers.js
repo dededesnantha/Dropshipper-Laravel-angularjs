@@ -9,11 +9,12 @@ myApp.controller('login', ['$scope', '$http','SweetAlert', function($scope, $htt
 			// SweetAlert.swal("Login Berhasil!", "Hay, Selamat Datang", "success")
 			SweetAlert.swal({
 				  title: 'Login Berhasil',
-				  text: '',
-				  timer:100,
+				  text: 'Anda Akan Dialihkan Kehalaman Utama',
+				  timer: 3000,
+				  buttons: false,
 				  type: "success",
 				  showCancelButton: false,
-				  showConfirmButton: false
+				  showConfirmButton: false,
 				})
 			setTimeout(function () {
 		       $scope.load_sign();
@@ -250,7 +251,8 @@ myApp.controller('ProfileController', ['$scope', '$http','SweetAlert','$location
 			if (data.data){
 	            $scope.user_datass.foto_user = data.data
 	        }
-	        $http.post(base_url+'update_profile/'+$scope.user.id_user,$scope.user_datass)
+	        $scope.user_datass.id_user = $scope.user.id_user;
+	        $http.post(base_url+'update_profile',$scope.user_datass)
 	        .then(function(response) {
             	SweetAlert.swal("Update Berhasil!", "Hay, Data Kamu Sudah di Update", "success")
             	$scope.load_sign();
@@ -376,6 +378,7 @@ myApp.controller('ListKategoriController', ['$scope', '$http','SweetAlert','$loc
 // }]);
 
 myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$location','$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
+	$scope.url = "Produk Detail";
 	$scope.load_sign();
 	$http.get(base_url+'produk/'+$routeParams.slug).then(function(data) {
               $scope.produks = data.data.produk;
@@ -495,6 +498,7 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 				$scope.produks = data.data
 	              angular.forEach($scope.produks, function (values, key) {
 	               	values['gambar'] = base_url +'image/'+values['gambar'];
+	               	values['notif'] = true;
 	              });
 	              $scope.getTotal();
 	              $scope.loading = false;
@@ -508,7 +512,7 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
     	angular.forEach($scope.produks, function (values, key) {
 	       	if (values.id_order === id) {
 	       		if ( item >= values.stok) {
-		  			SweetAlert.swal("Barang Hanya Tersedia "+values.stok,"", "warning")
+		  			values['notif'] = false;
 		  		}else{
 					values['qty'] = item + 1;
 		  		}
@@ -517,28 +521,37 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	    $scope.getTotal();
 	}
 	$scope.qty_kurang = function(item, id){
+		$scope.notif = true;
 		angular.forEach($scope.produks, function (values, key) {
 	       	if (values.id_order === id) {
 			    if(item > 1){
 			       values['qty'] = item - 1;
+			       values['notif'] = true;
 			    }
 	       	}
 		});
 		$scope.getTotal();
 	}
 	$scope.update_totals = function(item, id){
-
-		angular.forEach($scope.produks, function (values, key) {
-	       	if (values.id_order === id) {
-	       		if ( item >= values.stok) {
-		  			SweetAlert.swal("Barang Hanya Tersedia "+values.stok,"", "warning")
-		  			values['qty'] = values.stok;
-		  			$scope.getTotal();
-		  		}else{
-					$scope.getTotal();
-		  		}
-	       	}
-	    });
+		
+			if (item !== 0) {
+				angular.forEach($scope.produks, function (values, key) {
+			       	if (values.id_order === id) {
+			       		if ( item >= values.stok) {
+				  			values['notif'] = false;
+				  			values['qty'] = values.stok;
+				  			$scope.getTotal();
+				  		}else{
+				  			values['notif'] = true;
+							$scope.getTotal();
+				  		}
+			       	}
+			    });
+			}else{
+				angular.forEach($scope.produks, function (values, key) {
+					values['qty'] = 1;
+				});
+			}
 	}
 	
 
@@ -572,13 +585,35 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 				.then(function(respone) {
 					$scope.load_sign();
 			       	$scope.datass();
-			   		SweetAlert.swal("Barang Berhasil Dihapus!","","success")
+			   		SweetAlert.swal({
+					  title: 'Barang Berhasil Dihapus',
+					  text: '',
+					  timer: 2000,
+					  buttons: false,
+					  type: "success",
+					  showCancelButton: false,
+					  showConfirmButton: false,
+					})
+
 				});
 			}
 		});
 	}
-	
+
+	$scope.beli = function() {
+		$http.post(base_url+'update_cart',$scope.produks).then(function(data) {
+			$location.path( "/checkout");
+		}, function(x) {
+		     SweetAlert.swal("Terjadi Kesalahan!","","error")
+		});
+	}
 }]);
+
+myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$location','$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
+	$scope.url = "Checkout";
+
+}]);
+
 
 
 

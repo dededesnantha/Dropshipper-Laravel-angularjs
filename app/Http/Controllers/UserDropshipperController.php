@@ -76,9 +76,10 @@ class UserDropshipperController extends Controller
                 ->leftJoin('tb_kabupaten', 'tb_user.id_kabupaten', '=', 'tb_kabupaten.id_kabupaten')->first();
     }
 
-    public function update_user(Request $request, $id)
+    public function update_user(Request $request)
     {
         $post = $request->input();
+        
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|max:255',
             'email' => 'required',
@@ -115,7 +116,7 @@ class UserDropshipperController extends Controller
                         'address' => $post['address'] ?? ''
                     ];
                 }
-            tb_user::where('id_user', $id)->update($data);
+            tb_user::where('id_user', $post['id_user'])->update($data);
             return response(200);
             }
         } 

@@ -40,4 +40,14 @@ class CartController extends Controller
         tb_order::where('id_order', $post[0])->delete();
         return response()->json(['status'=>'succes'],200);
     }
+    public function update_cart(Request $request)
+    {
+        $post = $request->input();
+        foreach ($post as $rows) {
+            tb_order::where('id_order', $rows['id_order'])->update([
+                'kuantitas' => $rows['qty']
+            ]);
+        }
+        return response()->json(['status'=>'succes'],200);
+    }
 }

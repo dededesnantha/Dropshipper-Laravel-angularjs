@@ -1,0 +1,32 @@
+<div ng-controller="CheckoutController">
+	<!-- <div class="preloader" id="preloader" ng-show="loading">
+        <div class="spinner-grow text-secondary" role="status">
+            <div class="sr-only">Loading...</div>
+        </div>
+   	</div> -->
+	<!-- header --> 
+	<div data-ng-include=" 'views/components/header_single.html' "> 
+	</div>
+	<!-- / header -->
+
+	<!-- conntent -->
+	<div class="page-content-wrapper">
+		<div class="container">
+			<div class="checkout-wrapper-area py-3">
+				<div data-ng-include=" 'views/checkout_profile.html' "></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- conntent -->
+
+	<!-- sidebar --> 
+	<div data-ng-include=" 'views/components/sidebar.html' "> 
+	</div>
+	<!-- / sidebar -->
+
+	<!-- footer --> 
+	<div data-ng-include=" 'views/components/footer.html' "> 
+	</div>
+	<!-- / sidebar -->
+</div>

@@ -32,7 +32,7 @@ Route::get('/','UserDropshipperController@login');
 
 // get user
 Route::post('user','UserDropshipperController@get_user');
-Route::post('update_profile/{id}','UserDropshipperController@update_user');
+Route::post('update_profile','UserDropshipperController@update_user');
 
 // area
 Route::get('provinsi','AreaContoller@provinsi');
@@ -60,14 +60,7 @@ Route::post('add_cart','CartController@add_cart');
 Route::post('get_cart','CartController@get_cart');
 Route::post('delete_cart','CartController@delete_cart');
 
-
-
-
-
-
-
-
-
+Route::post('update_cart','CartController@update_cart');
 
 
 // upload gambar

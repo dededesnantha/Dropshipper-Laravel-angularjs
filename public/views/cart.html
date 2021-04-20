@@ -19,26 +19,28 @@
 	                <tbody>
 	                  <tr ng-repeat="produk in produks">
 	                    <th scope="row" style="width: 50px"><a class="remove-product" ng-click="delete(produk.id_order)"><i class="lni lni-close"></i></a></th>
-	                    <td>
-	                    	<img ng-src="{{produk.gambar}}" alt="{{produk.nama_produk}}">
+	                    <td style="text-align: center;">
+	                    	<img ng-src="{{produk.gambar}}" class="img-td" alt="{{produk.nama_produk}}">
 	                    </td>
 	                    <td><span class="badge badge-success" ng-if="produk.jenis_label === 'bigsale'">{{produk.text_label}}</span>
 			                <span class="badge badge-primary" ng-if="produk.jenis_label === 'new'">{{produk.text_label}}</span>
 			                <span class="badge badge-danger" ng-if="produk.jenis_label === 'disc'">{{produk.text_label}}</span>
 	                    	<a href="#!produk/{{produk.slug}}" class="top-product-card" style="font-size: 15px">
 	                    	{{produk.nama_produk}}
-	                    	<span class="sale-price" ng-if="produk.harga_promo">IDR {{produk.harga_promo | currency : "" : 0}}<span>IDR {{produk.harga | currency : "" : 0}}</span></span>
+	                    	<span class="sale-price" ng-if="produk.harga_promo">IDR {{produk.harga_promo | currency : "" : 0}}<span>IDR {{produk.harga | currency : "" : 0}} </span></span>
                     		<span class="sale-price" ng-if="!produk.harga_promo">IDR {{produk.harga | currency : "" : 0}}</span>
-	                    	× {{produk.qty}}
 	                    	</a>
 	                	</td>
-	                    <td style="width: 150px">
+	                    <td style="width: 150px;text-align: center;">
 	                      <div class="quantity cart-form">
 					        <div class="order-plus-minus d-flex align-items-center">
 					          <div class="quantity-button-handler" ng-click="qty_kurang(produk.qty, produk.id_order)" >-</div>
 					          <input class="form-control cart-quantity-input" type="number" name="qty" ng-change="update_totals(produk.qty, produk.id_order)" ng-model="produk.qty" >
 					          <div class="quantity-button-handler" ng-click="qty_tambah(produk.qty, produk.id_order)" >+</div>
 					        </div>
+					      </div>
+					      <div style="position: relative;">
+					      	<span ng-hide=produk.notif class="notif-card">max pemblian {{produk.stok}}</span>
 					      </div>
 	                    </td>
 	                  </tr>
@@ -49,7 +51,7 @@
 	          <!-- Cart Amount Area-->
 	          <div class="card cart-amount-area">
 	            <div class="card-body d-flex align-items-center justify-content-between">
-	              <h5 class="total-price mb-0">Total Harga : IDR <span class="counter">{{produks.totals | currency : "" : 0}}</span></h5><a class="btn btn-warning" href="checkout.html">Beli Sekarang ({{user.cart}})</a>
+	              <h5 class="total-price mb-0">Total Harga : IDR <span class="counter">{{produks.totals | currency : "" : 0}}</span></h5><a class="btn btn-warning" ng-click="beli()">Beli Sekarang ({{user.cart}})</a>
 	            </div>
 	          </div>
 	        </div>

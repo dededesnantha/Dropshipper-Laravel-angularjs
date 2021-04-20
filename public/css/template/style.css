@@ -1,45 +1,4 @@
-/* -----------------------------------------
-[Master Stylesheet]
 
-Template Name: Suha - Multipurpose Ecommerce Mobile HTML Template
-Template Author: Designing World
-Template Author URL: https://themeforest.net/user/designing-world
-Version: 2.3.0
-Last Updated: 5 Feb 2021
-Created: 15 Dec 2019
-
-[Table of Contents]
-
-    * Google Fonts
-    * Include Third Party CSS Library
-        + Bootstrap CSS
-        + Animate CSS
-        + Owl Carousel CSS
-        + Font Awesome CSS
-        + Line Icon CSS
-    * Template Mixins
-        + Miscellaneous
-    * Template Variables
-    * Template Responsive
-    * Main Styles
-        + Reboot CSS
-        + Shortcode CSS
-        + Preloader CSS
-        + Animation CSS
-        + Demo CSS
-        + Header CSS
-        + Hero CSS
-        + Home CSS
-        + Footer CSS
-        + CTA CSS
-        + Register CSS
-        + Contact CSS
-        + Dark Mode CSS
-
-# [font-family]
-'Roboto', sans-serif;
------------------------------------------ */
-/* Reboot CSS */
 * {
   margin: 0;
   padding: 0; }
@@ -4015,4 +3974,23 @@ input[type="number"] {
     -ms-flex-pack: center;
     justify-content: center;
     text-align: center;
+}
+
+@media only screen and (min-width: 767px) {
+  .img-td{
+    max-width: 9.5rem !important;
+  } 
+}
+@media only screen and (max-width: 768px) {
+  .img-td{
+    max-width: 2.5rem !important;
+  } 
+}
+.notif-card{
+    position: absolute;
+    top: 4px;
+    left: 0px;
+    right: 0px;
+    color: red;
+    font-weight: 500;
 }

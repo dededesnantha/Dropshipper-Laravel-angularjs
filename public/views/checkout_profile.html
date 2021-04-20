@@ -1,0 +1,31 @@
+<div class="billing-information-card mb-3" ng-controller="ProfileController">
+            <div class="card billing-information-title-card bg-danger">
+              <div class="card-body">
+                <h6 class="text-center mb-0 text-white">Alamat Pengiriman</h6>
+              </div>
+            </div>
+            <div class="card user-data-card">
+              <div class="card-body">                                   
+                <div class="single-profile-data d-flex align-items-center justify-content-between">
+                  <div class="title d-flex align-items-center"><i class="lni lni-user"></i><span>Nama</span></div>
+                  <div class="data-content">{{user_datass.username}}</div>
+                </div>
+                <div class="single-profile-data d-flex align-items-center justify-content-between">
+                  <div class="title d-flex align-items-center"><i class="lni lni-envelope"></i><span>Alamat Email</span></div>
+                  <div class="data-content">{{user_datass.email}}</div>
+                </div>
+                <div class="single-profile-data d-flex align-items-center justify-content-between">
+                  <div class="title d-flex align-items-center"><i class="lni lni-phone"></i><span>Telephone</span></div>
+                  <div class="data-content">{{user_datass.telephone || 0}}</div>
+                </div>
+                <div class="single-profile-data d-flex align-items-center justify-content-between">
+                  <div class="title d-flex align-items-center"><i class="lni lni-map-marker"></i><span>Alamat pengiriman</span></div>
+                  <div class="data-content">{{user_datass.provinsi}}, {{user_datass.kabupaten}}, {{user_datass.kecamatan}}
+                  <br>
+                  {{user_datass.address}}
+                  </div>
+                </div>
+                <!-- Edit Address--><a class="btn btn-danger w-100" href="#!edit-profile">Rubah Alamat Pengiriman</a>
+              </div>
+            </div>
+          </div>
