@@ -9,6 +9,11 @@ use App\Models\produk;
 use App\Models\Size;
 use App\Models\Color;
 use App\Models\tb_produk_gambar;
+use App\Models\tb_user;
+use App\Models\tb_ongkir;
+
+use Response;
+
 
 class HomeController extends Controller
 {
@@ -179,5 +184,17 @@ class HomeController extends Controller
             }
         }
         return $produk;
+    }
+
+    public function get_ongkir(Request $request)
+    {
+       $post = $request->input();
+        $get_user = tb_user::where('id_user', $post['id_user'])->select('id_provinsi','id_kabupaten','id_kecamatan')->first();
+        $data['kurir'] = tb_ongkir::where('tb_ongkir.id_kecamatan','=',$get_user->id_kecamatan)
+                                    ->join('tb_kecamatan', 'tb_ongkir.id_kecamatan','=','tb_kecamatan.id_kecamatan')
+                                    ->join('tb_kurir','tb_ongkir.id_kurir','=','tb_kurir.id_kurir')
+                                    ->select('tb_ongkir.id_ongkir','tb_ongkir.harga','tb_kurir.judul')
+                                    ->get();
+       return Response::json($data,200);
     }
 }

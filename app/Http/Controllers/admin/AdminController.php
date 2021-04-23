@@ -750,10 +750,9 @@ class AdminController extends Controller
     public function add_ongkir(Request $request)
     {
        $post = $request->input();
-       $get = tb_ongkir::where('id_kecamatan', $post['id_kecamatan'])->count();
+       $get = tb_ongkir::where('id_kecamatan', $post['id_kecamatan'])->where('id_kurir', $post['id_kurir'])->count();
        if ($get == 0) {
            tb_ongkir::create($post);
-           
        }else{
             return new JsonResponse($errors, 422);   
        }

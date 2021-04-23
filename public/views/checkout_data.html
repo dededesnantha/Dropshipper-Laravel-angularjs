@@ -1,0 +1,90 @@
+<div class="col-12 col-md-8">
+  
+  <div class="billing-information-card mb-3" ng-controller="ProfileController">
+    <div class="card billing-information-title-card">
+      <div class="card-body">
+        <h6 class="text-center mb-0">Alamat Pengiriman</h6>
+      </div>
+    </div>
+    <div class="card user-data-card">
+      <div class="card-body">                                   
+        <div class="single-profile-data d-flex align-items-center justify-content-between">
+          <div class="title d-flex align-items-center"><i class="lni lni-user"></i><span>Nama</span></div>
+          <div class="data-content">{{user_datass.nama}}</div>
+        </div>
+        <div class="single-profile-data d-flex align-items-center justify-content-between">
+          <div class="title d-flex align-items-center"><i class="lni lni-envelope"></i><span>Alamat Email</span></div>
+          <div class="data-content">{{user_datass.email}}</div>
+        </div>
+        <div class="single-profile-data d-flex align-items-center justify-content-between">
+          <div class="title d-flex align-items-center"><i class="lni lni-phone"></i><span>Telephone</span></div>
+          <div class="data-content">{{user_datass.telephone || 0}}</div>
+        </div>
+        <div class="single-profile-data d-flex align-items-center justify-content-between">
+          <div class="title d-flex align-items-center"><i class="lni lni-map-marker"></i><span>Alamat pengiriman</span></div>
+          <div class="data-content">{{user_datass.provinsi}}, {{user_datass.kabupaten}}, {{user_datass.kecamatan}}
+            <br>
+            {{user_datass.address}}
+          </div>
+        </div>
+        <!-- Edit Address--><a class="btn btn-default w-100" ng-click="edit_alamat()">Rubah Alamat Pengiriman</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="shipping-method-choose mb-3">
+  <div class="card shipping-method-choose-card" style="border-radius: .5rem .5rem .5rem .5rem">
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-12 col-md-7">
+            <div class="shipping-method-choose">
+              <div class="table-responsive card-body">
+                <table class="table mb-0">
+                  <tbody>
+                    <tr ng-repeat="produk in produks">
+                      <td style="text-align: center;">
+                        <img ng-src="{{produk.gambar}}" class="img-checkout" alt="{{produk.nama_produk}}">
+                      </td>
+                      <td><span class="badge badge-success" ng-if="produk.jenis_label === 'bigsale'">{{produk.text_label}}</span>
+                        <span class="badge badge-primary" ng-if="produk.jenis_label === 'new'">{{produk.text_label}}</span>
+                        <span class="badge badge-danger" ng-if="produk.jenis_label === 'disc'">{{produk.text_label}}</span>
+                        <a href="#!produk/{{produk.slug}}" class="top-product-card" style="font-size: 15px">
+                          {{produk.nama_produk}}
+                          <br>
+                          <p style="margin-top: 3px;margin-bottom: 0px">{{produk.qty}} barang</p>
+                          <span class="sale-price" ng-if="produk.harga_promo">IDR {{produk.harga_promo | currency : "" : 0}} <br><span>IDR {{produk.harga | currency : "" : 0}} </span></span>
+                          <span class="sale-price" ng-if="!produk.harga_promo">IDR {{produk.harga | currency : "" : 0}}</span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-5">
+            <div>
+              <label for="">Pilih Kurir Pengiriman</label>
+              <ul class="list-inline">
+                <li class="user-dropdown fancy-dropdown">
+                  <button class="btn btn-primary btn-lg btn-block w-100" ng-click="toggleOngkirDropdown($event)"><span ng-show="text_kurir">Kurir Pengiriman</span> 
+                    <div class="spinner-border text-light" role="status" ng-show="showload" style="width: 20px;height: 20px"><span class="sr-only">Loading...</span></div></button>
+                  <ul class="list-group menu" ng-show="showJne" ng-repeat="items in kurir">
+                    <li class="list-group-item">
+                      <label for="{{items.judul}}"><strong>{{items.judul}}</strong></label>
+                      <input type="radio" name="ongkir" value="{{items.id}}" id="{{items.judul}}" ng-model="datass.size" hidden>
+                      <p>IDR {{items.harga | currency : "" : 0}}</p>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              {{datass.size}}
+            </div>
+          </div>
+
+      </div>
+
+
+    </div>
+  </div>
+</div>

@@ -119,5 +119,30 @@ class UserDropshipperController extends Controller
             tb_user::where('id_user', $post['id_user'])->update($data);
             return response(200);
             }
-        } 
+    }
+    public function get_alamat(Request $request)
+    {
+        $post = $request->input();
+        $data = tb_user::leftJoin('tb_provinsi', 'tb_user.id_provinsi', '=','tb_provinsi.id_provinsi')
+                ->select('tb_user.nama','tb_user.id_kecamatan','tb_user.id_provinsi','tb_user.id_kabupaten','tb_user.telephone','tb_user.address','provinsi','kabupaten','kecamatan')
+                ->where('id_user', $post[0])
+                ->leftJoin('tb_kecamatan', 'tb_user.id_kecamatan', '=','tb_kecamatan.id_kecamatan')
+                ->leftJoin('tb_kabupaten', 'tb_user.id_kabupaten', '=', 'tb_kabupaten.id_kabupaten')->first();
+        return Response::json($data, 200);
+    } 
+
+    public function update_alamat(Request $request)
+    {
+        $post = $request->input();
+        $data = [
+            'nama' => $post['nama'],
+            'telephone' => $post['telephone'],
+            'id_provinsi' => $post['id_provinsi'],
+            'id_kabupaten' => $post['id_kabupaten'],
+            'id_kecamatan' => $post['id_kecamatan'],
+            'address' => $post['address']
+        ];
+        tb_user::where('id_user',$post['id_user'])->update($data);
+        return Response::json(200);
+    }
 }

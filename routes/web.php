@@ -62,6 +62,12 @@ Route::post('delete_cart','CartController@delete_cart');
 
 Route::post('update_cart','CartController@update_cart');
 
+Route::post('get_alamat','UserDropshipperController@get_alamat');
+Route::put('update_alamat','UserDropshipperController@update_alamat');
+Route::post('get_ongkir','HomeController@get_ongkir');
+
+
+
 
 // upload gambar
 Route::post('upload/gambar','upload\UploadImage@image_user');

@@ -1,0 +1,93 @@
+<div class="modal-header modal-text">
+  <span>Rubah Alamat Pengiriman</span>
+</div>
+<div class="modal-body">
+  <div class="row g-3">
+      <div class="col-12 col-md-6">
+        <div class="form-edit">
+          <div class="mb-3">
+            <label>Nama</label>
+              <input class="form-control" type="text" ng-model="user_datass.nama">
+              <div style="position: relative;">
+                  <span ng-hide="notif.nama" class="notif-card" style="font-weight: none;font-size: 12px">Nama Tidak Boleh Kosong</span>
+                </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="form-edit">
+          <div class="mb-3">
+            <label>Nomor Telephone</label>
+              <input class="form-control" type="text" ng-model="user_datass.telephone" only-numbers>
+              <div style="position: relative;">
+                  <span ng-hide="notif.tlp" class="notif-card" style="font-weight: none;font-size: 12px">Telephone Tidak Boleh Kosong</span>
+                </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="form-edit">
+          <div class="mb-3">
+            <label>Provinsi</label>
+            <div class="selects">
+              <select class="select-custom" ng-model="user_datass.id_provinsi" ng-change="get_kabupaten(user_datass.id_provinsi)"> 
+                        <option ng-repeat="key in provinsi"  ng-value="{{key.id_provinsi}}" >{{key.provinsi}}</option>
+              </select>
+            </div>
+                <div style="position: relative;">
+                  <span ng-hide="notif.prv" class="notif-card" style="font-weight: none;font-size: 12px">Provinsi Tidak Boleh Kosong</span>
+                </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="form-edit">
+          <div class="mb-3">
+            <label>Kabupaten</label>
+             <div class="selects">
+                <select class="select-custom" ng-model="user_datass.id_kabupaten" ng-change="get_kecamatan(user_datass.id_kabupaten)">   
+                          <option value="" ng-selected="true">--  Kabupaten  --</option>
+                          <option ng-repeat="key in kabupaten" ng-value="{{key.id_kabupaten}}" >{{key.kabupaten}}</option>
+                </select>
+              </div>
+                <div style="position: relative;">
+                  <span ng-hide="notif.kbt" class="notif-card" style="font-weight: none;font-size: 12px">Kabupaten Tidak Boleh Kosong</span>
+                </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="form-edit">
+          <div class="mb-3">
+            <label>Kecamatan</label>
+            <div class="selects">
+              <select class="select-custom" ng-model="user_datass.id_kecamatan">   
+                        <option value="" ng-selected="true">--  Kecamatan  --</option>
+                        <option ng-repeat="key in kecamatan" ng-value="{{key.id_kecamatan}}" >{{key.kecamatan}}</option>
+              </select>
+            </div>
+               <div style="position: relative;">
+                  <span ng-hide="notif.kcm" class="notif-card" style="font-weight: none;font-size: 12px">Kecamatan Tidak Boleh Kosong</span>
+                </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-12">
+        <div class="form-edit">
+          <div class="mb-3">
+            <label>Alamat</label>
+              <textarea  class="form-control" ng-model="user_datass.address"
+                    rows="5" cols="33">
+                </textarea>
+               <div style="position: relative;">
+                  <span ng-hide="notif.address" class="notif-card" style="font-weight: none;font-size: 12px">Alamat Tidak Boleh Kosong</span>
+                </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" style="background-color: green;border-color: green;" ng-click="update()">Rubah</button>
+    <button class="btn btn-warning" style="color: #fff" ng-click="cancel()">Batal</button>
+</div>

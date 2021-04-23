@@ -85,8 +85,7 @@ myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','
 	    }, function () {
             
         });
-	    
-	  };
+	};
 
 	// $scope.form = {};
 	// $scope.save = function () {
@@ -103,7 +102,6 @@ myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','
 
 	// }
 }]);
-
 
 myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$http','SweetAlert','$location','$route', 
 	function($scope, $uibModalInstance, items, $http,SweetAlert,$location,$route) {
@@ -185,23 +183,25 @@ myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$
 
 
 
-myApp.controller('ProfileController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
+myApp.controller('ProfileController', ['$scope', '$http','SweetAlert','$location','$uibModal', function($scope, $http, SweetAlert, $location, $uibModal){
 	$scope.load_sign();
 	$scope.user_datass = {};
 	$scope.provinsi = {};
 	$scope.kabupaten = {};
 	$scope.kecamatan = {};
 	// get user
-	$http.post(base_url+'user',$scope.user).then(function(data) {
-              $scope.user_datass = data.data;
-              $scope.user_datass.telephone = parseInt($scope.user_datass.telephone)
-              $scope.get_kabupaten($scope.user_datass.id_provinsi)
-              $scope.get_kecamatan($scope.user_datass.id_kabupaten)
-              $scope.src = base_url+'image/'+$scope.user_datass.foto_user;
-    }, function(x) {
-            SweetAlert.swal("Terjadi Kesalahan!", "error")
-    });
-
+	$scope.get_user = function(){
+		$http.post(base_url+'user',$scope.user).then(function(data) {
+	              $scope.user_datass = data.data;
+	              $scope.user_datass.telephone =$scope.user_datass.telephone
+	              $scope.get_kabupaten($scope.user_datass.id_provinsi)
+	              $scope.get_kecamatan($scope.user_datass.id_kabupaten)
+	              $scope.src = base_url+'image/'+$scope.user_datass.foto_user;
+	    }, function(x) {
+	            SweetAlert.swal("Terjadi Kesalahan!", "error")
+	    });
+	}
+	$scope.get_user();
     $http.get(base_url+'provinsi').then(function(data) {
               $scope.provinsi = data.data;
     }, function(x) {
@@ -247,7 +247,6 @@ myApp.controller('ProfileController', ['$scope', '$http','SweetAlert','$location
 			return formData;
 			}
 		}).then(function(data) {
-		console.log(data);
 			if (data.data){
 	            $scope.user_datass.foto_user = data.data
 	        }
@@ -263,8 +262,114 @@ myApp.controller('ProfileController', ['$scope', '$http','SweetAlert','$location
 	        SweetAlert.swal("Terjadi Kesalahan!", "error")
 	    });
 	}
+
+	$scope.edit_alamat = function () {
+		console.log($scope.user.id_user)
+	}
+
+	$scope.edit_alamat = function() {
+		var modalInstance =  $uibModal.open({
+	      templateUrl: "views/modal/Edit_alamat.html",
+	      controller: "ModalEditAlamat",
+	      size: "lg",
+	      resolve: {
+              items: function () {
+                return $scope.user.id_user;
+              }
+           }
+	    });
+	    modalInstance.result.then(function() {
+	        $scope.get_user();
+	    }, function () {
+            $scope.get_user();
+        });
+	};
 }]);
 
+myApp.controller('ModalEditAlamat', ['$scope', '$uibModalInstance', 'items', '$http','SweetAlert','$location','$route', 
+	function($scope, $uibModalInstance, items, $http,SweetAlert,$location,$route) {
+	$scope.notif = {}
+	$scope.notif.nama = true;
+	$scope.notif.tlp = true;
+	$scope.notif.prv = true;
+	$scope.notif.kbt = true;
+	$scope.notif.kcm = true;
+	$scope.notif.address = true;
+
+	$scope.id_user = items;
+	// get alamat
+	$scope.get_alamat = function() {
+		$http.post(base_url+'get_alamat',$scope.id_user).then(function(data) {
+			$scope.user_datass = data.data;
+	              $scope.user_datass.telephone = $scope.user_datass.telephone
+	              $scope.get_kabupaten($scope.user_datass.id_provinsi)
+	              $scope.get_kecamatan($scope.user_datass.id_kabupaten)
+	    }, function(x) {
+	            SweetAlert.swal("Terjadi Kesalahan!", "error")
+	    });
+	}
+   $scope.get_alamat();
+   $http.get(base_url+'provinsi').then(function(data) {
+              $scope.provinsi = data.data;
+    }, function(x) {
+        SweetAlert.swal("Terjadi Kesalahan!", "error")
+    });
+
+    $scope.get_kabupaten = function(id){
+    	$http.get(base_url+'kabupaten/'+id).then(function(data) {
+              $scope.kabupaten = data.data;
+	    }, function(x) {
+	        SweetAlert.swal("Terjadi Kesalahan!", "error")
+	    });
+    }
+    $scope.get_kecamatan = function(id){
+    	$http.get(base_url+'kecamatan/'+id).then(function(data) {
+              $scope.kecamatan = data.data;
+	    }, function(x) {
+	        SweetAlert.swal("Terjadi Kesalahan!", "error")
+	    });
+    }
+
+    $scope.update = function() {
+    	if ($scope.user_datass.nama == '') {
+    		$scope.notif.nama = false;
+    	}else if ($scope.user_datass.telephone == '') {
+    		$scope.notif.tlp = false;
+    	}else if ($scope.user_datass.id_provinsi == null) {
+    		$scope.notif.prv = false;
+    	}else if ($scope.user_datass.id_kabupaten == null) {
+    		$scope.notif.kbt = false;
+    	}else if ($scope.user_datass.id_kecamatan == null) {
+    		$scope.notif.kcm = false;
+    	}else if ($scope.user_datass.address == '') {
+    		$scope.notif.address = false;
+    	}else{
+    		$scope.user_datass.id_user = items;
+    		$http.put(base_url+'update_alamat',$scope.user_datass).then(function(data) {
+			SweetAlert.swal({
+				  title: 'Update Berhasil',
+				  text: 'Alamat Pengiriman Berhasil di Rubah',
+				  timer: 2000,
+				  buttons: false,
+				  type: "success",
+				  showCancelButton: false,
+				  showConfirmButton: false,
+				})
+			$uibModalInstance.dismiss();
+		    }, function(x) {
+		            SweetAlert.swal("Terjadi Kesalahan!", "error")
+		    });
+    		console.log("UPDATE")
+    	}
+    }
+
+
+
+  $scope.cancel = function(){
+    $uibModalInstance.dismiss();
+  } 
+  
+}]);
 // myApp.controller('SliderController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
 // 	// get slider
 // 	$scope.slider = [];
@@ -609,10 +714,96 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	}
 }]);
 
-myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$location','$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
+myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$location','$routeParams','$document', function($scope, $http, SweetAlert, $location, $routeParams, $document){
 	$scope.url = "Checkout";
+	$scope.text_kurir = true
+	$scope.showload = false
+	
+	// get_produk
+	$scope.datass = function(){
+		$http.post(base_url+'get_cart',$scope.user).then(function(data) {
+				$scope.produks = data.data
+	              angular.forEach($scope.produks, function (values, key) {
+	               	values['gambar'] = base_url +'image/'+values['gambar'];
+	              });
+	              $scope.getTotal();
+	              $scope.loading = false;
+		}, function(x) {
+		     SweetAlert.swal("Terjadi Kesalahan!","","error")
+		});
+	}
+	$scope.datass();
+	$scope.getTotal = function(){
+	    $scope.produks.totals = 0;
+	    angular.forEach($scope.produks, function (values, key) {
+	    	if (values['harga_promo']) {
+	    		$scope.produks.totals += values['harga_promo'] * values['qty'];
+	    	}else{
+	       		$scope.produks.totals += values['harga'] * values['qty'];
+	    	}
+	    });
+	}
+	
+	$scope.showJne = false;
+	
+	$scope.toggleOngkirDropdown = function($event){
+		$scope.text_kurir = false
+		$scope.showload = true
+		$http.post(base_url+'get_ongkir',$scope.user).then(function(data) {
+				$scope.text_kurir = true
+				$scope.showload = false
+				$scope.kurir = data.data.kurir;
+		}, function(x) {
+		     SweetAlert.swal("Terjadi Kesalahan!","","error")
+		});
 
-}]);
+		$event.stopPropagation()
+		if (!$scope.showJne) {
+			var closeMe = function(scope) { 
+				$scope.showJne = false;
+				$document.unbind('click', this);
+			};
+			$document.bind('click', function(event) {
+				$scope.$apply(function(){
+					closeMe($scope)
+				})
+			}); 
+		$scope.showJne = true;
+		} else {
+			$scope.showJne = false;
+			$scope.text_kurir = true
+			$scope.showload = false
+		} 
+	}
+
+	
+}])
+// .directive('userDropdown', ['$document', function($document) {
+    
+//   }])
+
+
+myApp.directive('onlyNumbers', function () {
+    return  {
+        restrict: 'A',
+        link: function (scope, elm, attrs, ctrl) {
+            elm.on('keydown', function (event) {
+                if(event.shiftKey){event.preventDefault(); return false;}
+                if ([8, 13, 27, 37, 38, 39, 40].indexOf(event.which) > -1) {
+                    return true;
+                } else if (event.which >= 48 && event.which <= 57) {
+                    return true;
+                } else if (event.which >= 96 && event.which <= 105) {
+                    return true;
+                } 
+                else {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        }
+    }
+});
 
 
 
