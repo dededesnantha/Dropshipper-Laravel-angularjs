@@ -1,6 +1,6 @@
-<div class="col-12 col-md-8">
-  
-  <div class="billing-information-card mb-3" ng-controller="ProfileController">
+<div class="row g-3">
+<div class="col-12 col-md-7">
+  <div class="billing-information-card mb-3">
     <div class="card billing-information-title-card">
       <div class="card-body">
         <h6 class="text-center mb-0">Alamat Pengiriman</h6>
@@ -33,12 +33,12 @@
   </div>
 
   <div class="shipping-method-choose mb-3">
-  <div class="card shipping-method-choose-card" style="border-radius: .5rem .5rem .5rem .5rem">
+    <div class="card shipping-method-choose-card" style="border-radius: .5rem .5rem .5rem .5rem">
       <div class="card-body">
         <div class="row g-3">
           <div class="col-12 col-md-7">
             <div class="shipping-method-choose">
-              <div class="table-responsive card-body">
+              <div class="table-responsive">
                 <table class="table mb-0">
                   <tbody>
                     <tr ng-repeat="produk in produks">
@@ -64,27 +64,77 @@
           </div>
           <div class="col-12 col-md-5">
             <div>
-              <label for="">Pilih Kurir Pengiriman</label>
+              <span><strong>Pilih Kurir Pengiriman</strong></span>
               <ul class="list-inline">
                 <li class="user-dropdown fancy-dropdown">
                   <button class="btn btn-primary btn-lg btn-block w-100" ng-click="toggleOngkirDropdown($event)"><span ng-show="text_kurir">Kurir Pengiriman</span> 
-                    <div class="spinner-border text-light" role="status" ng-show="showload" style="width: 20px;height: 20px"><span class="sr-only">Loading...</span></div></button>
-                  <ul class="list-group menu" ng-show="showJne" ng-repeat="items in kurir">
-                    <li class="list-group-item">
-                      <label for="{{items.judul}}"><strong>{{items.judul}}</strong></label>
-                      <input type="radio" name="ongkir" value="{{items.id}}" id="{{items.judul}}" ng-model="datass.size" hidden>
-                      <p>IDR {{items.harga | currency : "" : 0}}</p>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-              {{datass.size}}
+                    <div class="spinner-border text-light" role="status" ng-show="showload" style="width: 20px;height: 20px"><span class="sr-only">Loading...</span></div>
+                  </button>
+                  <div style="position: relative;">
+                    <span ng-hide="notif.kurir" class="notif-card" style="font-weight: none;font-size: 12px">Kurir Pengiriman Harus Isi</span>
+                  </div>
+                    <div ng-if="ongkirs" class="list_ongkir">
+                      <div class="add_kurir">
+                        <p><strong>Kurir Pilihan</strong></p>
+                        <p class="font-size-ongkir">{{ongkirs.ongkir}} (IDR {{ongkirs.harga | currency : "" : 0}})</p>
+                      </div>
+                    </div>
+                    <div class="height-ongkir">
+                      <div class="list-ongkris">
+                        <ul class="list-group menu" ng-show="showJne" ng-repeat="items in kurir">
+                          <li class="list-group-item list-kurir"  ng-click='get_kurir(items.id_ongkir)'>
+                            <strong>{{items.judul}}</strong>
+                            <p>IDR {{items.harga | currency : "" : 0}}</p>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
             </div>
+
           </div>
 
+
+        </div>
       </div>
-
-
+    </div>
+</div>
+<div class="col-12 col-md-5">
+  <div class="shipping-method-choose mb-3">
+    <div class="card shipping-method-choose-title-card bg-success">
+      <div class="card-body">
+        <h6 class="text-center mb-0 text-white">Ringkasan Belanja</h6>
+      </div>
+    </div>
+    <div class="card shipping-method-choose-card">
+      <div class="shipping-method-choose">
+          <div class="table-responsive card-body">
+            <table class="table mb-0">
+              <tbody>
+                <tr style="font-size: 14px">
+                  <td>Total Harga ({{cout_produk}} Produk)</td>
+                  <td style="text-align: right;">IDR {{totals_produk | currency : "" : 0}}</td>
+                </tr>
+                <tr style="font-size: 14px" ng-if="ongkirs">
+                  <td>Total Ongkos Kirim</td>
+                  <td style="text-align: right;">IDR {{ongkirs.harga | currency : "" : 0}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
     </div>
   </div>
+
+  <div class="card cart-amount-area">
+    <div class="card-body d-flex align-items-center justify-content-between">
+      <h5 class="total-price mb-0" ng-if="ongkirs">IDR <span class="counter">{{subtotal | currency : "" : 0}}</span></h5>
+      <h5 class="total-price mb-0" ng-if="!ongkirs">IDR <span class="counter" style="color: red">-</span></h5>
+      <a class="btn btn-warning" ng-click="pembayaran()">Pilih Pembayaran</a>
+    </div>
+  </div>
+</div>
 </div>

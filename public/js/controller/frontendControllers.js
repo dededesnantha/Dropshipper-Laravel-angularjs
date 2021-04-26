@@ -262,28 +262,6 @@ myApp.controller('ProfileController', ['$scope', '$http','SweetAlert','$location
 	        SweetAlert.swal("Terjadi Kesalahan!", "error")
 	    });
 	}
-
-	$scope.edit_alamat = function () {
-		console.log($scope.user.id_user)
-	}
-
-	$scope.edit_alamat = function() {
-		var modalInstance =  $uibModal.open({
-	      templateUrl: "views/modal/Edit_alamat.html",
-	      controller: "ModalEditAlamat",
-	      size: "lg",
-	      resolve: {
-              items: function () {
-                return $scope.user.id_user;
-              }
-           }
-	    });
-	    modalInstance.result.then(function() {
-	        $scope.get_user();
-	    }, function () {
-            $scope.get_user();
-        });
-	};
 }]);
 
 myApp.controller('ModalEditAlamat', ['$scope', '$uibModalInstance', 'items', '$http','SweetAlert','$location','$route', 
@@ -359,7 +337,6 @@ myApp.controller('ModalEditAlamat', ['$scope', '$uibModalInstance', 'items', '$h
 		    }, function(x) {
 		            SweetAlert.swal("Terjadi Kesalahan!", "error")
 		    });
-    		console.log("UPDATE")
     	}
     }
 
@@ -596,7 +573,7 @@ myApp.controller('SettingController', ['$scope', '$http','SweetAlert','$location
 }]);
 
 myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','$routeParams','$window', function($scope, $http, SweetAlert, $location, $routeParams, $window){
-	
+	$scope.load_sign();
 	$scope.produks = {}; 
 	$scope.datass = function(){
 		$http.post(base_url+'get_cart',$scope.user).then(function(data) {
@@ -714,17 +691,76 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	}
 }]);
 
-myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$location','$routeParams','$document', function($scope, $http, SweetAlert, $location, $routeParams, $document){
+myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$location','$routeParams','$document','$uibModal', function($scope, $http, SweetAlert, $location, $routeParams, $document, $uibModal){
+	$scope.load_sign();
 	$scope.url = "Checkout";
 	$scope.text_kurir = true
 	$scope.showload = false
-	
+	$scope.ongkirs = '';
+	$scope.cout_produk = 0;
+	$scope.subtotal = 0;
+	$scope.notif = {}
+	$scope.notif.kurir = true;
+	// get user
+	$scope.get_user = function(){
+		$http.post(base_url+'user',$scope.user).then(function(data) {
+	              $scope.user_datass = data.data;
+	              $scope.user_datass.telephone =$scope.user_datass.telephone
+	              $scope.get_kabupaten($scope.user_datass.id_provinsi)
+	              $scope.get_kecamatan($scope.user_datass.id_kabupaten)
+	              $scope.src = base_url+'image/'+$scope.user_datass.foto_user;
+	    }, function(x) {
+	            SweetAlert.swal("Terjadi Kesalahan!", "error")
+	    });
+	}
+	$scope.get_user();
+    $http.get(base_url+'provinsi').then(function(data) {
+              $scope.provinsi = data.data;
+    }, function(x) {
+        SweetAlert.swal("Terjadi Kesalahan!", "error")
+    });
+
+    $scope.get_kabupaten = function(id){
+    	$http.get(base_url+'kabupaten/'+id).then(function(data) {
+              $scope.kabupaten = data.data;
+	    }, function(x) {
+	        SweetAlert.swal("Terjadi Kesalahan!", "error")
+	    });
+    }
+    $scope.get_kecamatan = function(id){
+    	$http.get(base_url+'kecamatan/'+id).then(function(data) {
+              $scope.kecamatan = data.data;
+	    }, function(x) {
+	        SweetAlert.swal("Terjadi Kesalahan!", "error")
+	    });
+    }
+$scope.edit_alamat = function() {
+		var modalInstance =  $uibModal.open({
+	      templateUrl: "views/modal/Edit_alamat.html",
+	      controller: "ModalEditAlamat",
+	      size: "lg",
+	      resolve: {
+              items: function () {
+                return $scope.user.id_user;
+              }
+           }
+	    });
+	    modalInstance.result.then(function() {
+	        $scope.get_user();
+	        $scope.ongkirs = '';
+	    }, function () {
+            $scope.get_user();
+            $scope.ongkirs = '';
+        });
+	};
+
 	// get_produk
 	$scope.datass = function(){
 		$http.post(base_url+'get_cart',$scope.user).then(function(data) {
 				$scope.produks = data.data
 	              angular.forEach($scope.produks, function (values, key) {
-	               	values['gambar'] = base_url +'image/'+values['gambar'];
+	              values['gambar'] = base_url +'image/'+values['gambar'];
+	               	$scope.cout_produk += values['qty'];
 	              });
 	              $scope.getTotal();
 	              $scope.loading = false;
@@ -734,17 +770,18 @@ myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$locatio
 	}
 	$scope.datass();
 	$scope.getTotal = function(){
-	    $scope.produks.totals = 0;
+	    $scope.totals_produk = 0;
 	    angular.forEach($scope.produks, function (values, key) {
 	    	if (values['harga_promo']) {
-	    		$scope.produks.totals += values['harga_promo'] * values['qty'];
+	    		$scope.totals_produk += values['harga_promo'] * values['qty'];
 	    	}else{
-	       		$scope.produks.totals += values['harga'] * values['qty'];
+	       		$scope.totals_produk += values['harga'] * values['qty'];
 	    	}
 	    });
 	}
 	
 	$scope.showJne = false;
+	$scope.kurir = {};
 	
 	$scope.toggleOngkirDropdown = function($event){
 		$scope.text_kurir = false
@@ -776,12 +813,52 @@ myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$locatio
 		} 
 	}
 
-	
-}])
-// .directive('userDropdown', ['$document', function($document) {
-    
-//   }])
+	$scope.get_kurir = function (e) {
+		$scope.notif.kurir = true;
+    	angular.forEach($scope.kurir, function (values, key) {
+			if (values.id_ongkir == e) {
+				$scope.ongkirs = {
+					id_ongkir: values['id_ongkir'],
+					ongkir: values['judul'],
+					harga: values['harga']
+				}
+    		}
+	    });
+		$scope.subtotal = $scope.totals_produk + $scope.ongkirs.harga
+	};
 
+	$scope.pembayaran = function () {
+		if ($scope.ongkirs) {
+			$scope.datas = {}
+			$scope.id_orders = '';
+			$scope.datas.subtotal = $scope.subtotal;
+			$scope.datas.ongkirs = $scope.ongkirs.id_ongkir;
+
+			for(var i=0; i< $scope.produks.length; i++){
+			  $scope.id_orders += $scope.produks[i]['id_order'];
+			  if(i < ($scope.produks.length-1) ){
+			   $scope.id_orders += ',';
+			  }
+			 }
+			$scope.datas.id_orders = $scope.id_orders;
+			$http.post(base_url+'add_transaksi',$scope.datas).then(function(data) {
+			SweetAlert.swal({
+				  title: 'Login Berhasil',
+				  text: 'Anda Akan Dialihkan Kehalaman Utama',
+				  timer: 3000,
+				  buttons: false,
+				  type: "success",
+				  showCancelButton: false,
+				  showConfirmButton: false,
+				})
+		}, function(x) {
+		     SweetAlert.swal("Terjadi Kesalahan!","","error")
+		});
+		}else{
+			$scope.notif.kurir = false;
+		}
+	}
+}])
 
 myApp.directive('onlyNumbers', function () {
     return  {

@@ -47,7 +47,6 @@ Route::get('get_kategori','HomeController@get_kategori');
 Route::get('get_kategori_produk/{slug}','HomeController@get_kategori_produk');
 Route::get('kategori_all','HomeController@kategori_all');
 
-
 // produk
 Route::get('get_top_produk','HomeController@get_top_produk');
 Route::get('get_produk','HomeController@get_produk');
@@ -55,18 +54,18 @@ Route::get('produk/{slug}','HomeController@single_produk');
 Route::get('produk_top','HomeController@produk_top_all');
 Route::get('produk_all','HomeController@produk_all');
 
+// chart
 Route::get('card_produk/{id}','HomeController@card_produk');
 Route::post('add_cart','CartController@add_cart');
 Route::post('get_cart','CartController@get_cart');
 Route::post('delete_cart','CartController@delete_cart');
-
 Route::post('update_cart','CartController@update_cart');
-
 Route::post('get_alamat','UserDropshipperController@get_alamat');
 Route::put('update_alamat','UserDropshipperController@update_alamat');
 Route::post('get_ongkir','HomeController@get_ongkir');
 
-
+// transaksi
+Route::post('add_transaksi','TransaksiController@add_transaksi');
 
 
 // upload gambar
