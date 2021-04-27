@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class tb_transaksi extends Model
 {
     protected $table = 'tb_transaksi';
-    protected $fillable = ['tgl_transkasi','total_transkasi','status_transaksi','metode_transkasi','id_ongkir','tgl_konfirm'];
+    protected $fillable = ['tgl_transkasi','total_transkasi','status_transaksi','metode_transkasi','id_ongkir','tgl_konfirm','code_transaksi','image_transfer'];
     public $timestamps = false;
 }

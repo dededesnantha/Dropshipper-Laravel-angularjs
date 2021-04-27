@@ -32,8 +32,8 @@ class UserDropshipperController extends Controller
         $user = tb_user::where('username', $request->username)->first();
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
-                $set_Cookie = Cookie::forever('id_user', $user->id_user);
-                return response()->json(200)->withCookie($set_Cookie);
+                // $set_Cookie = Cookie::forever('id_user', $user->id_user);
+                return response()->json(200)->withCookie(Cookie::forever('id_user', $user->id_user));
             } else {
                 $response = ["message" => "Login Gagal"];
                 return response($response, 422);

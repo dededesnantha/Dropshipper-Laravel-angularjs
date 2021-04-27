@@ -691,7 +691,7 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	}
 }]);
 
-myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$location','$routeParams','$document','$uibModal', function($scope, $http, SweetAlert, $location, $routeParams, $document, $uibModal){
+myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$location','$routeParams','$document','$uibModal','$cookies', function($scope, $http, SweetAlert, $location, $routeParams, $document, $uibModal, $cookies){
 	$scope.load_sign();
 	$scope.url = "Checkout";
 	$scope.text_kurir = true
@@ -748,9 +748,11 @@ $scope.edit_alamat = function() {
 	    modalInstance.result.then(function() {
 	        $scope.get_user();
 	        $scope.ongkirs = '';
+	        $cookies.remove('ongkirs');
 	    }, function () {
             $scope.get_user();
             $scope.ongkirs = '';
+            $cookies.remove('ongkirs');
         });
 	};
 
@@ -812,8 +814,32 @@ $scope.edit_alamat = function() {
 			$scope.showload = false
 		} 
 	}
+	
+	$http.post(base_url+'get_ongkir',$scope.user).then(function(data) {
+				$scope.kurir = data.data.kurir;
+				$scope.cookies_kurir();
+				$scope.getTotal();
+		}, function(x) {
+		});
+
+	$scope.cookies_kurir = function($event){
+	if ($cookies.get('ongkirs') !=='') {
+		angular.forEach($scope.kurir, function (values, key) {
+			if (values.id_ongkir == $cookies.get('ongkirs')) {
+				$scope.ongkirs = {
+					id_ongkir: values['id_ongkir'],
+					ongkir: values['judul'],
+					harga: values['harga']
+				}
+			}
+		});
+	$scope.subtotal = $scope.totals_produk + $scope.ongkirs.harga
+		}
+	};
+	
 
 	$scope.get_kurir = function (e) {
+
 		$scope.notif.kurir = true;
     	angular.forEach($scope.kurir, function (values, key) {
 			if (values.id_ongkir == e) {
@@ -822,10 +848,12 @@ $scope.edit_alamat = function() {
 					ongkir: values['judul'],
 					harga: values['harga']
 				}
+				$cookies.put('ongkirs', $scope.ongkirs.id_ongkir);
     		}
 	    });
 		$scope.subtotal = $scope.totals_produk + $scope.ongkirs.harga
 	};
+	
 
 	$scope.pembayaran = function () {
 		if ($scope.ongkirs) {
@@ -833,6 +861,7 @@ $scope.edit_alamat = function() {
 			$scope.id_orders = '';
 			$scope.datas.subtotal = $scope.subtotal;
 			$scope.datas.ongkirs = $scope.ongkirs.id_ongkir;
+			$scope.datas.id_user = $scope.user.id_user;
 
 			for(var i=0; i< $scope.produks.length; i++){
 			  $scope.id_orders += $scope.produks[i]['id_order'];
@@ -842,15 +871,7 @@ $scope.edit_alamat = function() {
 			 }
 			$scope.datas.id_orders = $scope.id_orders;
 			$http.post(base_url+'add_transaksi',$scope.datas).then(function(data) {
-			SweetAlert.swal({
-				  title: 'Login Berhasil',
-				  text: 'Anda Akan Dialihkan Kehalaman Utama',
-				  timer: 3000,
-				  buttons: false,
-				  type: "success",
-				  showCancelButton: false,
-				  showConfirmButton: false,
-				})
+			$location.path('/payment/'+data.data);
 		}, function(x) {
 		     SweetAlert.swal("Terjadi Kesalahan!","","error")
 		});
