@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\Models\tb_order;
 use App\Models\tb_user;
 use Cookie;
+use Illuminate\Support\Facades\Crypt;
 
 class TransaksiController extends Controller
 {
@@ -32,6 +33,14 @@ class TransaksiController extends Controller
     	->update([
     		'id_transaksi' => $id
     	]);
-    	return response()->json(md5($id),200);
+        $encrypted = Crypt::encryptString($id);
+    	return response()->json($encrypted,200);
+    }
+
+    public function metode_transaksi(Request $request, $id)
+    {
+        $id = Crypt::decryptString($id);
+        var_dump ($id);
+        die();
     }
 }

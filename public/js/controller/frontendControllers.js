@@ -103,11 +103,12 @@ myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','
 	// }
 }]);
 
-myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$http','SweetAlert','$location','$route', 
-	function($scope, $uibModalInstance, items, $http,SweetAlert,$location,$route) {
+myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$http','SweetAlert','$location','$route','$cookies',
+	function($scope, $uibModalInstance, items, $http,SweetAlert,$location,$route,$cookies) {
 	
 	$scope.datass = {};
 	$scope.produks = {};
+	$scope.carts = {};
 	$http.get(base_url+'card_produk/'+items).then(function(data) {
               $scope.produks = data.data;
               $scope.produks.gambar = base_url+'image/'+$scope.produks.gambar;
@@ -152,10 +153,19 @@ myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$
 	}
 
   $scope.post = function($datass, $id){
+  	
   	$datass.id_produk = $id;
   	$datass.id_user = $scope.user.id_user;
+  	
+  	// $scope.carts.push($datass);
+  	
+  	// var expireDate = new Date();
+  	// expireDate.setDate(expireDate.getDate() + 1);
+  	// $cookies.putObject('cart', $scope.carts,  {'expires': expireDate});
+  	
   	$http.post(base_url+'add_cart',$datass)
       	.then(function(response) {
+      		$scope.count_cart();
       		$uibModalInstance.dismiss();
 			SweetAlert.swal({
 			   title: "Ye..Pesanan Berhasil ",
@@ -165,9 +175,12 @@ myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$
 			   confirmButtonColor: "#00b894",
 			   confirmButtonText: "Lanjut Pembayaran",
 			   cancelButtonText: "Lanjut Belanja",
-			   closeOnConfirm: true}, 
-			function(){ 
-				$location.path( "/cart" );
+			   closeOnConfirm: true,
+				closeOnCancel: true}, 
+				function(isConfirm){ 
+					if (isConfirm) {
+						$location.path( "/cart" );
+					} 
 			});
 			$scope.load_sign();
     }, function(x) {
@@ -178,7 +191,7 @@ myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$
   $scope.cancel = function(){
     $uibModalInstance.dismiss();
   } 
-  
+
 }]);
 
 
@@ -574,6 +587,7 @@ myApp.controller('SettingController', ['$scope', '$http','SweetAlert','$location
 
 myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','$routeParams','$window', function($scope, $http, SweetAlert, $location, $routeParams, $window){
 	$scope.load_sign();
+	$scope.count_cart();
 	$scope.produks = {}; 
 	$scope.datass = function(){
 		$http.post(base_url+'get_cart',$scope.user).then(function(data) {
@@ -583,16 +597,16 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	               	values['notif'] = true;
 	              });
 	              $scope.getTotal();
+	              console.log($scope.produks)
 	              $scope.loading = false;
 		}, function(x) {
 		     SweetAlert.swal("Terjadi Kesalahan!","","error")
 		});
 	}
 	$scope.datass();
-	$scope.qty_tambah = function(item, id){
-
-    	angular.forEach($scope.produks, function (values, key) {
-	       	if (values.id_order === id) {
+	$scope.qty_tambah = function(item, id, size, color){
+		angular.forEach($scope.produks, function (values, key) {
+    		if (values.id === id && values.size === size && values.color.color === color) {
 	       		if ( item >= values.stok) {
 		  			values['notif'] = false;
 		  		}else{
@@ -602,10 +616,10 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	    });
 	    $scope.getTotal();
 	}
-	$scope.qty_kurang = function(item, id){
+	$scope.qty_kurang = function(item, id, size, color){
 		$scope.notif = true;
 		angular.forEach($scope.produks, function (values, key) {
-	       	if (values.id_order === id) {
+	       	if (values.id === id && values.size === size && values.color.color === color) {
 			    if(item > 1){
 			       values['qty'] = item - 1;
 			       values['notif'] = true;
@@ -614,11 +628,10 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 		});
 		$scope.getTotal();
 	}
-	$scope.update_totals = function(item, id){
-		
+	$scope.update_totals = function(item, id, size, color){
 			if (item !== 0) {
 				angular.forEach($scope.produks, function (values, key) {
-			       	if (values.id_order === id) {
+			       	if (values.id === id && values.size === size && values.color.color === color) {
 			       		if ( item >= values.stok) {
 				  			values['notif'] = false;
 				  			values['qty'] = values.stok;
@@ -650,7 +663,8 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 
 
 
-	$scope.delete = function(id) {
+	$scope.delete = function(id, size, color) {
+		$scope.datass_delete = {};
 		SweetAlert.swal({
 		   title: "Hapus barang?",
 		   text: "Barang yang kamu pilih akan dihapus dari keranjang.",
@@ -662,10 +676,12 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 			closeOnCancel: true}, 
 		function(isConfirm){ 
 			if (isConfirm) {
-				$scope.id = id
-				$http.post(base_url+'delete_cart',$scope.id)
+				$scope.datass_delete.id = id;
+				$scope.datass_delete.size = size;
+				$scope.datass_delete.color = color;
+				$http.post(base_url+'delete_cart',$scope.datass_delete)
 				.then(function(respone) {
-					$scope.load_sign();
+					$scope.count_cart();
 			       	$scope.datass();
 			   		SweetAlert.swal({
 					  title: 'Barang Berhasil Dihapus',
@@ -839,7 +855,6 @@ $scope.edit_alamat = function() {
 	
 
 	$scope.get_kurir = function (e) {
-
 		$scope.notif.kurir = true;
     	angular.forEach($scope.kurir, function (values, key) {
 			if (values.id_ongkir == e) {
@@ -903,6 +918,23 @@ myApp.directive('onlyNumbers', function () {
     }
 });
 
+myApp.controller('PaymentController', ['$scope', '$http','SweetAlert','$location', '$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
+	$scope.load_sign();
+	$scope.url = "Pembayaran";
+	$scope.loading = false;
+	$scope.datass = {};
+	$scope.metode = function (metode) {
+		$scope.datass.metode = metode;
+		$http.put(base_url+'metode/'+$routeParams.id,$scope.datass).then(function(data) {
+			// setTimeout(function () {
+
+		 //    }, 3000);
+		}, function(x) {
+		     SweetAlert.swal("Terjadi Kesalahan!","","error")
+		});
+	}
+
+}])
 
 
 

@@ -66,6 +66,8 @@ Route::post('get_ongkir','HomeController@get_ongkir');
 
 // transaksi
 Route::post('add_transaksi','TransaksiController@add_transaksi');
+Route::put('metode/{id}','TransaksiController@metode_transaksi');
+Route::get('get/count','CartController@count_cart');
 
 
 // upload gambar

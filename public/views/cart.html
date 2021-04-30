@@ -9,8 +9,8 @@
 	  </div>
 	  <!-- / header -->
 
-	  <div class="page-content-wrapper">
-		   <div class="container" ng-controller="CartController" ng-if="user.cart > '0'">
+	  <div class="page-content-wrapper" ng-controller="CartController"> 
+		   <div class="container" ng-if=" produks.length > 0">
 	        <!-- Cart Wrapper-->
 	        <div class="cart-wrapper-area py-3">
 	          <div class="cart-table card mb-3">
@@ -18,7 +18,7 @@
 	              <table class="table mb-0">
 	                <tbody>
 	                  <tr ng-repeat="produk in produks">
-	                    <th scope="row" style="width: 50px"><a class="remove-product" ng-click="delete(produk.id_order)"><i class="lni lni-close"></i></a></th>
+	                    <th scope="row" style="width: 50px"><a class="remove-product" ng-click="delete(produk.id, produk.size, produk.color.id)"><i class="lni lni-close"></i></a></th>
 	                    <td style="text-align: center;">
 	                    	<img ng-src="{{produk.gambar}}" class="img-td" alt="{{produk.nama_produk}}">
 	                    </td>
@@ -30,13 +30,16 @@
 	                    	<span class="sale-price" ng-if="produk.harga_promo">IDR {{produk.harga_promo | currency : "" : 0}}<span>IDR {{produk.harga | currency : "" : 0}} </span></span>
                     		<span class="sale-price" ng-if="!produk.harga_promo">IDR {{produk.harga | currency : "" : 0}}</span>
 	                    	</a>
+	                    	<span class="badge badge-default" ng-if="produk.size" style="background-color: #9a9a9a">{{produk.size}}</span>
+	                    	<span class="btn btn-success btn-sm" ng-if="produk.color.color" style="background-color: {{produk.color.color}};border-color: {{produk.color.color}}"></span>
+	                    	
 	                	</td>
 	                    <td style="width: 150px;text-align: center;">
 	                      <div class="quantity cart-form">
 					        <div class="order-plus-minus d-flex align-items-center">
-					          <div class="quantity-button-handler" ng-click="qty_kurang(produk.qty, produk.id_order)" >-</div>
-					          <input class="form-control cart-quantity-input" type="number" name="qty" ng-change="update_totals(produk.qty, produk.id_order)" ng-model="produk.qty" >
-					          <div class="quantity-button-handler" ng-click="qty_tambah(produk.qty, produk.id_order)" >+</div>
+					          <div class="quantity-button-handler" ng-click="qty_kurang(produk.qty, produk.id, produk.size, produk.color.color)" >-</div>
+					          <input class="form-control cart-quantity-input" type="number" name="qty" ng-change="update_totals(produk.qty, produk.id, produk.size, produk.color.color)" ng-model="produk.qty" >
+					          <div class="quantity-button-handler" ng-click="qty_tambah(produk.qty, produk.id, produk.size, produk.color.color)" >+</div>
 					        </div>
 					      </div>
 					      <div style="position: relative;">
@@ -51,12 +54,12 @@
 	          <!-- Cart Amount Area-->
 	          <div class="card cart-amount-area">
 	            <div class="card-body d-flex align-items-center justify-content-between">
-	              <h5 class="total-price mb-0">Total Harga : IDR <span class="counter">{{produks.totals | currency : "" : 0}}</span></h5><a class="btn btn-warning" ng-click="beli()">Beli Sekarang ({{user.cart}})</a>
+	              <h5 class="total-price mb-0">Total Harga : IDR <span class="counter">{{produks.totals | currency : "" : 0}}</span></h5><a class="btn btn-warning" ng-click="beli()">Beli Sekarang ({{cart}})</a>
 	            </div>
 	          </div>
 	        </div>
       	</div>
-	        <div ng-if="user.cart == '0'">
+	        <div ng-if=" produks.length == 0">
 	        	<div class="empty-card">
 			      <div class="content" style="padding-top: 200px">
 			      	<img src="../css/empty_keranjang.png">

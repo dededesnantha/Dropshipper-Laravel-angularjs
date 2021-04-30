@@ -21,6 +21,17 @@ myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','
           $rootScope.$route = $route;
       }     
 
+      // check cart
+      $rootScope.count_cart = function(){
+        $http.get(base_url+'get/count').then(function(response){
+          $rootScope.cart = response.data
+          
+        },function (error){
+          $location.path('/login');
+        });  
+      }
+
+      $scope.count_cart();
        $scope.load_sign();
        $scope.route = $location.path();
 

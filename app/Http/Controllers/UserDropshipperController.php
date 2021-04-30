@@ -47,7 +47,7 @@ class UserDropshipperController extends Controller
     {
     	$datass = Cookie::get('id_user');
         $get_user = tb_user::select('id_user','nama','foto_user','username')->where('id_user', $datass)->first();
-        $get_user['cart'] = tb_order::where('id_user', $get_user->id_user)->whereNull('deleted_at')->count();
+        
     	if ($datass) {
     		return $get_user;
     	}else{
