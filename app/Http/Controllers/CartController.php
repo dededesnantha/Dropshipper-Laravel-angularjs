@@ -50,7 +50,7 @@ class CartController extends Controller
             }
 
             $item_data = json_encode($cart_data);
-            $minutes = 60;
+            $minutes = 1440;
             Cookie::queue(Cookie::make('cart', $item_data, $minutes));
             return response()->json(['status'=>'succes'],200);
         }else{
@@ -63,7 +63,7 @@ class CartController extends Controller
                     );
             $cart_data[] = $item_array;
             $item_data = json_encode($cart_data);
-            $minutes = 60;
+            $minutes = 1440;
             Cookie::queue(Cookie::make('cart', $item_data, $minutes));
         	return response()->json(['status'=>'succes'],200);
         }
@@ -75,6 +75,7 @@ class CartController extends Controller
         if (Cookie::get('cart')) {
             $cookie_data = stripslashes(Cookie::get('cart'));
             $cart_data = json_decode($cookie_data, true);
+            
             $data = [];
             foreach ($cart_data as $key => $datas) {
                 $data[$key] = produk::where('id', $datas['id_produk'])
@@ -110,7 +111,7 @@ class CartController extends Controller
                 }
             }
             $item_data = json_encode($cart_data);
-            $minutes = 60;
+            $minutes = 1440;
             Cookie::queue(Cookie::make('cart', $item_data, $minutes));
             return response()->json(['status'=>'succes'],200);
 
@@ -119,11 +120,19 @@ class CartController extends Controller
     public function update_cart(Request $request)
     {
         $post = $request->input();
-        foreach ($post as $rows) {
-            tb_order::where('id_order', $rows['id_order'])->update([
-                'kuantitas' => $rows['qty']
-            ]);
+        $cart_data = array();
+        foreach ($post as $key => $datss) {
+                $item_array = array(
+                    'id_produk' => $datss['id'],
+                    'id_color' => $datss['color']['id'],
+                    'kuantitas' => $datss['qty'],
+                    'size' => $datss['size']
+                );
+                $cart_data[] = $item_array;
         }
+        $item_data = json_encode($cart_data);
+        $minutes = 1440;
+        Cookie::queue(Cookie::make('cart', $item_data, $minutes));
         return response()->json(['status'=>'succes'],200);
     }
 
@@ -131,7 +140,11 @@ class CartController extends Controller
     {
         $cookie_data = stripslashes(Cookie::get('cart'));
         $cart_data = json_decode($cookie_data, true);
-        $data = count($cart_data);
+        if ($cart_data == null) {
+            $data = 0;
+        }else{
+            $data = count($cart_data);
+        }
         return $data;
     }
 }

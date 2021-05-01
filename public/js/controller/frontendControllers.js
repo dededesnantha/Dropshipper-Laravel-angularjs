@@ -597,7 +597,6 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	               	values['notif'] = true;
 	              });
 	              $scope.getTotal();
-	              console.log($scope.produks)
 	              $scope.loading = false;
 		}, function(x) {
 		     SweetAlert.swal("Terjadi Kesalahan!","","error")
@@ -660,8 +659,6 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	    	}
 	    });
 	}
-
-
 
 	$scope.delete = function(id, size, color) {
 		$scope.datass_delete = {};
@@ -750,7 +747,7 @@ myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$locatio
 	        SweetAlert.swal("Terjadi Kesalahan!", "error")
 	    });
     }
-$scope.edit_alamat = function() {
+	$scope.edit_alamat = function() {
 		var modalInstance =  $uibModal.open({
 	      templateUrl: "views/modal/Edit_alamat.html",
 	      controller: "ModalEditAlamat",
@@ -774,7 +771,7 @@ $scope.edit_alamat = function() {
 
 	// get_produk
 	$scope.datass = function(){
-		$http.post(base_url+'get_cart',$scope.user).then(function(data) {
+		$http.post(base_url+'get_cart').then(function(data) {
 				$scope.produks = data.data
 	              angular.forEach($scope.produks, function (values, key) {
 	              values['gambar'] = base_url +'image/'+values['gambar'];
@@ -883,10 +880,11 @@ $scope.edit_alamat = function() {
 			  if(i < ($scope.produks.length-1) ){
 			   $scope.id_orders += ',';
 			  }
-			 }
+			}
+
 			$scope.datas.id_orders = $scope.id_orders;
 			$http.post(base_url+'add_transaksi',$scope.datas).then(function(data) {
-			$location.path('/payment/'+data.data);
+			$scope.modalPembyarn(data.data)
 		}, function(x) {
 		     SweetAlert.swal("Terjadi Kesalahan!","","error")
 		});
@@ -894,6 +892,33 @@ $scope.edit_alamat = function() {
 			$scope.notif.kurir = false;
 		}
 	}
+
+	$scope.modalPembyarn = function(data) {
+		var modalInstance =  $uibModal.open({
+	      templateUrl: "views/modal/pembayaran.html",
+	      controller: "ModalPembayaran",
+	      resolve: {
+              items: function () {
+                return data;
+              }
+           }
+	    });
+	    modalInstance.result.then(function() {
+	        
+	    }, function () {
+        });
+	};
+}])
+
+myApp.controller('ModalPembayaran', ['$scope', '$uibModalInstance', 'items', '$http','SweetAlert','$location','$route', 
+	function($scope, $uibModalInstance, items, $http,SweetAlert,$location,$route) {
+		
+		$http.get(base_url+'payment/'+items).then(function(data) {
+			$scope.total = data.data.total_transkasi;
+		}, function(x) {
+			SweetAlert.swal("Terjadi Kesalahan!", "error")
+		});
+
 }])
 
 myApp.directive('onlyNumbers', function () {

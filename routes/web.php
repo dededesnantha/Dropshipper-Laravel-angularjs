@@ -68,6 +68,8 @@ Route::post('get_ongkir','HomeController@get_ongkir');
 Route::post('add_transaksi','TransaksiController@add_transaksi');
 Route::put('metode/{id}','TransaksiController@metode_transaksi');
 Route::get('get/count','CartController@count_cart');
+Route::get('payment/{id}','TransaksiController@payment_get');
+
 
 
 // upload gambar

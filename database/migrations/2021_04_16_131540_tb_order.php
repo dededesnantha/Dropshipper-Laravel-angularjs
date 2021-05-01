@@ -15,10 +15,10 @@ class TbOrder extends Migration
     {
         Schema::create('tb_order', function (Blueprint $table) {
             $table->id('id_order');
-            $table->integer('id_user');
             $table->integer('id_produk');
             $table->integer('id_color');
             $table->integer('kuantitas');
+            $table->integer('id_transaksi');
             $table->string('size', 20);
             $table->timestamps();
             $table->softDeletes();

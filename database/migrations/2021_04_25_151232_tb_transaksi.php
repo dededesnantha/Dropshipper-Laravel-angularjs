@@ -17,6 +17,7 @@ class TbTransaksi extends Migration
             $table->id('id_transaksi');
             $table->date('tgl_transkasi');
             $table->integer('total_transkasi');
+            $table->integer('id_user');
             $table->string('status_transaksi', 100);
             $table->string('metode_transkasi', 100)->nullable();
             $table->integer('id_ongkir');
