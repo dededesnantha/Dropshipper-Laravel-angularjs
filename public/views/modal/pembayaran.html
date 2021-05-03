@@ -27,14 +27,14 @@
     				<tbody>
     					<tr style="font-size: 14px">
     						<td>Total Tagihan</td>
-    						<td style="text-align: right;">IDR {{total | currency : "" : 0}}</td>
+    						<td style="text-align: right;">Rp. {{total | currency : "" : 0}}</td>
     					</tr>
     				</tbody>
     			</table>
     		</div>
     	</div>
     </div>
-    <div class=" col-12 col-md-12 btn btn-success" style="margin: 10px 0px">
-    	<a ng-click="pembayaran()">Bayar</a>
+    <div ng-click="bayar(id_transaksi)" class=" col-12 col-md-12 btn btn-success" style="margin: 10px 0px">
+    	<a>Bayar</a>
     </div>
 </div>

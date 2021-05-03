@@ -27,8 +27,8 @@
 			                <span class="badge badge-danger" ng-if="produk.jenis_label === 'disc'">{{produk.text_label}}</span>
 	                    	<a href="#!produk/{{produk.slug}}" class="top-product-card" style="font-size: 15px">
 	                    	{{produk.nama_produk}}
-	                    	<span class="sale-price" ng-if="produk.harga_promo">IDR {{produk.harga_promo | currency : "" : 0}}<span>IDR {{produk.harga | currency : "" : 0}} </span></span>
-                    		<span class="sale-price" ng-if="!produk.harga_promo">IDR {{produk.harga | currency : "" : 0}}</span>
+	                    	<span class="sale-price" ng-if="produk.harga_promo">Rp. {{produk.harga_promo | currency : "" : 0}}<span>Rp. {{produk.harga | currency : "" : 0}} </span></span>
+                    		<span class="sale-price" ng-if="!produk.harga_promo">Rp. {{produk.harga | currency : "" : 0}}</span>
 	                    	</a>
 	                    	<span class="badge badge-default" ng-if="produk.size" style="background-color: #9a9a9a">{{produk.size}}</span>
 	                    	<span class="btn btn-success btn-sm" ng-if="produk.color.color" style="background-color: {{produk.color.color}};border-color: {{produk.color.color}}"></span>
@@ -54,7 +54,7 @@
 	          <!-- Cart Amount Area-->
 	          <div class="card cart-amount-area">
 	            <div class="card-body d-flex align-items-center justify-content-between">
-	              <h5 class="total-price mb-0">Total Harga : IDR <span class="counter">{{produks.totals | currency : "" : 0}}</span></h5><a class="btn btn-warning" ng-click="beli()">Beli Sekarang ({{cart}})</a>
+	              <span class="total-price mb-0">Total Harga : <span class="counter"><strong>Rp. {{produks.totals | currency : "" : 0}}</strong></span></span><a class="btn btn-warning" ng-click="beli()">Beli Sekarang ({{cart}})</a>
 	            </div>
 	          </div>
 	        </div>

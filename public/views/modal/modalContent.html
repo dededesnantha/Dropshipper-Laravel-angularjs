@@ -13,8 +13,8 @@
 	                  <span class="badge badge-danger" ng-if="produks.jenis_label === 'disc'">{{produks.text_label}}</span>
 	                  <br>
                     {{produks.nama_produk}}
-                    <p class="sale-price" ng-if="produks.harga_promo" style="color: red">IDR {{produks.harga_promo | currency : "" : 0}}<span style="color: #747794">IDR {{produks.harga | currency : "" : 0}}</span></p>
-                    <p class="sale-price" ng-if="!produks.harga_promo" style="color: red">IDR {{produks.harga | currency : "" : 0}}</p>
+                    <p class="sale-price" ng-if="produks.harga_promo" style="color: red">Rp. {{produks.harga_promo | currency : "" : 0}}<span style="color: #747794">Rp. {{produks.harga | currency : "" : 0}}</span></p>
+                    <p class="sale-price" ng-if="!produks.harga_promo" style="color: red">Rp. {{produks.harga | currency : "" : 0}}</p>
 
                     <div class="product-rating">Sisa Barang : {{produks.stok}}</div>
                   </div>

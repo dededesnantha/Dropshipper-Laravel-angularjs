@@ -52,9 +52,12 @@
                           {{produk.nama_produk}}
                           <br>
                           <p style="margin-top: 3px;margin-bottom: 0px">{{produk.qty}} barang</p>
-                          <span class="sale-price" ng-if="produk.harga_promo">IDR {{produk.harga_promo | currency : "" : 0}} <br><span>IDR {{produk.harga | currency : "" : 0}} </span></span>
-                          <span class="sale-price" ng-if="!produk.harga_promo">IDR {{produk.harga | currency : "" : 0}}</span>
+                          <span class="sale-price" ng-if="produk.harga_promo">Rp. {{produk.harga_promo | currency : "" : 0}} <br><span>Rp. {{produk.harga | currency : "" : 0}} </span></span>
+                          <span class="sale-price" ng-if="!produk.harga_promo">Rp. {{produk.harga | currency : "" : 0}}</span>
                         </a>
+                        <br>
+                        <span class="badge badge-default" ng-if="produk.size" style="background-color: #9a9a9a">{{produk.size}}</span>
+                        <span class="btn btn-success btn-sm" ng-if="produk.color.color" style="background-color: {{produk.color.color}};border-color: {{produk.color.color}}"></span>
                       </td>
                     </tr>
                   </tbody>
@@ -76,7 +79,7 @@
                     <div ng-if="ongkirs" class="list_ongkir">
                       <div class="add_kurir">
                         <p><strong>Kurir Pilihan</strong></p>
-                        <p class="font-size-ongkir">{{ongkirs.ongkir}} (IDR {{ongkirs.harga | currency : "" : 0}})</p>
+                        <p class="font-size-ongkir">{{ongkirs.ongkir}} (Rp. {{ongkirs.harga | currency : "" : 0}})</p>
                       </div>
                     </div>
                     <div class="height-ongkir">
@@ -84,7 +87,7 @@
                         <ul class="list-group menu" ng-show="showJne" ng-repeat="items in kurir">
                           <li class="list-group-item list-kurir"  ng-click='get_kurir(items.id_ongkir)'>
                             <strong>{{items.judul}}</strong>
-                            <p>IDR {{items.harga | currency : "" : 0}}</p>
+                            <p>Rp. {{items.harga | currency : "" : 0}}</p>
                           </li>
                         </ul>
                       </div>
@@ -116,11 +119,11 @@
               <tbody>
                 <tr style="font-size: 14px">
                   <td>Total Harga ({{cout_produk}} Produk)</td>
-                  <td style="text-align: right;">IDR {{totals_produk | currency : "" : 0}}</td>
+                  <td style="text-align: right;">Rp. {{totals_produk | currency : "" : 0}}</td>
                 </tr>
                 <tr style="font-size: 14px" ng-if="ongkirs">
                   <td>Total Ongkos Kirim</td>
-                  <td style="text-align: right;">IDR {{ongkirs.harga | currency : "" : 0}}</td>
+                  <td style="text-align: right;">Rp. {{ongkirs.harga | currency : "" : 0}}</td>
                 </tr>
               </tbody>
             </table>
@@ -131,8 +134,8 @@
 
   <div class="card cart-amount-area">
     <div class="card-body d-flex align-items-center justify-content-between">
-      <h5 class="total-price mb-0" ng-if="ongkirs">IDR <span class="counter">{{subtotal | currency : "" : 0}}</span></h5>
-      <h5 class="total-price mb-0" ng-if="!ongkirs">IDR <span class="counter" style="color: red">-</span></h5>
+      <h5 class="total-price mb-0" ng-if="ongkirs">Rp. <span class="counter">{{subtotal | currency : "" : 0}}</span></h5>
+      <h5 class="total-price mb-0" ng-if="!ongkirs">Rp. <span class="counter" style="color: red">-</span></h5>
       <a class="btn btn-warning" ng-click="pembayaran()">Pilih Pembayaran</a>
     </div>
   </div>

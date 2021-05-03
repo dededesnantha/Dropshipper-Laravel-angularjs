@@ -110,7 +110,7 @@ class CartController extends Controller
                     unset($cart_data[$keys]);
                 }
             }
-            $item_data = json_encode($cart_data);
+            $item_data = json_encode(array_values($cart_data));
             $minutes = 1440;
             Cookie::queue(Cookie::make('cart', $item_data, $minutes));
             return response()->json(['status'=>'succes'],200);

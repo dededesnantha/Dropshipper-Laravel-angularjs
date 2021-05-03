@@ -32,8 +32,8 @@
 	          <div class="container d-flex justify-content-between">
 	            <div class="p-title-price">
 	              <h6 class="mb-1">{{produks.nama_produk}}</h6>
-	              <p class="sale-price" ng-if="produks.harga_promo">IDR {{produks.harga_promo | currency : "" : 0}}<span>IDR {{produks.harga | currency : "" : 0}}</span></p>
-	                    <p class="sale-price" ng-if="!produks.harga_promo">IDR {{produks.harga | currency : "" : 0}}</p>
+	              <p class="sale-price" ng-if="produks.harga_promo">Rp. {{produks.harga_promo | currency : "" : 0}}<span>Rp. {{produks.harga | currency : "" : 0}}</span></p>
+	                    <p class="sale-price" ng-if="!produks.harga_promo">Rp. {{produks.harga | currency : "" : 0}}</p>
 	            </div>
 	          </div>
 	          <div class="product-ratings">

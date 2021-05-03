@@ -596,6 +596,7 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	               	values['gambar'] = base_url +'image/'+values['gambar'];
 	               	values['notif'] = true;
 	              });
+	              console.log($scope.produks)
 	              $scope.getTotal();
 	              $scope.loading = false;
 		}, function(x) {
@@ -829,11 +830,11 @@ myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$locatio
 	}
 	
 	$http.post(base_url+'get_ongkir',$scope.user).then(function(data) {
-				$scope.kurir = data.data.kurir;
-				$scope.cookies_kurir();
-				$scope.getTotal();
-		}, function(x) {
-		});
+		$scope.kurir = data.data.kurir;
+		$scope.cookies_kurir();
+		$scope.getTotal();
+	}, function(x) {
+	});
 
 	$scope.cookies_kurir = function($event){
 	if ($cookies.get('ongkirs') !=='') {
@@ -908,6 +909,7 @@ myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$locatio
 	    }, function () {
         });
 	};
+
 }])
 
 myApp.controller('ModalPembayaran', ['$scope', '$uibModalInstance', 'items', '$http','SweetAlert','$location','$route', 
@@ -915,9 +917,18 @@ myApp.controller('ModalPembayaran', ['$scope', '$uibModalInstance', 'items', '$h
 		
 		$http.get(base_url+'payment/'+items).then(function(data) {
 			$scope.total = data.data.total_transkasi;
+			$scope.id_transaksi = items; 
 		}, function(x) {
 			SweetAlert.swal("Terjadi Kesalahan!", "error")
 		});
+
+	$scope.bayar = function(data){
+		console.log(data)
+		$http.post(base_url+'transaction/'+data).then(function(data) {
+			
+		}, function(x) {
+		});
+	};
 
 }])
 

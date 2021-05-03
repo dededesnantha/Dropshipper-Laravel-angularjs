@@ -35,8 +35,8 @@
 	                    </div>
 	                  </a>
 	                    <a class="product-title d-block" href="#!produk/{{item.slug}}">{{item.nama_produk}}</a>
-	                    <p class="sale-price" ng-if="item.harga_promo">IDR {{item.harga_promo | currency : "" : 0}}<span>IDR {{item.harga | currency : "" : 0}}</span></p>
-	                    <p class="sale-price" ng-if="!item.harga_promo">IDR {{item.harga | currency : "" : 0}}</p>
+	                    <p class="sale-price" ng-if="item.harga_promo">Rp. {{item.harga_promo | currency : "" : 0}}<span>Rp. {{item.harga | currency : "" : 0}}</span></p>
+	                    <p class="sale-price" ng-if="!item.harga_promo">Rp. {{item.harga | currency : "" : 0}}</p>
 
 	                    <div class="product-rating">
 	                      <span class="badge badge-danger" style="position: inherit;">Sisa Barang : {{item.stok}}</span>
