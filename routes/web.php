@@ -70,6 +70,9 @@ Route::put('metode/{id}','TransaksiController@metode_transaksi');
 Route::get('get/count','CartController@count_cart');
 Route::get('payment/{id}','TransaksiController@payment_get');
 Route::post('transaction/{id}','TransaksiController@transaction_end');
+Route::get('get/transaction/{id}','TransaksiController@transaction_get');
+Route::get('detail/transaksi/{id}','TransaksiController@detail_transaksi');
+
 
 
 

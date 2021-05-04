@@ -116,7 +116,7 @@
                 <table cellspacing="0" cellpadding="0" width="100%" style="margin-bottom: 20px">
                   <tr style="padding-bottom:20px;">
                     <td>
-                      <img src="{{url('css/img/logo')}}/bri.jpg" alt="Bank BRI">
+                      <img src="{{url('css/img')}}/bri.jpg" alt="Bank BRI">
                     </td>
                     <td>
                       <span>Bank BRI</span>
@@ -128,7 +128,7 @@
                   </tr>
                   <tr style="padding-bottom:20px;">
                     <td>
-                      <img src="{{url('css/img/logo')}}/bca.jpg" alt="Bank BCA">
+                      <img src="{{url('css/img')}}/bca.jpg" alt="Bank BCA">
                     </td>
                     <td>
                       <span>Bank BCA</span>
@@ -140,7 +140,7 @@
                   </tr>
                   <tr style="padding-bottom:20px;">
                     <td>
-                      <img src="{{url('css/img/logo')}}/mdniri.png" alt="Bank MANDIRI">
+                      <img src="{{url('css/img')}}/mdniri.png" alt="Bank MANDIRI">
                     </td>
                     <td>
                       <span>Bank MANDIRI</span>

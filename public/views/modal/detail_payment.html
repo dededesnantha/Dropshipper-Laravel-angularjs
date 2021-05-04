@@ -1,0 +1,76 @@
+<div class="modal-header modal-text">
+  <span>Detail Pembayaran</span>
+</div>
+<div class="modal-body" style="background-color: rgb(243, 244, 245)">
+  	<div class="checkout-wrapper-area py-3">
+      <div class="card cart-amount-area">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="table-responsive card-body">
+          <table class="table mb-0">
+            <tbody>
+              <tr style="font-size: 14px">
+                <td>Total Harga ({{datass.data_transaksi.total_kuantitas}})</td>
+                <td style="text-align: right;">Rp. {{datass.data_transaksi.total_produk| currency : "" : 0}}</td>
+              </tr>
+              <tr style="font-size: 14px">
+                <td>Total Ongkos Kirim</td>
+                <td style="text-align: right;">Rp. {{datass.data_transaksi.harga| currency : "" : 0}}</td>
+              </tr>
+              <tr style="font-size: 17px">
+                <td><strong>Total Bayar</strong></td>
+                <td style="text-align: right;color: red;font-weight: 700">Rp. {{datass.data_transaksi.total_transkasi| currency : "" : 0}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div class="card cart-amount-area">
+     <div class="d-flex align-items-center justify-content-between">
+      <div class="table-responsive card-body">
+       <table class="table mb-0">
+        <tbody>
+          <tr>
+            <td style="border-bottom: none;font-size: 18px"><strong>Barang yang dibeli</strong></td>
+            <td style="border-bottom: none"></td>
+          </tr>
+          <tr style="font-size: 14px" ng-repeat="item in datass.data_transaksi_detail">
+            <td><strong>{{item.nama_produk}} - {{item.text}}, {{item.size}}</strong>
+              <br>
+              <span>{{item.kuantitas}} x Rp. {{item.harga | currency : "" : 0}}</span>
+            </td>
+            <td style="text-align: right;vertical-align: middle;">Rp. {{item.totals_produks | currency : "" : 0}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+    <div class="checkout-wrapper-area py-3">
+      <div class="card cart-amount-area">
+       <div class="d-flex align-items-center justify-content-between">
+        <div class="table-responsive card-body">
+         <table class="table mb-0">
+          <tbody>
+            <tr>
+              <td style="border-bottom: none;font-size: 16px"><strong>Alamat Pengirim</strong></td>
+              <td style="border-bottom: none"></td>
+            </tr>
+            <tr style="font-size: 14px">
+              <td style="border-bottom: none;">
+                {{ datass.data_transaksi.nama }}
+                <br>
+                {{ datass.data_transaksi.address }}, {{datass.data_transaksi.provinsi}}, {{datass.data_transaksi.kabupaten}}, {{datass.data_transaksi.kecamatan}}
+                <br>
+                {{datass.data_transaksi.telephone}}
+              </td>
+              <td style="border-bottom: none;"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>

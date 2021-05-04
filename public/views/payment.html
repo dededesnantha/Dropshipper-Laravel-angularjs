@@ -13,23 +13,115 @@
   <div class="page-content-wrapper">
     <div class="container">
       <div class="checkout-wrapper-area py-3">
-
         <div class="choose-payment-method">
-          <h6 class="mb-3 text-center">Pilih Metode Pembayaran</h6>
-          <div class="row justify-content-center g-3">
-            <!-- Single Payment Method-->
-            <div class="col-12 col-md-5">
-              <div class="single-payment-method"><a class="bank" ng-click="metode('transfer bank')" style="cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-building mb-2 text-dark" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694L1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"/>
-                <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"/>
-              </svg>
-              <h6>Transfer Bank</h6>
-              <p>( Bank Transfer bayar via ATM, SMS, atau Internet Banking, konfirmasi pembayaran, setelah itu pesanan di kirim. )</p>
-              </a></div>
+          <div class="justify-content-center g-3">
+            <div class="card cart-amount-area">
+              <div class="card-body align-items-center justify-content-between" style="text-align: center;">
+                <span style="color: #333"><b>Selesaikan pembayaran dalam batas akhir</b>
+                  <br>
+                </span>
+                  <strong style="font-size: 30px;color: red">{{datass.tgl_expired}}</strong>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+      <div class="shipping-method-choose mb-3">
+        <div class="card shipping-method-choose-title-card bg-success">
+          <div class="card-body">
+            <h6 class="text-center mb-0 text-white">Pemabayaran</h6>
+          </div>
+        </div>
+        <div class="card shipping-method-choose-card">
+          <div class="shipping-method-choose">
+            <div class="table-responsive card-body">
+              <table class="table mb-0">
+                <tbody>
+                  <tr style="font-size: 14px">
+                    <td><strong>Transfer Bank</strong></td>
+                    <td style="text-align: right;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-building mb-2 text-dark" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694L1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"/>
+                      <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"/>
+                    </svg></td>
+                  </tr>
+                  <tr style="font-size: 14px">
+                    <td><strong>Kode Pembayaran</strong></td>
+                    <td style="text-align: right;"><strong>{{datass.code_transaksi}}</strong></td>
+                  </tr>
+                  <tr style="font-size: 14px">
+                    <td><strong>Total Tagihan</strong>
+                      <br>
+                      <span style="font-size: 16px;color: red;font-weight: 700">Rp.{{datass.total_transkasi | currency : "" : 0}}</span>
+                    </td>
+                    <td style="text-align: right;vertical-align: middle;"><a href="" ng-click="detail(datass.id_transaksi)" title="">Lihat Detail</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <div class="shipping-method-choose mb-3">
+        <div class="card shipping-method-choose-title-card">
+          <div class="card-body">
+            <h6 class="text-center mb-0 text-blank">Transfer bank ke rekening berikut :</h6>
+          </div>
+        </div>
+        <div class="card shipping-method-choose-card">
+          <div class="shipping-method-choose">
+            <div class="table-responsive card-body">
+              <table class="table mb-0">
+                <tbody>
+                  <tr style="font-size: 14px;text-align: center;">
+                    <td style="vertical-align: middle;">
+                      <img src="../css/img/bri.jpg" alt="Bank BRI">
+                    </td>
+                    <td>
+                      <span>Bank BRI</span>
+                      <br>
+                      <b>No Rek: 3567-01-016357-53-7</b>
+                      <br>
+                      <span>(An :Ni Made Ayu Ery Sulastri)</span>
+                    </td>
+                  </tr>
+                  <tr style="font-size: 14px;text-align: center;">
+                     <td>
+                      <img src="../css/img/bca.jpg" alt="Bank BCA">
+                    </td>
+                    <td>
+                      <span>Bank BCA</span>
+                      <br>
+                      <b>No Rek: 772-524-4851</b>
+                      <br>
+                      <span>(An :Ni Made Ayu Ery Sulastri)</span>
+                    </td>
+                  </tr>
+                  <tr style="font-size: 14px;text-align: center;">
+                    <td>
+                      <img src="../css/img/mdniri.png" alt="Bank MANDIRI">
+                    </td>
+                    <td>
+                      <span>Bank MANDIRI</span>
+                      <br>
+                      <b>No Rek: 145-00-1283818-7</b>
+                      <br>
+                      <span>(An :Ni Made Ayu Ery Sulastri)</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-6 mb-3">
+          <a class="btn btn-default w-100" ng-click="edit_alamat()" style="padding: 12px">Belanja Lagi</a>
+        </div>
+        <div class="col-12 col-md-6 mb-3">
+          <a class="btn btn-success w-100" ng-click="edit_alamat()" style="padding: 12px">Konfirmasi Pembayaran</a>
+        </div>
       </div>
     </div>
   </div>

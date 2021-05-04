@@ -905,16 +905,16 @@ myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$locatio
            }
 	    });
 	    modalInstance.result.then(function() {
-	        
+	        $scope.loading = true 
 	    }, function () {
+	    	$scope.loading = true 
         });
 	};
 
 }])
 
-myApp.controller('ModalPembayaran', ['$scope', '$uibModalInstance', 'items', '$http','SweetAlert','$location','$route', 
-	function($scope, $uibModalInstance, items, $http,SweetAlert,$location,$route) {
-		
+myApp.controller('ModalPembayaran', ['$scope', '$uibModalInstance', 'items', '$http','SweetAlert','$location','$route','$rootScope', 
+	function($scope, $uibModalInstance, items, $http,SweetAlert,$location,$route,$rootScope) {
 		$http.get(base_url+'payment/'+items).then(function(data) {
 			$scope.total = data.data.total_transkasi;
 			$scope.id_transaksi = items; 
@@ -923,9 +923,10 @@ myApp.controller('ModalPembayaran', ['$scope', '$uibModalInstance', 'items', '$h
 		});
 
 	$scope.bayar = function(data){
-		console.log(data)
+		$uibModalInstance.close();
 		$http.post(base_url+'transaction/'+data).then(function(data) {
-			
+			$scope.count_cart();
+			$location.path("/payment/"+items);
 		}, function(x) {
 		});
 	};
@@ -954,24 +955,54 @@ myApp.directive('onlyNumbers', function () {
     }
 });
 
-myApp.controller('PaymentController', ['$scope', '$http','SweetAlert','$location', '$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
+myApp.controller('PaymentController', ['$scope', '$http','SweetAlert','$location', '$routeParams','$uibModal', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal){
 	$scope.load_sign();
-	$scope.url = "Pembayaran";
-	$scope.loading = false;
+	$scope.url = "Detail Pembayaran";
 	$scope.datass = {};
-	$scope.metode = function (metode) {
-		$scope.datass.metode = metode;
-		$http.put(base_url+'metode/'+$routeParams.id,$scope.datass).then(function(data) {
-			// setTimeout(function () {
 
-		 //    }, 3000);
-		}, function(x) {
-		     SweetAlert.swal("Terjadi Kesalahan!","","error")
-		});
+	$http.get(base_url+'get/transaction/'+$routeParams.id).then(function(data) {
+		$scope.loading = false;
+		$scope.datass = data.data;
+	}, function(x) {
+		SweetAlert.swal("Terjadi Kesalahan!", "error")
+	});
+
+	$scope.detail = function(data){
+		var modalInstance =  $uibModal.open({
+	      templateUrl: "views/modal/detail_payment.html",
+	      controller: "ModalDetailPembayaran",
+	      size:'lg',
+	      resolve: {
+              items: function () {
+                return data;
+              }
+           }
+	    });
+	    modalInstance.result.then(function() {
+	    }, function () {
+        });
 	}
+	
+	// $scope.metode = function (metode) {
+	// 	$scope.datass.metode = metode;
+	// 	$http.put(base_url+'metode/'+$routeParams.id,$scope.datass).then(function(data) {
+	// 		$location.path( "/payment/"+data);
+	// 	}, function(x) {
+	// 	     SweetAlert.swal("Terjadi Kesalahan!","","error")
+	// 	});
+	// }
+}]);
 
-}])
-
+myApp.controller('ModalDetailPembayaran', ['$scope', '$uibModalInstance', 'items', '$http','SweetAlert','$location','$route', 
+	function($scope, $uibModalInstance, items, $http,SweetAlert,$location,$route) {
+		$scope.datass = {};
+		$http.get(base_url+'detail/transaksi/'+items).then(function(data) {
+			$scope.datass = data.data;
+			console.log($scope.datass)
+		}, function(x) {
+			SweetAlert.swal("Terjadi Kesalahan!", "error")
+		});
+	}]);
 
 
 

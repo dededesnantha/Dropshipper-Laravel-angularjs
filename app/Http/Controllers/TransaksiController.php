@@ -76,7 +76,11 @@ class TransaksiController extends Controller
         $transaksi = tb_transaksi::orderBy('id_transaksi','DESC')->select('id_transaksi')->first();
         $count_codes = 1;
         do {
-            $codes = '#'.str_pad($transaksi->id_transaksi + 1, 15, $latestOrder->telephone, STR_PAD_LEFT);
+            if (empty($transaksi->id_transaksi)) {
+                $codes = '#'.str_pad(1, 15, $latestOrder->telephone, STR_PAD_LEFT);
+            }else{
+                $codes = '#'.str_pad($transaksi->id_transaksi + 1, 15, $latestOrder->telephone, STR_PAD_LEFT);
+            }
             $count_codes = tb_transaksi::where('code_transaksi','=', $codes)->count();
             if ($count_codes == 0) {
                 $count_codes--;
@@ -179,6 +183,88 @@ class TransaksiController extends Controller
             'data_transaksi_detail' => $data_transaksi_detail,
         ];
         \Mail::to($data_transaksi['email'])->send(new \App\Mail\MailPembayaran($details));
+        \Cookie::queue(\Cookie::forget('cart'));
+        $encrypted = Crypt::encryptString($id);
+        return response()->json($encrypted,200);
+    }
 
+    public function transaction_get($id)
+    {
+        $id = Crypt::decryptString($id);
+        $data_transaksi = tb_transaksi::where('id_transaksi', $id)
+                            ->select('tb_transaksi.id_transaksi',
+                                'tb_transaksi.id_transaksi',
+                                'tb_transaksi.tgl_transkasi',
+                                'tb_transaksi.total_transkasi',
+                                'tb_transaksi.metode_transaksi',
+                                'tb_transaksi.code_transaksi',
+                                'tb_transaksi.tgl_expired')->first();
+        $temp_date = $this->date_convert($data_transaksi->tgl_expired);
+        $data_transaksi->tgl_expired =  $temp_date['date'].' '.$temp_date['sort_month'].' '.$temp_date['year'];
+        $data_transaksi->id_transaksi = Crypt::encryptString($data_transaksi->id_transaksi);
+        return response()->json($data_transaksi,200);
+    }
+
+    public function detail_transaksi($id)
+    {
+        $id = Crypt::decryptString($id);
+        $data_transaksi = tb_transaksi::where('id_transaksi', $id)
+                            ->join('tb_ongkir', 'tb_transaksi.id_ongkir','=','tb_ongkir.id_ongkir')
+                            ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
+                            ->join('tb_provinsi', 'tb_user.id_provinsi','=','tb_provinsi.id_provinsi')
+                            ->join('tb_kabupaten', 'tb_user.id_kabupaten','=','tb_kabupaten.id_kabupaten')
+                            ->join('tb_kecamatan', 'tb_user.id_kecamatan','=','tb_kecamatan.id_kecamatan')
+                            ->select('tb_transaksi.id_transaksi',
+                                'tb_transaksi.id_transaksi',
+                                'tb_transaksi.tgl_transkasi',
+                                'tb_transaksi.total_transkasi',
+                                'tb_transaksi.metode_transaksi',
+                                'tb_transaksi.code_transaksi',
+                                'tb_transaksi.tgl_expired',
+                                'tb_ongkir.harga',
+                                'tb_user.nama',
+                                'tb_user.email',
+                                'tb_user.address',
+                                'tb_user.telephone',
+                                'tb_provinsi.provinsi',
+                                'tb_kabupaten.kabupaten',
+                                'tb_kecamatan.kecamatan')->first();
+        $temp_date = $this->date_convert($data_transaksi->tgl_expired);
+        $data_transaksi->tgl_expired =  $temp_date['date'].' '.$temp_date['sort_month'].' '.$temp_date['year'];
+        $data_transaksi->id_transaksi = Crypt::encryptString($data_transaksi->id_transaksi);
+        $data_transaksi_detail = tb_order::where('id_transaksi', $id)
+                        ->join('tb_produk', 'tb_order.id_produk','=','tb_produk.id')
+                        ->leftJoin('tb_color','tb_order.id_color','=','tb_color.id')
+                        ->select('tb_produk.nama_produk',
+                            'tb_produk.harga',
+                            'tb_produk.harga_promo',
+                            'tb_produk.jenis_label',
+                            'tb_produk.text_label',
+                            'tb_produk.gambar',
+                            'tb_produk.slug',
+                            'tb_produk.stok',
+                            'tb_color.color',
+                            'tb_color.text',
+                            'tb_order.kuantitas',
+                            'tb_order.size')->get();
+        $total_produk = 0;
+        $total_kuantitas = 0;
+        foreach ($data_transaksi_detail as $key => $value) {
+            if ($value->harga_promo == null) {
+                $total_produk += $value->kuantitas * $value->harga;
+                $data_transaksi_detail[$key]->totals_produks = $value->kuantitas * $value->harga;
+            }else{
+                $total_produk += $value->kuantitas * $value->harga_promo;
+                $data_transaksi_detail[$key]->totals_produks = $value->kuantitas * $value->harga_promo;
+            }
+            $total_kuantitas += $value->kuantitas;
+        }
+        $data_transaksi->total_produk = $total_produk;
+        $data_transaksi->total_kuantitas = $total_kuantitas;
+        $details = [
+            'data_transaksi' => $data_transaksi,
+            'data_transaksi_detail' => $data_transaksi_detail,
+        ];
+        return response()->json($details,200);
     }
 }
