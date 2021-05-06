@@ -16,7 +16,8 @@
           <!-- User Information-->
           <div class="card user-info-card">
             <div class="card-body p-4 d-flex align-items-center">
-              <div class="user-profile me-3"><img ng-src="{{src}}" style="height: 100%">
+              <div class="user-profile me-3">
+                <img ng-src="{{src}}" style="height: 100%">
                 <div class="change-user-thumb">
                     <!-- <input class="form-control-file" type="file"> -->
                      <input type="file" name="file"  class="form-control-file" accept="image/*"  onchange="angular.element(this).scope().uploadedFile(this)">

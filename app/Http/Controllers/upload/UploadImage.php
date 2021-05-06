@@ -60,4 +60,30 @@ class UploadImage extends Controller
             return response()->json(['data'=>'','status' => 400]);
         }
     }
+
+    public function transaksi(Request $request)
+    {
+        if($request->file('file') != null){
+            
+            $file = $request->file('file');
+            
+            $while = 0;
+            $string_replace = array('\'', ';', '[', ']', '{', '}', '|', '^', '~','?','/');            
+            $file_name = str_replace(' ','-',str_replace($string_replace, '',$file->getClientOriginalName()));           
+            $temp_file_name = $file_name;
+            $file_same = 1;
+            while (file_exists(public_path('transaksi/'.$file_name))) {
+                $file_name = str_replace('.','-'.$file_same.'.',$temp_file_name);
+                $file_same++;
+            }
+            $file->move('transaksi/', $file_name); 
+            public_path() . DIRECTORY_SEPARATOR . 'transaksi' .DIRECTORY_SEPARATOR . $file_name;
+            $data = [
+                    'gambar' => $file_name
+            ];
+            return response()->json(['data'=>$file_name,'status' => 200]);
+        }else{
+            return response()->json(['data'=>'','status' => 400]);
+        }
+    }
 }

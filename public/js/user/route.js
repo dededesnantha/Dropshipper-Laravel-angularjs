@@ -67,7 +67,10 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
         activetab: 'cart'
     });
 
-    
+    $routeProvider.when('/order/:id',{
+        templateUrl:'../views/order_payment.html',
+        activetab: 'cart'
+    });
     
     // $routeProvider.when('/dashboard',{
     //     templateUrl:'templates/dashboard.html',

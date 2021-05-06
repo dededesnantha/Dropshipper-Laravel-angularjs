@@ -72,17 +72,19 @@ Route::get('payment/{id}','TransaksiController@payment_get');
 Route::post('transaction/{id}','TransaksiController@transaction_end');
 Route::get('get/transaction/{id}','TransaksiController@transaction_get');
 Route::get('detail/transaksi/{id}','TransaksiController@detail_transaksi');
+Route::put('update_transaksi','TransaksiController@update_transaksi');
+
 
 
 
 
 // upload gambar
 Route::post('upload/gambar','upload\UploadImage@image_user');
-
-
-
 // upload image
 Route::post('upload/slider','admin\AdminController@upload');
+// upload transaksi 
+Route::post('upload/transaksi','upload\UploadImage@transaksi');
+
 
 
 

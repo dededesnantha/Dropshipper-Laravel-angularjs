@@ -173,7 +173,7 @@ myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$
 			   type: "success",
 			   showCancelButton: true,
 			   confirmButtonColor: "#00b894",
-			   confirmButtonText: "Lanjut Pembayaran",
+			   confirmButtonText: "Lihat Keranjang",
 			   cancelButtonText: "Lanjut Belanja",
 			   closeOnConfirm: true,
 				closeOnCancel: true}, 
@@ -982,7 +982,6 @@ myApp.controller('PaymentController', ['$scope', '$http','SweetAlert','$location
 	    }, function () {
         });
 	}
-	
 	// $scope.metode = function (metode) {
 	// 	$scope.datass.metode = metode;
 	// 	$http.put(base_url+'metode/'+$routeParams.id,$scope.datass).then(function(data) {
@@ -1002,9 +1001,80 @@ myApp.controller('ModalDetailPembayaran', ['$scope', '$uibModalInstance', 'items
 		}, function(x) {
 			SweetAlert.swal("Terjadi Kesalahan!", "error")
 		});
-	}]);
+}]);
 
+myApp.controller('OrderController', ['$scope', '$http','SweetAlert','$location', '$routeParams','$uibModal', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal){
+	$scope.load_sign();
+	$scope.url = "Konfirmasi Pembayaran";
+	$scope.datass = {};
+	$scope.notif = {}
+	$scope.notif.tanggal = true;
+	$scope.notif.bank = true;
+	$scope.notif.img = true;
 
+	$http.get(base_url+'detail/transaksi/'+$routeParams.id).then(function(data) {
+		$scope.datass = data.data;
+		$scope.datass.date_now = new Date();
+		console.log($scope.datass)
+		$scope.loading = false;
+	}, function(x) {
+		SweetAlert.swal("Terjadi Kesalahan!", "error")
+	});
+
+	$scope.file = [];
+	$scope.src = base_url+'css/noimg.jpg';
+	$scope.uploadedFile = function(element) {
+		var reader = new FileReader();
+		reader.onload = function(event) {
+			$scope.$apply(function($scope) {
+				$scope.file = element.files[0];
+				$scope.src = event.target.result  
+
+			});
+		}
+		reader.readAsDataURL(element.files[0]);
+	}
+
+	$scope.confrim = function (id) {
+	$scope.update = {};
+	if (!$scope.datass.bank_transfer) {
+		$scope.notif.bank = false;
+	}else if (!$scope.datass.date_now){
+		$scope.notif.tanggal = false;
+	}else if ($scope.file.length == 0){
+		$scope.notif.img = false;
+	}else{
+		$scope.loading = true;
+		$http({
+			method  : 'POST',
+			url     : base_url+'upload/transaksi',
+			headers: { 'Content-Type': undefined},
+			transformRequest: function (data) {
+				var formData = new FormData();
+				formData.append("file", $scope.file);
+				return formData;
+			}
+		}).then(function(data) {
+			if (data.data){
+				$scope.update.image_transfer = data.data
+			}
+			$scope.update.tgl_konfirm = $scope.datass.date_now;
+	        $scope.update.bank_transfer = $scope.datass.bank_transfer;
+	        $scope.update.id_transaksi = id;
+	        $http.put(base_url+'update_transaksi',$scope.update)
+	        .then(function(response) {
+            	$scope.loading = true;
+            	$location.path("/order/"+$scope.update.id_transaksi);
+			}, function(x) {
+            	SweetAlert.swal("Terjadi Kesalahan!"," ", "error")        
+			});
+		}, function(x) {
+			SweetAlert.swal("Terjadi Kesalahan!", "error")
+		});
+	}
+	}
+
+}]);
 
 
 

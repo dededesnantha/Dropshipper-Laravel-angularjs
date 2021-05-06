@@ -221,6 +221,8 @@ class TransaksiController extends Controller
                                 'tb_transaksi.metode_transaksi',
                                 'tb_transaksi.code_transaksi',
                                 'tb_transaksi.tgl_expired',
+                                'tb_transaksi.image_transfer',
+                                'tb_transaksi.tgl_konfirm',
                                 'tb_ongkir.harga',
                                 'tb_user.nama',
                                 'tb_user.email',
@@ -267,4 +269,27 @@ class TransaksiController extends Controller
         ];
         return response()->json($details,200);
     }
+
+    public function update_transaksi(Request $request)
+    {
+       $post = $request->input();
+       $date_konfrim = date('Y-m-d', strtotime($post['tgl_konfirm']));
+       $id = Crypt::decryptString($post['id_transaksi']);
+       tb_transaksi::where('id_transaksi', $id)->update([
+        'tgl_konfirm' => $date_konfrim,
+        'image_transfer' => $post['image_transfer']['data'],
+        'bank_transfer' => $post['bank_transfer']
+       ]);
+       $datas = tb_transaksi::where('id_transaksi',$id)
+                ->join('tb_user', 'tb_transaksi.id_user')
+                ->select('tb_user.email','tb_transaksi.total_transkasi','tb_transaksi.tgl_konfirm','tb_transaksi.code_transaksi')
+                ->first();
+        $details = [
+            'total_transkasi' => $datas->total_transkasi,
+            'tgl_konfirm' => $datas->tgl_konfirm,
+            'code_transaksi' => $datas->code_transaksi,
+        ];
+        \Mail::to($datas->email)->send(new \App\Mail\OrderEmail($details));
+       return response()->json(200);
+    }   
 }
