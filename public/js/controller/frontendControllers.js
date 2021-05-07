@@ -596,7 +596,6 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	               	values['gambar'] = base_url +'image/'+values['gambar'];
 	               	values['notif'] = true;
 	              });
-	              console.log($scope.produks)
 	              $scope.getTotal();
 	              $scope.loading = false;
 		}, function(x) {
@@ -885,10 +884,10 @@ myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$locatio
 
 			$scope.datas.id_orders = $scope.id_orders;
 			$http.post(base_url+'add_transaksi',$scope.datas).then(function(data) {
-			$scope.modalPembyarn(data.data)
-		}, function(x) {
-		     SweetAlert.swal("Terjadi Kesalahan!","","error")
-		});
+				$scope.modalPembyarn(data.data)
+			}, function(x) {
+				SweetAlert.swal("Terjadi Kesalahan!","","error")
+			});
 		}else{
 			$scope.notif.kurir = false;
 		}
@@ -997,7 +996,6 @@ myApp.controller('ModalDetailPembayaran', ['$scope', '$uibModalInstance', 'items
 		$scope.datass = {};
 		$http.get(base_url+'detail/transaksi/'+items).then(function(data) {
 			$scope.datass = data.data;
-			console.log($scope.datass)
 		}, function(x) {
 			SweetAlert.swal("Terjadi Kesalahan!", "error")
 		});
@@ -1015,7 +1013,6 @@ myApp.controller('OrderController', ['$scope', '$http','SweetAlert','$location',
 	$http.get(base_url+'detail/transaksi/'+$routeParams.id).then(function(data) {
 		$scope.datass = data.data;
 		$scope.datass.date_now = new Date();
-		console.log($scope.datass)
 		$scope.loading = false;
 	}, function(x) {
 		SweetAlert.swal("Terjadi Kesalahan!", "error")
@@ -1076,5 +1073,32 @@ myApp.controller('OrderController', ['$scope', '$http','SweetAlert','$location',
 
 }]);
 
+myApp.controller('TrackController', ['$scope', '$http','SweetAlert','$location', '$routeParams','$uibModal', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal){
+	$scope.load_sign();
+	$scope.url = "Tracking";
+	$scope.datass = {};
+	$scope.url_img = base_url +'image/';
+	$scope.id_user = $scope.user.id_user;
+	$http.get(base_url+'detail/list/tracking/'+$scope.id_user).then(function(data) {
+		$scope.datass = data.data;
+		$scope.loading = false;
+	}, function(x) {
+		SweetAlert.swal("Terjadi Kesalahan!", "error")
+	});
 
+	$scope.tracking = function (id) {
+		$location.path("/tracking/"+id);
+	}
+}]);
 
+myApp.controller('TrackTransaksiController', ['$scope', '$http','SweetAlert','$location', '$routeParams','$uibModal', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal){
+	$scope.load_sign();
+	$scope.url = "Tracking Transaksi";
+	$http.get(base_url+'detail/list/tracking/transaksi/'+$routeParams.id).then(function(data) {
+		$scope.datass = data.data;
+		$scope.loading = false;
+	}, function(x) {
+		SweetAlert.swal("Terjadi Kesalahan!", "error")
+	});
+	console.log($routeParams.id)
+}]);

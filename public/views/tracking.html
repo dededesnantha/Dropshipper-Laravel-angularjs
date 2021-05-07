@@ -1,0 +1,81 @@
+<div ng-controller="TrackController">
+	<div class="preloader" id="preloader" ng-show="loading">
+        <div class="spinner-grow text-secondary" role="status">
+            <div class="sr-only">Loading...</div>
+        </div>
+   	</div>
+	<!-- header --> 
+	<div data-ng-include=" 'views/components/header_single.html' "> 
+	</div>
+	<!-- / header -->
+
+	<!-- conntent -->
+	<div class="page-content-wrapper">
+		<div class="container">
+			<div class="checkout-wrapper-area py-3">
+				<div class="shipping-method-choose mb-3" ng-repeat="item in datass">
+					<div class="card shipping-method-choose-title-card" style="background-color: #818181">
+						<div class="card-body">
+							<h6 class="text-left mb-0 text-white">Status Transaksi : {{item.status_transaksi}}</h6>
+						</div>
+					</div>
+					<div class="card shipping-method-choose-card">
+						<div class="shipping-method-choose">
+							<div class="table-responsive card-body">
+								<table class="table mb-0">
+									<tbody>
+										<tr style="font-size: 14px">
+											<td>Kode Transaksi : {{item.code_transaksi}}</td>
+											<td style="text-align: right;">
+												<a class="btn btn-warning" href="#!order/{{item.id_transaksi}}" ng-if="item.status_transaksi == 'pembayaran'" ng-click="pembayaran()">Konfirmasi Pembayaran</a>
+												<a class="btn btn-success" ng-if="item.status_transaksi !== 'pembayaran'" ng-click="tracking(item.id_transaksi)">Lihat Tracking</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<table class="table mb-0">
+									<tbody>
+										<tr style="border-bottom: 0px solid #fff">
+											<td>Detail Order :</td>
+										</tr>
+										<tr style="font-size: 14px" ng-repeat="items in item.produks">
+											<td>
+												<img ng-src="{{url_img}}{{items.gambar}}" class="img-checkout" alt="{{items.nama_produk}}">
+												<br>
+												<span class="badge badge-success" ng-if="items.jenis_label === 'bigsale'">{{items.text_label}}</span>
+												<span class="badge badge-primary" ng-if="items.jenis_label === 'new'">{{items.text_label}}</span>
+												<span class="badge badge-danger" ng-if="items.jenis_label === 'disc'">{{items.text_label}}</span>
+												<a href="#!produk/{{items.slug}}" class="top-product-card" style="font-size: 15px">
+													{{items.nama_produk}}
+													<br>
+													<p style="margin-top: 3px;margin-bottom: 0px">{{items.kuantitas}} barang</p>
+													<span class="sale-price" ng-if="items.harga_promo">Rp. {{items.harga_promo | currency : "" : 0}} <br><span>Rp. {{items.harga | currency : "" : 0}} </span></span>
+													<span class="sale-price" ng-if="!items.harga_promo">Rp. {{items.harga | currency : "" : 0}}</span>
+												</a>
+												<br>
+												<span class="badge badge-default" ng-if="items.size" style="background-color: #9a9a9a">{{items.size}}</span>
+												<span class="btn btn-success btn-sm" ng-if="items.color" style="background-color: {{items.color}};border-color: {{items.color}}"></span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- conntent -->
+
+	<!-- sidebar --> 
+	<div data-ng-include=" 'views/components/sidebar.html' "> 
+	</div>
+	<!-- / sidebar -->
+
+	<!-- footer --> 
+	<div data-ng-include=" 'views/components/footer.html' "> 
+	</div>
+	<!-- / sidebar -->
+</div>

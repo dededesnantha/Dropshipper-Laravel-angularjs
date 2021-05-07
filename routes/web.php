@@ -75,9 +75,9 @@ Route::get('detail/transaksi/{id}','TransaksiController@detail_transaksi');
 Route::put('update_transaksi','TransaksiController@update_transaksi');
 
 
-
-
-
+// tracking
+Route::get('detail/list/tracking/{id}','TrackingController@get');
+Route::get('detail/list/tracking/transaksi/{id}','TrackingController@get_tracking');
 // upload gambar
 Route::post('upload/gambar','upload\UploadImage@image_user');
 // upload image

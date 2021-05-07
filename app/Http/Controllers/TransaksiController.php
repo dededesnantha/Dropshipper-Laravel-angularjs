@@ -91,14 +91,10 @@ class TransaksiController extends Controller
             
         } while ($count_codes > 0);
         $data = [
-    		'tgl_transkasi' => Carbon::now()->toDateTimeString(),
     		'total_transkasi' => $post['subtotal'],
-    		'status_transaksi' => "pembayaran",
     		'id_ongkir' => $post['ongkirs'],
             'id_user' => $post['id_user'],
-            'code_transaksi' => $codes,
-            'metode_transaksi' => 'Transfer Bank',
-            'tgl_expired' => Carbon::now()->addDays(2)->toDateTimeString()
+            'code_transaksi' => $codes
     	];
     	$id = tb_transaksi::create($data)->id;
         $cookie_data = stripslashes(Cookie::get('cart'));
@@ -125,6 +121,13 @@ class TransaksiController extends Controller
     public function transaction_end($id)
     {
         $id = Crypt::decryptString($id);
+        $data = [
+            'tgl_transkasi' => Carbon::now()->toDateTimeString(),
+            'status_transaksi' => "pembayaran",
+            'metode_transaksi' => 'Transfer Bank',
+            'tgl_expired' => Carbon::now()->addDays(2)->toDateTimeString()
+        ];
+        tb_transaksi::where('id_transaksi', $id)->update($data);
         $data_transaksi = tb_transaksi::where('id_transaksi', $id)
                             ->join('tb_ongkir', 'tb_transaksi.id_ongkir','=','tb_ongkir.id_ongkir')
                             ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
@@ -182,7 +185,7 @@ class TransaksiController extends Controller
             'data_transaksi' => $data_transaksi,
             'data_transaksi_detail' => $data_transaksi_detail,
         ];
-        \Mail::to($data_transaksi['email'])->send(new \App\Mail\MailPembayaran($details));
+        //\Mail::to($data_transaksi['email'])->send(new \App\Mail\MailPembayaran($details));
         \Cookie::queue(\Cookie::forget('cart'));
         $encrypted = Crypt::encryptString($id);
         return response()->json($encrypted,200);
@@ -278,16 +281,20 @@ class TransaksiController extends Controller
        tb_transaksi::where('id_transaksi', $id)->update([
         'tgl_konfirm' => $date_konfrim,
         'image_transfer' => $post['image_transfer']['data'],
-        'bank_transfer' => $post['bank_transfer']
+        'bank_transfer' => $post['bank_transfer'],
+        'status_transaksi' => 'Order'
        ]);
        $datas = tb_transaksi::where('id_transaksi',$id)
-                ->join('tb_user', 'tb_transaksi.id_user')
-                ->select('tb_user.email','tb_transaksi.total_transkasi','tb_transaksi.tgl_konfirm','tb_transaksi.code_transaksi')
+                ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
+                ->select('tb_user.email','tb_transaksi.total_transkasi','tb_transaksi.tgl_konfirm','tb_transaksi.code_transaksi','tb_transaksi.status_transaksi')
                 ->first();
+        $date = $this->date_convert($datas->tgl_konfirm);
+        $tgl_konfirm =  $date['date'].' '.$date['sort_month'].' '.$date['year'];
         $details = [
             'total_transkasi' => $datas->total_transkasi,
-            'tgl_konfirm' => $datas->tgl_konfirm,
+            'tgl_konfirm' => $tgl_konfirm,
             'code_transaksi' => $datas->code_transaksi,
+            'status_transaksi' => $datas->status_transaksi
         ];
         \Mail::to($datas->email)->send(new \App\Mail\OrderEmail($details));
        return response()->json(200);

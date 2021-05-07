@@ -246,7 +246,7 @@
                 <table cellspacing="0" cellpadding="0" width="100%">
                   <tr>
                     <td class="left" style="text-align:left;">
-                      Thanks so much,
+                      Terimakasi, 
                     </td>
                   </tr>
                   <tr>
