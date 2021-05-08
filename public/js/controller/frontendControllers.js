@@ -475,6 +475,31 @@ myApp.controller('ListKategoriController', ['$scope', '$http','SweetAlert','$loc
 myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$location','$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
 	$scope.url = "Produk Detail";
 	$scope.load_sign();
+	$scope.ongkir = {};
+	$scope.datass = {};
+	$scope.datass.qty = 1;
+	$scope.list_kurirs = false;
+	$scope.notif = {};
+	$scope.notif.color = true;
+	$scope.notif.size = true
+
+	$(document).ready(function() {
+		$('#js-example-basic-single-alamat').select2({
+			placeholder: "Pilih Kota atau Kecamatan",
+			allowClear: false
+		});
+	});
+
+	$('#js-example-basic-single-alamat').change(function(){
+    var value = $(this).val();
+    $scope.get_kurir(value);
+  });
+
+	$http.get(base_url+'ongkos_kirim/all').then(function(data) {
+		$scope.ongkos_kirim = data.data;
+	}, function(x) {
+		SweetAlert.swal("Terjadi Kesalahan!","","error")
+	});
 	$http.get(base_url+'produk/'+$routeParams.slug).then(function(data) {
               $scope.produks = data.data.produk;
               angular.forEach($scope.produks.gambar, function (values, key) {
@@ -485,6 +510,129 @@ myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$loc
 	}, function(x) {
 	     SweetAlert.swal("Terjadi Kesalahan!","","error")
 	});
+
+	$scope.get_kurir = function(id) {
+		$http.post(base_url+'ongkos_kirim/kurir/'+id).then(function(data) {
+			$scope.kurir = data.data;
+			$scope.getTotal()
+			angular.forEach($scope.kurir, function (values, key) {
+				values['totals'] = values['harga'] + $scope.produks.totals;
+            });
+			$scope.list_kurirs = true;
+		}, function(x) {
+			SweetAlert.swal("Terjadi Kesalahan!","","error")
+		});
+	}
+
+	$scope.qty_tambah = function(item){
+  		if ( item >= $scope.produks.stok) {
+  			SweetAlert.swal("Barang Hanya Tersedia "+$scope.produks.stok,"", "warning")
+  		}else{
+			$scope.datass.qty = item + 1;
+			$scope.getTotal()
+			angular.forEach($scope.kurir, function (values, key) {
+				values['totals'] = values['harga'] + $scope.produks.totals;
+            });
+  		}
+	}
+	$scope.qty_kurang = function(item){
+	    if($scope.datass.qty > 1){
+	       $scope.datass.qty = item - 1;
+	       $scope.getTotal()
+			angular.forEach($scope.kurir, function (values, key) {
+				values['totals'] = values['harga'] + $scope.produks.totals;
+            });
+	    }
+	}
+
+	$scope.update_totals = function(item){
+			if (item !== 0) {
+				if ( item >= $scope.produks.stok) {
+					$scope.datass.qty = $scope.produks.stok;
+					$scope.getTotal();
+					angular.forEach($scope.kurir, function (values, key) {
+						values['totals'] = values['harga'] + $scope.produks.totals;
+					});
+				}else{
+					$scope.getTotal();
+					angular.forEach($scope.kurir, function (values, key) {
+						values['totals'] = values['harga'] + $scope.produks.totals;
+					});
+				}
+			}else{
+				$scope.datass.qty = 1;
+				$scope.getTotal();
+				angular.forEach($scope.kurir, function (values, key) {
+					values['totals'] = values['harga'] + $scope.produks.totals;
+				});
+			}
+	}
+	$scope.getTotal = function(){
+	    $scope.produks.totals = 0;
+	    if ($scope.produks.harga_promo) {
+	    	$scope.produks.totals += $scope.produks.harga_promo * $scope.datass.qty;
+	    }else{
+	    	$scope.produks.totals += $scope.produks.harga * $scope.datass.qty;
+	    }
+	}
+
+	$scope.addchart = function(){
+  	if ($scope.produks.warna.length > 0 && $scope.produks.size.length === 0) {
+  		if (!$scope.datass.colors) {
+  			$scope.notif.color = false
+  		}else{
+  			$scope.post($scope.datass, $scope.produks.id)
+  		}
+  	}else if($scope.produks.warna.length === 0 && $scope.produks.size.length > 0){
+  		if (!$scope.datass.size) {
+  			$scope.notif.size = false
+  		}else{
+  			$scope.post($scope.datass, $scope.produks.id)
+  		}
+  	}else{
+  		if (!$scope.datass.size || !$scope.datass.colors) {
+  			$scope.notif.color = false; 
+  			$scope.notif.size = false
+  		}else{
+  			$scope.post($scope.datass, $scope.produks.id)
+  		}
+  	}
+  }
+$scope.post = function($datass, $id){
+
+  	$datass.id_produk = $id;
+  	$datass.id_user = $scope.user.id_user;
+  	
+  	// $scope.carts.push($datass);
+  	
+  	// var expireDate = new Date();
+  	// expireDate.setDate(expireDate.getDate() + 1);
+  	// $cookies.putObject('cart', $scope.carts,  {'expires': expireDate});
+  	
+  	$http.post(base_url+'add_cart',$datass)
+      	.then(function(response) {
+      		$scope.count_cart();
+			SweetAlert.swal({
+			   title: "Ye..Pesanan Berhasil ",
+			   text: "Pesanan mu berhasil disimpan",
+			   type: "success",
+			   showCancelButton: true,
+			   confirmButtonColor: "#00b894",
+			   confirmButtonText: "Lihat Keranjang",
+			   cancelButtonText: "Lanjut Belanja",
+			   closeOnConfirm: true,
+				closeOnCancel: true}, 
+				function(isConfirm){ 
+					if (isConfirm) {
+						$location.path( "/cart" );
+					} 
+			});
+			$scope.load_sign();
+    }, function(x) {
+      		SweetAlert.swal("Terjadi Kesalahan!", "Mohon Untuk Mengulangi Pesanan Anda", "error")
+    });
+  }
+
 }]);
 
 myApp.controller('ListProdukTopController', ['$scope', '$http','SweetAlert','$location','$routeParams','$uibModal', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal){

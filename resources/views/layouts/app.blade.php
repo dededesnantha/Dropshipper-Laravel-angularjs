@@ -25,6 +25,9 @@
     <link rel="stylesheet" href="{{asset('css/template/style.css') }}">
     <link rel="stylesheet" href="{{asset('bower_components/sweetalert/sweet-alert.css')}}"></link>
 
+    <!-- slect -->
+    <link rel="stylesheet" href="{{asset('css/template/select2.css') }}">
+
     <script> 
         var base_url = "{{ url('/')}}/" ; 
         var tokens = "{{ csrf_token() }}" ;
@@ -55,6 +58,7 @@
     <script src="{{asset('js/default/dark-mode-switch.js') }}"></script>
     <!-- <script src="{{asset('js/default/no-internet.js') }}"></script> -->
     <script src="{{asset('js/default/active.js') }}"></script>
+    <script src="{{asset('js/default/select.js') }}"></script>
 
     <!--  -->
     <script src="{{asset('js/app.js')}}"></script>

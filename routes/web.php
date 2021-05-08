@@ -53,6 +53,10 @@ Route::get('get_produk','HomeController@get_produk');
 Route::get('produk/{slug}','HomeController@single_produk');
 Route::get('produk_top','HomeController@produk_top_all');
 Route::get('produk_all','HomeController@produk_all');
+Route::get('ongkos_kirim/all','AreaContoller@ongkos_kirim_all');
+Route::post('ongkos_kirim/kurir/{id}','AreaContoller@kurir');
+
+
 
 // chart
 Route::get('card_produk/{id}','HomeController@card_produk');
