@@ -7,7 +7,7 @@ myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','
       $rootScope.load_sign = function(){
           $http.get(base_url+'api/session_user').then(function(response){
             if (response.status == 200) {
-                $rootScope.user = response.data
+                $rootScope.user = response.data;
                 $scope.image_user = base_url+'image/'+$rootScope.user.foto_user
                 if ($location.path() == '/login') {
                     $location.path('/home');
@@ -31,8 +31,9 @@ myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','
         });  
       }
 
-      $scope.count_cart();
+       $scope.count_cart();
        $scope.load_sign();
+       
        $scope.route = $location.path();
 
        $scope.logout = function(){     
@@ -59,6 +60,18 @@ myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','
       $scope.Back = function () {
         $window.history.back();
       }
+
+      // check track
+      // $rootScope.count_track = function(){
+      //   console.log($scope.user)
+      //   $http.get(base_url+'get/count/track').then(function(response){
+      //     $rootScope.count_track = response.data;
+      //   },function (error){
+      //   });  
+      // }
+
+      // $scope.count_track();       
+
     }
 ]);
 

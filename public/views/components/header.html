@@ -10,6 +10,8 @@
           </form>
         </div>
         <!-- Navbar Toggler-->
-        <div class="suha-navbar-toggler d-flex flex-wrap" ng-click="suhaNavbarToggler()" id=""><span></span><span></span><span></span></div>
+        <div class="suha-navbar-toggler d-flex flex-wrap" ng-click="suhaNavbarToggler()" id=""><span></span><span></span><span></span>
+          <div class="badge badge-warning" style="font-size: 9px;position: absolute;right: 0px;top: 0px;" ng-if="user.count_track >= 1">{{user.count_track}}</div>
+        </div>
       </div>
     </div>

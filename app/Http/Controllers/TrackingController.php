@@ -107,4 +107,14 @@ class TrackingController extends Controller
     	$data->tgl_konfirm =  $temp_date['date'].' '.$temp_date['sort_month'].' '.$temp_date['year'];
     	return $data;
     }
+
+    public function count_track($id)
+    {
+    	$transaksi = tb_transaksi::where('id_user', $id)->whereNotNull('status_transaksi')
+					->whereNotNull('metode_transaksi')
+					->whereNotNull('tgl_transkasi')
+					->where('tgl_expired','>=',date('Y-m-d'))
+					->count();
+		return $transaksi;
+    }
 }

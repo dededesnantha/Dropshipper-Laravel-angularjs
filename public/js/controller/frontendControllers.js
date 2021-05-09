@@ -149,19 +149,28 @@ myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$
 	    if($scope.datass.qty > 1){
 	       $scope.datass.qty = item - 1;
 	    }
+	}
 
+	$scope.update_totals = function(item){
+			if (item !== 0) {
+				if ( item >= $scope.produks.stok) {
+					$scope.datass.qty = $scope.produks.stok;
+					
+				}else{
+					$scope.datass.qty = item;
+				}
+			}else{
+				$scope.datass.qty = 1;
+			}
 	}
 
   $scope.post = function($datass, $id){
-  	
+  	if ($datass.qty == null) {
+  		$datass.qty = 1
+  	}
   	$datass.id_produk = $id;
   	$datass.id_user = $scope.user.id_user;
   	
-  	// $scope.carts.push($datass);
-  	
-  	// var expireDate = new Date();
-  	// expireDate.setDate(expireDate.getDate() + 1);
-  	// $cookies.putObject('cart', $scope.carts,  {'expires': expireDate});
   	
   	$http.post(base_url+'add_cart',$datass)
       	.then(function(response) {
@@ -360,19 +369,6 @@ myApp.controller('ModalEditAlamat', ['$scope', '$uibModalInstance', 'items', '$h
   } 
   
 }]);
-// myApp.controller('SliderController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
-// 	// get slider
-// 	$scope.slider = [];
-// 	$http.get(base_url+'get_slider').then(function(data) {
-//               $scope.slider = data.data;
-//               angular.forEach($scope.slider, function (values, key) {
-//                	values['image'] = base_url +'gallery/'+values['image'];
-//               });
-// 	}, function(x) {
-// 	     SweetAlert.swal("Terjadi Kesalahan!", "error")
-// 	});
-
-// }])
 
 myApp.directive("owlCarousel", function() {
 	return {
@@ -407,16 +403,6 @@ myApp.directive('owlCarouselItem', [function() {
 	};
 }]);
 
-// myApp.controller('KategoriController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
-// 	$http.get(base_url+'get_kategori').then(function(data) {
-//               $scope.kategori = data.data;
-//               angular.forEach($scope.kategori, function (values, key) {
-//                	values['gambar'] = base_url +'image/'+values['gambar'];
-//               });
-// 	}, function(x) {
-// 	     SweetAlert.swal("Terjadi Kesalahan!", "error")
-// 	});
-// }]);
 
 myApp.controller('ListKategoriController', ['$scope', '$http','SweetAlert','$location', '$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
 	$scope.filteredCustomers = [];
@@ -449,28 +435,6 @@ myApp.controller('ListKategoriController', ['$scope', '$http','SweetAlert','$loc
 	$scope.init();
 
 }]);
-
-// myApp.controller('ProdukController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
-// 	$http.get(base_url+'get_top_produk').then(function(data) {
-//               $scope.produk = data.data;
-//               angular.forEach($scope.produk, function (values, key) {
-//                	values['gambar'] = base_url +'image/'+values['gambar'];
-//               });
-// 	}, function(x) {
-// 	     SweetAlert.swal("Terjadi Kesalahan!","", "error")
-// 	});
-// }]);
-
-// myApp.controller('ProdukAllController', ['$scope', '$http','SweetAlert','$location', function($scope, $http, SweetAlert, $location){
-// 	$http.get(base_url+'get_produk').then(function(data) {
-//               $scope.produkAll = data.data;
-//               angular.forEach($scope.produkAll, function (values, key) {
-//                	values['gambar'] = base_url +'image/'+values['gambar'];
-//               });
-// 	}, function(x) {
-// 	     SweetAlert.swal("Terjadi Kesalahan!","", "error")
-// 	});
-// }]);
 
 myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$location','$routeParams', function($scope, $http, SweetAlert, $location, $routeParams){
 	$scope.url = "Produk Detail";
@@ -599,15 +563,12 @@ myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$loc
   	}
   }
 $scope.post = function($datass, $id){
-
+	if ($datass.qty == null) {
+  		$datass.qty = 1
+  	}
   	$datass.id_produk = $id;
   	$datass.id_user = $scope.user.id_user;
   	
-  	// $scope.carts.push($datass);
-  	
-  	// var expireDate = new Date();
-  	// expireDate.setDate(expireDate.getDate() + 1);
-  	// $cookies.putObject('cart', $scope.carts,  {'expires': expireDate});
   	
   	$http.post(base_url+'add_cart',$datass)
       	.then(function(response) {
@@ -1071,8 +1032,8 @@ myApp.controller('ModalPembayaran', ['$scope', '$uibModalInstance', 'items', '$h
 
 	$scope.bayar = function(data){
 		$uibModalInstance.close();
+		$scope.load_sign();
 		$http.post(base_url+'transaction/'+data).then(function(data) {
-			$scope.count_cart();
 			$location.path("/payment/"+items);
 		}, function(x) {
 		});
@@ -1210,6 +1171,7 @@ myApp.controller('OrderController', ['$scope', '$http','SweetAlert','$location',
 	        .then(function(response) {
             	$scope.loading = true;
             	$location.path("/order/"+$scope.update.id_transaksi);
+            	$scope.load_sign();
 			}, function(x) {
             	SweetAlert.swal("Terjadi Kesalahan!"," ", "error")        
 			});

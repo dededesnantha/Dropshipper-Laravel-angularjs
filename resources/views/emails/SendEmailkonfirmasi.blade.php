@@ -376,14 +376,14 @@
                 <td>
                   <table class="soapbox">
                     <tr>
-                      @if($details['status_transaksi'] == 'order')
+                      @if($details['status_transaksi'] == 'Order')
                         <td class="soapbox-title">Pesanan Kamu Diproses</td>
                       @endif
                     </tr>
                   </table>
                   <table class="status" bgcolor="#fffeea" cellspacing="0">
                     <tr>
-                      @if($details['status_transaksi'] == 'order')
+                      @if($details['status_transaksi'] == 'Order')
                         <td class="status-cell success">
                             <img class="status-image" src="https://www.filepicker.io/api/file/gd9yTMfATWV8fPJlmyRC" alt="✓">&nbsp;<b>Step&nbsp;1 Pembayaran</b>
                         </td>
@@ -406,7 +406,7 @@
                     <tr>
                       <td class="body-padding"></td>
                       <td class="body-padded">
-                        @if($details['status_transaksi'] == 'order')
+                        @if($details['status_transaksi'] == 'Order')
                           <div class="body-title">Step 2 Pesanan Diproses</div>
                           <table class="body-text">
                             <tr>

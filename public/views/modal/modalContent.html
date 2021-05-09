@@ -41,7 +41,7 @@
       <div class="cart-form">
         <div class="order-plus-minus d-flex align-items-center">
           <div class="quantity-button-handler" ng-click="qty_kurang(datass.qty)" >-</div>
-          <input class="form-control cart-quantity-input" type="number" ng-init="datass.qty=1" name="qty" ng-model="datass.qty" >
+          <input class="form-control cart-quantity-input" type="number" ng-init="datass.qty=1" name="qty" ng-model="datass.qty" ng-change="update_totals(datass.qty)">
           <div class="quantity-button-handler" ng-click="qty_tambah(datass.qty)" >+</div>
         </div>
       </div>

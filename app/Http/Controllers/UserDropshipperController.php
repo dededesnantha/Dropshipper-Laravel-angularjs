@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\tb_user;
 use App\Models\tb_order;
+use App\Models\tb_transaksi;
 
 use Validator;
 use Response;
@@ -49,6 +50,11 @@ class UserDropshipperController extends Controller
         $get_user = tb_user::select('id_user','nama','foto_user','username')->where('id_user', $datass)->first();
         
     	if ($datass) {
+            $get_user['count_track'] = tb_transaksi::where('id_user', $datass)->whereNotNull('status_transaksi')
+                    ->whereNotNull('metode_transaksi')
+                    ->whereNotNull('tgl_transkasi')
+                    ->where('tgl_expired','>=',date('Y-m-d'))
+                    ->count();
     		return $get_user;
     	}else{
     		return response()->json($datass, 500);
@@ -144,5 +150,12 @@ class UserDropshipperController extends Controller
         ];
         tb_user::where('id_user',$post['id_user'])->update($data);
         return Response::json(200);
+    }
+
+    public function count_track($value='')
+    {
+       $datass = Cookie::get('id_user');
+       var_dump ($datass);
+       die();
     }
 }

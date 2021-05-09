@@ -5,144 +5,154 @@
 		</div>
 	</div>
   <!-- header --> 
- <div ng-if="!datass.data_transaksi.image_transfer">
- 	<div data-ng-include=" 'views/components/header_single.html' "> 
-	  </div>
-	  <div class="page-content-wrapper py-3">
-	  	<div class="container">
-	  		<div class="shipping-method-choose mb-3">
-	  			<!-- <div class="card shipping-method-choose-title-card">
-	  				<div class="card-body">
-	  					<h6 class="text-center mb-0 text-blank">Konfirmasi Pembayaran</h6>
-	  				</div>
-	  			</div> -->
-	  			<div class="card shipping-method-choose-card">
-	  				<div class="shipping-method-choose">
-	  					<div class="table-responsive card-body">
-	  						<p>Terima kasih sudah belanja. Setelah melakukan pembayaran, segera lakukan konfirmasi pembayaran dengan mengisi form di bawah ini, paling lambat pada tanggal <span style="color: red;font-weight: 700">{{datass.data_transaksi.tgl_expired}}</span>. </p>
-	  						<div class=" user-data-card">
-	  								
-	  								<table class="table mb-0">
-	  									<tbody>
-	  										<tr style="font-size: 14px">
-	  											<td>
-	  												Nama Lengkap
-	  											</td>
-	  											<td>
-	  												<div style="background-color: #e9ecef;color: #747794;padding: 10px;border-radius: 5px">
-	  													{{datass.data_transaksi.nama}}
-	  												</div>
-	  											</td>
-	  										</tr>
-	  										<tr style="font-size: 14px">
-	  											<td>
-	  												Email
-	  											</td>
-	  											<td>
-	  												<div style="background-color: #e9ecef;color: #747794;padding: 10px;border-radius: 5px">
-	  													{{datass.data_transaksi.email}}
-	  												</div>
-	  											</td>
-	  										</tr>
-	  										<tr style="font-size: 14px">
-	  											<td>
-	  												No Handphone
-	  											</td>
-	  											<td>
-	  												<div style="background-color: #e9ecef;color: #747794;padding: 10px;border-radius: 5px">
-	  													{{datass.data_transaksi.telephone}}
-	  												</div>
-	  											</td>
-	  										</tr>
-	  										<tr style="font-size: 14px">
-	  											<td>
-	  												Code Pemabayaran
-	  											</td>
-	  											<td>
-	  												<div style="background-color: #e9ecef;color: #747794;padding: 10px;border-radius: 5px">
-	  													{{datass.data_transaksi.code_transaksi}}
-	  												</div>
-	  											</td>
-	  										</tr>
-	  										<tr style="font-size: 14px">
-	  											<td>
-	  												Tanggal Konfirmasi
-	  											</td>
-	  											<td>
-	  												<input class="form-control" type="date" ng-model="datass.date_now"></td>
-	  												 <span ng-hide="notif.tanggal" class="notif-card" style="font-weight: none;font-size: 12px">Tanggal Konfirmasi Tidak Boleh Kosong</span>
-	  										</tr>
-	  										<tr style="font-size: 14px">
-	  											<td>
-	  												Total Transfer
-	  											</td>
-	  											<td>
-	  												<div style="background-color: #cdcdcd;color: #747794;padding: 10px;border-top-left-radius: 5px;border-bottom-left-radius: 5px;position: absolute;">
-	  													Rp.
-	  												</div>
-	  												<div style="background-color: #e9ecef;color: #747794;padding: 10px;border-radius: 5px;padding-left: 48px">
-	  												{{datass.data_transaksi.total_transkasi | currency : "" : 0}}
-	  												</div>
-	  											</td>
-	  										</tr>
-	  										<tr style="font-size: 14px">
-	  											<td>
-	  												Akun Bank
-	  											</td>
-	  											<td>
-	  												<select class="form-control"  ng-model="datass.bank_transfer">   
-	  													<option value="" ng-selected="true">--  Pilih Bank  --</option>
-	  													<option value="BRI" >BRI</option>
-	  													<option value="BCA" >BCA</option>
-	  													<option value="MANDIRI" >MANDIRI</option>
-	  												</select>
-	  												 <span ng-hide="notif.bank" class="notif-card" style="font-weight: none;font-size: 12px;position: inherit">Akun Bank Tidak Boleh Kosong</span>
-	  											</td>
-	  										</tr>
-	  										<tr style="font-size: 14px">
-	  											<td>
-	  												<strong>Bukti Pembayaran</strong>
-	  											</td>
-	  											<td>
-	  												<p>Foto struk atau screenshoot dari bukti pembayaran yang sah. <br>Contoh : Struk ATM
-	  												</p>
-	  												 <span ng-hide="notif.img" class="notif-card" style="font-weight: none;font-size: 12px;position: inherit">Bukti pembayaran tidak boleh kosong</span>
-	  												<div class="user-profile me-3">
-	  													<img ng-src="{{src}}" style="max-width: 200px;max-height: 200px">
-	  													<br>
-	  													<input type="file" name="file"  class="form-control-file" accept="image/*"  onchange="angular.element(this).scope().uploadedFile(this)">
-	  												</div>
-	  											</td>
-	  										</tr> 
-	  									</tbody>
-	  								</table>
-	  							</div>
-	  						</div>
-	  				</div>
-	  			</div>
-	  			<div class="col-12 col-md-12 mt-3">
-	  				<a class="btn btn-success w-100" href="" ng-click="confrim(datass.data_transaksi.id_transaksi)" style="padding: 12px">Konfirmasi Pembayaran</a>
-	  			</div>
-	  		</div>
-	  	</div>
-	  </div>
+  <div ng-if="!datass.status">
+  	<div ng-if="!datass.data_transaksi.image_transfer">
+	 	<div data-ng-include=" 'views/components/header_single.html' "> 
+		  </div>
+		  <div class="page-content-wrapper py-3">
+		  	<div class="container">
+		  		<div class="shipping-method-choose mb-3">
+		  			<!-- <div class="card shipping-method-choose-title-card">
+		  				<div class="card-body">
+		  					<h6 class="text-center mb-0 text-blank">Konfirmasi Pembayaran</h6>
+		  				</div>
+		  			</div> -->
+		  			<div class="card shipping-method-choose-card">
+		  				<div class="shipping-method-choose">
+		  					<div class="table-responsive card-body">
+		  						<p>Terima kasih sudah belanja. Setelah melakukan pembayaran, segera lakukan konfirmasi pembayaran dengan mengisi form di bawah ini, paling lambat pada tanggal <span style="color: red;font-weight: 700">{{datass.data_transaksi.tgl_expired}}</span>. </p>
+		  						<div class=" user-data-card">
+		  								
+		  								<table class="table mb-0">
+		  									<tbody>
+		  										<tr style="font-size: 14px">
+		  											<td>
+		  												Nama Lengkap
+		  											</td>
+		  											<td>
+		  												<div style="background-color: #e9ecef;color: #747794;padding: 10px;border-radius: 5px">
+		  													{{datass.data_transaksi.nama}}
+		  												</div>
+		  											</td>
+		  										</tr>
+		  										<tr style="font-size: 14px">
+		  											<td>
+		  												Email
+		  											</td>
+		  											<td>
+		  												<div style="background-color: #e9ecef;color: #747794;padding: 10px;border-radius: 5px">
+		  													{{datass.data_transaksi.email}}
+		  												</div>
+		  											</td>
+		  										</tr>
+		  										<tr style="font-size: 14px">
+		  											<td>
+		  												No Handphone
+		  											</td>
+		  											<td>
+		  												<div style="background-color: #e9ecef;color: #747794;padding: 10px;border-radius: 5px">
+		  													{{datass.data_transaksi.telephone}}
+		  												</div>
+		  											</td>
+		  										</tr>
+		  										<tr style="font-size: 14px">
+		  											<td>
+		  												Code Pemabayaran
+		  											</td>
+		  											<td>
+		  												<div style="background-color: #e9ecef;color: #747794;padding: 10px;border-radius: 5px">
+		  													{{datass.data_transaksi.code_transaksi}}
+		  												</div>
+		  											</td>
+		  										</tr>
+		  										<tr style="font-size: 14px">
+		  											<td>
+		  												Tanggal Konfirmasi
+		  											</td>
+		  											<td>
+		  												<input class="form-control" type="date" ng-model="datass.date_now"></td>
+		  												 <span ng-hide="notif.tanggal" class="notif-card" style="font-weight: none;font-size: 12px">Tanggal Konfirmasi Tidak Boleh Kosong</span>
+		  										</tr>
+		  										<tr style="font-size: 14px">
+		  											<td>
+		  												Total Transfer
+		  											</td>
+		  											<td>
+		  												<div style="background-color: #cdcdcd;color: #747794;padding: 10px;border-top-left-radius: 5px;border-bottom-left-radius: 5px;position: absolute;">
+		  													Rp.
+		  												</div>
+		  												<div style="background-color: #e9ecef;color: #747794;padding: 10px;border-radius: 5px;padding-left: 48px">
+		  												{{datass.data_transaksi.total_transkasi | currency : "" : 0}}
+		  												</div>
+		  											</td>
+		  										</tr>
+		  										<tr style="font-size: 14px">
+		  											<td>
+		  												Akun Bank
+		  											</td>
+		  											<td>
+		  												<select class="form-control"  ng-model="datass.bank_transfer">   
+		  													<option value="" ng-selected="true">--  Pilih Bank  --</option>
+		  													<option value="BRI" >BRI</option>
+		  													<option value="BCA" >BCA</option>
+		  													<option value="MANDIRI" >MANDIRI</option>
+		  												</select>
+		  												 <span ng-hide="notif.bank" class="notif-card" style="font-weight: none;font-size: 12px;position: inherit">Akun Bank Tidak Boleh Kosong</span>
+		  											</td>
+		  										</tr>
+		  										<tr style="font-size: 14px">
+		  											<td>
+		  												<strong>Bukti Pembayaran</strong>
+		  											</td>
+		  											<td>
+		  												<p>Foto struk atau screenshoot dari bukti pembayaran yang sah. <br>Contoh : Struk ATM
+		  												</p>
+		  												 <span ng-hide="notif.img" class="notif-card" style="font-weight: none;font-size: 12px;position: inherit">Bukti pembayaran tidak boleh kosong</span>
+		  												<div class="user-profile me-3">
+		  													<img ng-src="{{src}}" style="max-width: 200px;max-height: 200px">
+		  													<br>
+		  													<input type="file" name="file"  class="form-control-file" accept="image/*"  onchange="angular.element(this).scope().uploadedFile(this)">
+		  												</div>
+		  											</td>
+		  										</tr> 
+		  									</tbody>
+		  								</table>
+		  							</div>
+		  						</div>
+		  				</div>
+		  			</div>
+		  			<div class="col-12 col-md-12 mt-3">
+		  				<a class="btn btn-success w-100" href="" ng-click="confrim(datass.data_transaksi.id_transaksi)" style="padding: 12px">Konfirmasi Pembayaran</a>
+		  			</div>
+		  		</div>
+		  	</div>
+		  </div>
 
-	  <!-- sidebar --> 
-	  <div data-ng-include=" 'views/components/sidebar.html' "> 
-	  </div>
-	  <!-- / sidebar -->
+		  <!-- sidebar --> 
+		  <div data-ng-include=" 'views/components/sidebar.html' "> 
+		  </div>
+		  <!-- / sidebar -->
 
-	  <!-- footer --> 
-	  <div data-ng-include=" 'views/components/footer.html' "> 
-	  </div>
-	  <!-- / sidebar -->
- </div>
- <div ng-if="datass.data_transaksi.image_transfer">
- 	<div class="order-success-wrapper">
-      <div class="content"><i class="lni lni-checkmark-circle"></i>
-        <h5>Pembayaran Berhasil</h5>
-        <p>Pesanan kamu sedang di proses, yuk belanja lagi</p><a class="btn btn-warning mt-3" href="#!home">Belanja Lagi</a>
-      </div>
-    </div>
- </div>
+		  <!-- footer --> 
+		  <div data-ng-include=" 'views/components/footer.html' "> 
+		  </div>
+		  <!-- / sidebar -->
+	 </div>
+	 <div ng-if="datass.data_transaksi.image_transfer">
+	 	<div class="order-success-wrapper">
+	      <div class="content"><i class="lni lni-checkmark-circle"></i>
+	        <h5>Pembayaran Berhasil</h5>
+	        <p>Pesanan kamu sedang di proses, yuk belanja lagi</p><a class="btn btn-warning mt-3" href="#!home">Belanja Lagi</a>
+	      </div>
+	    </div>
+	 </div>
+  </div>
+  <div ng-if="datass.status">
+  	<div class="order-success-wrapper">
+  		<div class="content"><i class="lni lni-close"></i>
+  			<h5>Pesanan Kadaluarsa</h5>
+  			<p>Pesanan kamu sudah kadaluarsa, yuk belanja lagi</p><a class="btn btn-warning mt-3" href="#!home">Belanja Lagi</a>
+  		</div>
+  	</div>
+  </div>
 </div>
