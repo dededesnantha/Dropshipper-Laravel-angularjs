@@ -1,0 +1,72 @@
+  <div ng-controller="ListSearchController">
+  		<div class="preloader" id="preloader" ng-show="loading">
+          <div class="spinner-grow text-secondary" role="status">
+            <div class="sr-only">Loading...</div>
+          </div>
+        </div>
+	  <!-- header --> 
+	  <div data-ng-include=" 'views/components/header.html' "> 
+	  </div>
+	  <!-- / header -->
+
+	  <div class="page-content-wrapper">
+		  <div class="product-catagories-wrapper py-3">
+        	<div class="container">
+        		<div ng-if="filteredCustomers.length > 0">
+        			<div class="section-heading d-flex align-items-center justify-content-between">
+        				<h6>Pencarian : {{search.product}}</h6>
+        			</div>
+        			<div class="row g-3">
+        				<!-- Single Top Product Card-->
+        				<div class="col-6 col-md-4 col-lg-3" ng-repeat="item in filteredCustomers">
+        					<div class="card top-product-card">
+        						<div class="card-body">
+        							<span class="badge badge-success" ng-if="item.jenis_label === 'bigsale'">{{item.text_label}}</span>
+        							<span class="badge badge-primary" ng-if="item.jenis_label === 'new'">{{item.text_label}}</span>
+        							<span class="badge badge-danger" ng-if="item.jenis_label === 'disc'">{{item.text_label}}</span>
+        							<a class="product-thumbnail d-block" href="#!produk/{{item.slug}}">
+        								<div class="img-card">
+        									<img class="mb-2" src="{{item.gambar}}" alt="{{item.nama_produk}}">
+        								</div>
+        							</a>
+        							<a class="product-title d-block" href="#!produk/{{item.slug}}">{{item.nama_produk}}</a>
+        							<p class="sale-price" ng-if="item.harga_promo">Rp. {{item.harga_promo | currency : "" : 0}}<span>Rp. {{item.harga | currency : "" : 0}}</span></p>
+        							<p class="sale-price" ng-if="!item.harga_promo">Rp. {{item.harga | currency : "" : 0}}</p>
+
+        							<div class="product-rating">
+        								<span class="badge badge-danger" style="position: inherit;">Sisa Barang : {{item.stok}}</span>
+        							</div>
+        						</div>
+        					</div>
+        				</div>
+        				<div class="row" data-ng-show="produks.length > 0">
+        					<div class="col-span-12" style="text-align: center;">
+        						<uib-pagination ng-model="currentPage" total-items="produks.length" max-size="maxSize" items-per-page="numPerPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;"></uib-pagination>
+        						<div class="clearfix"></div>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        		<div ng-if="filteredCustomers.length == 0">
+        			<div class="offline-area-wrapper py-3 d-flex align-items-center justify-content-center">
+        				<div class="offline-text text-center"><img class="mb-4 px-5" src="../css/notfound.jpg" alt="">
+        					<h5>Opps. Pencarian Tidak ditemukan</h5>
+        					<p>Pencarian yang kamu cari tidak ditemukan..</p><a class="btn btn-primary" href="#!home">Home</a>
+        				</div>
+        			</div>
+        		</div>
+	        </div>
+       	</div>
+
+	  </div>
+
+	  <!-- sidebar --> 
+	  <div data-ng-include=" 'views/components/sidebar.html' "> 
+	  </div>
+	  <!-- / sidebar -->
+
+	  <!-- footer --> 
+	  <div data-ng-include=" 'views/components/footer.html' "> 
+	  </div>
+	  <!-- / sidebar -->
+  </div>

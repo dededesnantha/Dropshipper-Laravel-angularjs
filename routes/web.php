@@ -56,7 +56,8 @@ Route::get('produk_all','HomeController@produk_all');
 Route::get('ongkos_kirim/all','AreaContoller@ongkos_kirim_all');
 Route::post('ongkos_kirim/kurir/{id}','AreaContoller@kurir');
 
-
+// serach
+Route::get('search/{slug}','HomeController@search');
 
 // chart
 Route::get('card_produk/{id}','HomeController@card_produk');

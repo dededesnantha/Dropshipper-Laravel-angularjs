@@ -75,9 +75,15 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
     $routeProvider.when('/tracking',{
         templateUrl:'../views/tracking.html',
     });
+    
     $routeProvider.when('/tracking/:id',{
         templateUrl:'../views/tracking_transaksi.html',
     });
+
+    $routeProvider.when('/home/search/:search',{
+        templateUrl:'../views/search.html',
+    });
+    
     
     
     // $routeProvider.when('/dashboard',{

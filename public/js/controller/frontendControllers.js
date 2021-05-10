@@ -105,10 +105,14 @@ myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','
 
 myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$http','SweetAlert','$location','$route','$cookies',
 	function($scope, $uibModalInstance, items, $http,SweetAlert,$location,$route,$cookies) {
-	
 	$scope.datass = {};
 	$scope.produks = {};
 	$scope.carts = {};
+
+	$scope.notif = {};
+	$scope.notif.color = true;
+	$scope.notif.size = true;
+
 	$http.get(base_url+'card_produk/'+items).then(function(data) {
               $scope.produks = data.data;
               $scope.produks.gambar = base_url+'image/'+$scope.produks.gambar;
@@ -119,20 +123,25 @@ myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$
   $scope.addchart = function(){
   	if ($scope.produks.warna.length > 0 && $scope.produks.size.length === 0) {
   		if (!$scope.datass.colors) {
-  			SweetAlert.swal("Anda Belum Memilih Warna","", "error")
+  			$scope.notif.color = false;
   		}else{
   			$scope.post($scope.datass, items)
   		}
   	}else if($scope.produks.warna.length === 0 && $scope.produks.size.length > 0){
   		if (!$scope.datass.size) {
-  			SweetAlert.swal("Anda Belum Memilih Size","", "error")
+  			$scope.notif.size = false;
   		}else{
   			$scope.post($scope.datass, items)
   		}
   	}else{
-  		if (!$scope.datass.size || !$scope.datass.colors) {
-  			SweetAlert.swal("Anda Belum Memilih Size Atau Warna","", "error")
-  		}else{
+  		if (!$scope.datass.size && !$scope.datass.colors) {
+			$scope.notif.size = false;
+			$scope.notif.color = false;
+  		}else if (!$scope.datass.colors) {
+  			$scope.notif.color = false;
+  		}else if (!$scope.datass.size) {
+  			$scope.notif.size = false;
+  		}else {
   			$scope.post($scope.datass, items)
   		}
   	}
@@ -554,9 +563,13 @@ myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$loc
   			$scope.post($scope.datass, $scope.produks.id)
   		}
   	}else{
-  		if (!$scope.datass.size || !$scope.datass.colors) {
-  			$scope.notif.color = false; 
-  			$scope.notif.size = false
+  		if (!$scope.datass.size && !$scope.datass.colors) { 
+  			$scope.notif.size = false;
+  			$scope.notif.color = false;
+  		}else if (!$scope.datass.colors) {
+  			$scope.notif.color = false;
+  		}else if (!$scope.datass.size) {
+  			$scope.notif.size = false;
   		}else{
   			$scope.post($scope.datass, $scope.produks.id)
   		}
@@ -1211,4 +1224,42 @@ myApp.controller('TrackTransaksiController', ['$scope', '$http','SweetAlert','$l
 		SweetAlert.swal("Terjadi Kesalahan!", "error")
 	});
 	console.log($routeParams.id)
+}]);
+
+myApp.controller('SearchController', ['$scope', '$http','SweetAlert','$location', '$routeParams','$uibModal', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal){
+	
+	$scope.search = function () {
+		$location.path("/home/search/"+$scope.search.product);
+	}
+
+}]);
+
+myApp.controller('ListSearchController', ['$scope', '$http','SweetAlert','$location', '$routeParams','$uibModal', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal){
+	$scope.search = {};
+	$scope.search.product = $routeParams.search
+	$scope.filteredCustomers = [];
+	$scope.currentPage = 1;
+	$scope.numPerPage = 16;
+	$scope.maxSize = 10;
+
+	
+	$http.get(base_url+'search/'+$routeParams.search).then(function(data) {
+		$scope.produks = data.data;
+		angular.forEach($scope.produks, function (values, key) {
+			values['gambar'] = base_url +'image/'+values['gambar'];
+		});
+		$scope.$watch('currentPage + numPerPage', updateFilteredItems);
+
+		function updateFilteredItems() {
+			var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+			end = begin + $scope.numPerPage;
+
+			$scope.filteredCustomers = $scope.produks.slice(begin, end);
+			$scope.loading = false;
+		}
+		$scope.loading = false;
+	}, function(x) {
+		SweetAlert.swal("Terjadi Kesalahan!", "error")
+	});
+
 }]);

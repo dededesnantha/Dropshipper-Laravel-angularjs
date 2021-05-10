@@ -197,4 +197,18 @@ class HomeController extends Controller
                                     ->get();
        return Response::json($data,200);
     }
+
+    public function search($search)
+    {
+       $data = produk::join('tb_kategori', 'tb_produk.id_kategori','=','tb_kategori.id')
+                    ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.gambar','tb_produk.status',
+                                    'tb_produk.slug','tb_produk.harga','tb_produk.stok','tb_produk.harga_promo','tb_produk.jenis_label',
+                                    'tb_produk.text_label','tb_produk.updated_at')
+                    ->where('tb_kategori.status','=',1)
+                    ->where('tb_produk.status','=',1)
+                    ->where('tb_produk.nama_produk','like',"%".$search."%")
+                    ->orderBy('tb_produk.id','DESC')
+                    ->get();
+        return Response::json($data,200);
+    }
 }

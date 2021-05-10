@@ -27,14 +27,17 @@
   <div class="row">
     <div class="col-4 col-md-4" ng-if = "produks.warna.length > 0">
       <div class="choose-color-wrapper">
-        <p class="mb-1 font-weight-bold" style="text-align: center;">Color</p>
-          <div class="choose-color-radio d-flex align-items-center">
-            <div class="form-check mb-0" ng-repeat="color in produks.warna">
-              <input class="form-check-input" style="background-color: {{color.color}}" id="color-{{color.id}}" type="radio" name="colorRadio" value="{{color.id}}" ng-model="datass.colors">
-                <label class="form-check-label" for="color-{{color.id}}"></label>
-            </div>
+        <p class="mb-1 font-weight-bold" style="text-align: left;">Color</p>
+        <div class="choose-color-radio d-flex align-items-center">
+          <div class="form-check mb-0" ng-repeat="color in produks.warna">
+            <input class="form-check-input" style="background-color: {{color.color}}" id="color-{{color.id}}" type="radio" name="colorRadio" value="{{color.id}}" ng-model="datass.colors">
+            <label class="form-check-label" for="color-{{color.id}}"></label>
           </div>
         </div>
+      </div>
+      <div style="float: right;">
+        <span ng-hide="notif.color" class="notif-card" style="font-weight: none;font-size: 12px;position: inherit">Color Tidak Boleh Kosong</span>
+      </div>
     </div>
     <div class="col-4 col-md-4" >
       <p class="mb-1 font-weight-bold" style="text-align: center;">Qty</p>
@@ -49,13 +52,16 @@
     </div>
     <div class="col-4 col-md-4" ng-if = "produks.size.length > 0" >
       <div class="choose-color-wrapper">
-        <p class="mb-1 font-weight-bold" style="text-align: center;">Size</p>
+        <p class="mb-1 font-weight-bold" style="text-align: right;">Size</p>
           <div class="choose-size-radio d-flex align-items-center" style="float: right;">
             <div class="form-check mb-0 me-2" ng-repeat="size in produks.size">
               <input class="form-check-input" id="size-{{size.id}}" type="radio" name="sizeRadio" value="{{size.size}}" ng-model="datass.size">
               <label class="form-check-label" for="size-{{size.id}}">{{size.size}}</label>
             </div>
           </div>
+        </div>
+        <div style="float: left;">
+          <span ng-hide="notif.size" class="notif-card" style="font-weight: none;font-size: 12px;position: inherit">Size Tidak Boleh Kosong</span>
         </div>
     </div>
   </div>

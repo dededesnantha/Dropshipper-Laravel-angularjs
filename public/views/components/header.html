@@ -3,9 +3,9 @@
         <!-- Logo Wrapper-->
         <div class="logo-wrapper"><a href="home.html"><img src="img/core-img/logo-small.png" alt=""></a></div>
         <!-- Search Form-->
-        <div class="top-search-form">
-          <form action="" method="">
-            <input class="form-control" type="search" placeholder="Enter your keyword">
+        <div class="top-search-form" ng-controller="SearchController">
+          <form ng-submit="search()"> 
+            <input class="form-control" type="index" placeholder="Pencarian..." ng-model="search.product">
             <button type="submit"><i class="fa fa-search"></i></button>
           </form>
         </div>
