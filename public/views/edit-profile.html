@@ -1,15 +1,21 @@
+<div ng-controller="ProfileController">
+  
 <!-- header --> 
     <div data-ng-include=" 'views/components/header.html' "> 
     </div>
     <!-- / header -->
-
+    <div class="preloader" id="preloader" ng-show="loading">
+      <div class="spinner-grow text-secondary" role="status">
+        <div class="sr-only">Loading...</div>
+      </div>
+    </div>
     <!-- sidebar --> 
     <div data-ng-include=" 'views/components/sidebar.html' "> 
     </div>
     <!-- / sidebar -->
 
 
-    <div class="page-content-wrapper" ng-controller="ProfileController">
+    <div class="page-content-wrapper">
       <div class="container">
         <!-- Profile Wrapper-->
         <div class="profile-wrapper-area py-3">
@@ -31,60 +37,102 @@
             </div>
           </div>
           <!-- User Meta Data-->
-          <div class="card user-data-card">
-            <div class="card-body">
-                <div class="mb-3">
-                  <div class="title mb-2"><i class="lni lni-user"></i><span>Username</span></div>
-                  <input class="form-control" type="text" ng-model="user_datass.username">
-                </div>
-                <div class="mb-3">
-                  <div class="title mb-2"><i class="lni lni-user"></i><span>Nama</span></div>
-                  <input class="form-control" type="text" ng-model="user_datass.nama">
-                </div>
-                <div class="mb-3">
-                  <div class="title mb-2"><i class="lni lni-phone"></i><span>Telephone</span></div>
-                  <input class="form-control" type="text" ng-model="user_datass.telephone" only-numbers>
-                </div>
-                <div class="mb-3">
-                  <div class="title mb-2"><i class="lni lni-envelope"></i><span>Email</span></div>
-                  <input class="form-control" type="email" ng-model="user_datass.email">
-                </div>
-                <div class="mb-3">
-                  <div class="title mb-2"><i class="lni lni-map-marker"></i><span>Provinsi</span></div>
-                  	<select class="form-control"  ng-model="user_datass.id_provinsi" ng-change="get_kabupaten(user_datass.id_provinsi)">   
-                        <option value="" ng-selected="true">--  Provinsi  --</option>
-                        <option ng-repeat="key in provinsi"  ng-value="{{key.id_provinsi}}" >{{key.provinsi}}</option>
-                    </select>
-                </div>
+          <form name="profile" ng-submit="save()">
+            <div class="card user-data-card">
+              <div class="card-body">
+                  <div class="mb-3">
+                    <div class="title mb-2"><i class="lni lni-user"></i><span>Username</span></div>
+                    <input class="form-control" type="text" name="username" ng-model="user_datass.username" required>
+                    <div ng-show="profile.username.$error.required">
+                      <span class="notif-card" style="font-weight: none;font-size: 12px;position: relative">
+                           Username Tidak Boleh Kosong
+                      </span>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <div class="title mb-2"><i class="lni lni-user"></i><span>Nama</span></div>
+                    <input class="form-control" type="text" name="Nama" ng-model="user_datass.nama" required>
+                    <div ng-show="profile.Nama.$error.required" >
+                      <span class="notif-card" style="font-weight: none;font-size: 12px;position: relative">
+                           Nama Tidak Boleh Kosong
+                      </span>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <div class="title mb-2"><i class="lni lni-phone"></i><span>Telephone</span></div>
+                    <input class="form-control" type="text" name="Telephone" ng-model="user_datass.telephone" only-numbers required>
+                    <div ng-show="profile.Telephone.$error.required">
+                      <span class="notif-card" style="font-weight: none;font-size: 12px;position: relative">
+                           Telephone Tidak Boleh Kosong
+                      </span>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <div class="title mb-2"><i class="lni lni-envelope"></i><span>Email</span></div>
+                    <input class="form-control" type="email" name="Email" ng-model="user_datass.email" required>
+                    <div ng-show="profile.Email.$error.required">
+                      <span class="notif-card" style="font-weight: none;font-size: 12px;position: relative">
+                           Email Tidak Boleh Kosong
+                      </span>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <div class="title mb-2"><i class="lni lni-map-marker"></i><span>Provinsi</span></div>
+                    	<select class="form-control"  ng-model="user_datass.id_provinsi" name="Provinsi" ng-change="get_kabupaten(user_datass.id_provinsi)" required>   
+                          <option value="" ng-selected="true">--  Provinsi  --</option>
+                          <option ng-repeat="key in provinsi"  ng-value="{{key.id_provinsi}}" >{{key.provinsi}}</option>
+                      </select>
+                      <div ng-show="profile.Provinsi.$error.required">
+                        <span class="notif-card" style="font-weight: none;font-size: 12px;position: relative">
+                         Provinsi Tidak Boleh Kosong
+                       </span>
+                     </div>
+                  </div>
 
-                <div class="mb-3" ng-if="user_datass.id_provinsi">
-                  <div class="title mb-2"><i class="lni lni-map-marker"></i><span>Kabupaten</span></div>
-                  	<select class="form-control"  ng-model="user_datass.id_kabupaten" ng-change="get_kecamatan(user_datass.id_kabupaten)">   
-                        <option value="" ng-selected="true">--  Kabupaten  --</option>
-                        <option ng-repeat="key in kabupaten" ng-value="{{key.id_kabupaten}}" >{{key.kabupaten}}</option>
-                    </select>
-                </div>
+                  <div class="mb-3" ng-if="user_datass.id_provinsi">
+                    <div class="title mb-2"><i class="lni lni-map-marker"></i><span>Kabupaten</span></div>
+                    	<select class="form-control"  ng-model="user_datass.id_kabupaten" name="Kabupaten" ng-change="get_kecamatan(user_datass.id_kabupaten)" required>   
+                          <option value="" ng-selected="true">--  Kabupaten  --</option>
+                          <option ng-repeat="key in kabupaten" ng-value="{{key.id_kabupaten}}" >{{key.kabupaten}}</option>
+                      </select>
+                      <div ng-show="profile.Kabupaten.$error.required">
+                        <span class="notif-card" style="font-weight: none;font-size: 12px;position: relative">
+                         Kabupaten Tidak Boleh Kosong
+                       </span>
+                     </div>
+                  </div>
 
-                <div class="mb-3" ng-if="user_datass.id_kabupaten">
-                  <div class="title mb-2"><i class="lni lni-map-marker"></i><span>Kecamatan</span></div>
-                  	<select class="form-control"  ng-model="user_datass.id_kecamatan">   
-                        <option value="" ng-selected="true">--  Kecamatan  --</option>
-                        <option ng-repeat="key in kecamatan" ng-value="{{key.id_kecamatan}}" >{{key.kecamatan}}</option>
-                    </select>
-                </div>
+                  <div class="mb-3" ng-if="user_datass.id_kabupaten">
+                    <div class="title mb-2"><i class="lni lni-map-marker"></i><span>Kecamatan</span></div>
+                    	<select class="form-control"  ng-model="user_datass.id_kecamatan" name="Kecamatan" required>   
+                          <option value="" ng-selected="true">--  Kecamatan  --</option>
+                          <option ng-repeat="key in kecamatan" ng-value="{{key.id_kecamatan}}" >{{key.kecamatan}}</option>
+                      </select>
+                      <div ng-show="profile.Kecamatan.$error.required">
+                        <span class="notif-card" style="font-weight: none;font-size: 12px;position: relative">
+                         Kecamatan Tidak Boleh Kosong
+                       </span>
+                     </div>
+                  </div>
 
-                <div class="mb-3">
-                  <div class="title mb-2"><i class="lni lni-text-align-center"></i><span>Alamat</span></div>
-                  <textarea  class="form-control" ng-model="user_datass.address"
-	                  rows="5" cols="33">
-	                  
-	              </textarea>
-                </div>
+                  <div class="mb-3">
+                    <div class="title mb-2"><i class="lni lni-text-align-center"></i><span>Alamat</span></div>
+                    <textarea  class="form-control" ng-model="user_datass.address" name="Alamat" 
+  	                  rows="5" cols="33" required></textarea>
+                      <div ng-show="profile.Alamat.$error.required">
+                        <span class="notif-card" style="font-weight: none;font-size: 12px;position: relative">
+                         Alamat Tidak Boleh Kosong
+                       </span>
+                     </div>
+                  </div>
 
-                <button class="btn btn-success w-100" ng-click="save()" type="submit">Simpan Perubahan</button>
-              
+                  <button class="btn btn-success w-100" type="submit">Simpan Perubahan</button>
+                
+              </div>
             </div>
-          </div>
+          </form>
+
+
         </div>
       </div>
     </div>
@@ -92,3 +140,4 @@
 <!-- footer --> 
     <div data-ng-include=" 'views/components/footer.html' "> 
     </div>
+</div>

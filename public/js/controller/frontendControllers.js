@@ -6,7 +6,6 @@ myApp.controller('login', ['$scope', '$http','SweetAlert', function($scope, $htt
 	$scope.save = function () {
 		$http.post(base_url+'api/login_user', {username: $scope.form.username, password: $scope.form.password})
       	.then(function(response) {
-			// SweetAlert.swal("Login Berhasil!", "Hay, Selamat Datang", "success")
 			SweetAlert.swal({
 				  title: 'Login Berhasil',
 				  text: 'Anda Akan Dialihkan Kehalaman Utama',
@@ -227,7 +226,12 @@ myApp.controller('ProfileController', ['$scope', '$http','SweetAlert','$location
 	              $scope.user_datass.telephone =$scope.user_datass.telephone
 	              $scope.get_kabupaten($scope.user_datass.id_provinsi)
 	              $scope.get_kecamatan($scope.user_datass.id_kabupaten)
-	              $scope.src = base_url+'image/'+$scope.user_datass.foto_user;
+	              $scope.loading = false;
+	              if ($scope.user_datass.foto_user == null || $scope.user_datass.foto_user == '') {
+	              	$scope.src = base_url+'css/noimg.png';
+	              }else{
+	              	$scope.src = base_url+'image/'+$scope.user_datass.foto_user;
+	              }
 	    }, function(x) {
 	            SweetAlert.swal("Terjadi Kesalahan!", "error")
 	    });
@@ -1235,6 +1239,7 @@ myApp.controller('SearchController', ['$scope', '$http','SweetAlert','$location'
 }]);
 
 myApp.controller('ListSearchController', ['$scope', '$http','SweetAlert','$location', '$routeParams','$uibModal', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal){
+	$scope.load_sign();
 	$scope.search = {};
 	$scope.search.product = $routeParams.search
 	$scope.filteredCustomers = [];
@@ -1263,3 +1268,196 @@ myApp.controller('ListSearchController', ['$scope', '$http','SweetAlert','$locat
 	});
 
 }]);
+
+
+myApp.controller('RessetController', ['$scope', '$http','SweetAlert','$location', '$routeParams','$uibModal','$timeout', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal, $timeout){
+	$scope.load_sign();
+	$timeout(function() {
+		$scope.loading = false;
+	},2000);
+	$scope.datas = {};
+	$scope.notif = {};
+	$scope.notif.email = true;
+	$scope.load = true;
+	$scope.text = false;
+
+	$scope.send_email = function () {
+		$scope.load = false;
+		$scope.text = true;
+		if (!$scope.datas.email) {
+			$scope.notif.email = false;
+			$scope.load = true;
+			$scope.text = false;
+		}else{
+			$http.post(base_url+'change_email',$scope.datas).then(function(data) {
+				$scope.kurir = data.data.kurir;
+				$scope.load = true;
+				$scope.text = false;
+				SweetAlert.swal({
+				  title: 'Kode OTP sudah Terkirim',
+				  text: 'Silahkan Cek Email Untuk Mendapatkan Kode OTP',
+				  timer: 3000,
+				  buttons: false,
+				  type: "success",
+				  showCancelButton: false,
+				  showConfirmButton: false,
+				});
+				$timeout(function() {
+				  $location.path('/otp');
+				},3000);
+			}, function(x) {
+				$scope.load = true;
+				$scope.text = false;
+				SweetAlert.swal({
+					  title: 'Email Tidak Terdaftar',
+					  text: 'Email Yang Dimasukan Tidak Terdaftar',
+					  timer: 3000,
+					  buttons: false,
+					  type: "error",
+					  showCancelButton: false,
+					  showConfirmButton: false,
+					});
+			});
+		}
+	}
+}]);
+
+myApp.controller('OTPController', ['$scope', '$http','SweetAlert','$location', '$routeParams','$uibModal','$timeout', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal, $timeout){
+	$timeout(function() {
+		$scope.loading = false;
+	},2000);
+
+	$scope.token = [];
+	$scope.notif = {};
+	$scope.notif.otp = true;
+	$scope.load = true;
+	$scope.text = false;
+	$scope.submit_token = false;
+
+    var count = 60;
+    var counter = setInterval(timer, 1000);
+    function timer() {
+        count = count - 1;
+        if (count <= 0) {
+            clearInterval(counter);
+            document.getElementById("resendOTP").innerHTML = '<a class="resendOTP" href="#!rubah/password">Kirim Ulang OTP</a>';
+        } else {
+            document.getElementById("resendOTP").innerHTML = 'tunggu ' + count + ' detik';
+        }
+    }
+
+    $scope.cek_otp = function () {
+    	$http.post(base_url+'cek_otp').then(function(data) {
+			$scope.submit_token = false;
+		}, function(x) {
+			$location.path('/rubah/password');
+		});
+    }
+
+     $scope.cek_otp();
+
+    $scope.verifi_token = function () {
+    	$scope.load = false;
+		$scope.text = true;
+    	if ($scope.token.length !== 4) {
+    		$scope.notif.otp = false;
+    	}else{
+    		$http.post(base_url+'send_otp/'+$scope.user.id_user,$scope.token).then(function(data) {
+    			$scope.kurir = data.data.kurir;
+    			$scope.load = true;
+    			$scope.text = false;
+    			SweetAlert.swal({
+    				title: 'Kode OTP Berhasil',
+    				text: 'Anda akan dialihkan untuk merubah password',
+    				timer: 3000,
+    				buttons: false,
+    				type: "success",
+    				showCancelButton: false,
+    				showConfirmButton: false,
+    			});
+    			$timeout(function() {
+    				$location.path('/password_rubah');
+    			},3000);
+    		}, function(x) {
+    			$scope.load = true;
+    			$scope.text = false;
+    			SweetAlert.swal({
+    				title: 'Kode OTP Salah',
+    				text: 'Kode OTP anda masukan salah',
+    				timer: 3000,
+    				buttons: false,
+    				type: "error",
+    				showCancelButton: false,
+    				showConfirmButton: false,
+    			});
+    		});
+    	}
+    }
+}]);
+
+myApp.controller('RubahPasswordController', ['$scope', '$http','SweetAlert','$location', '$routeParams','$uibModal','$timeout', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal, $timeout){
+	$timeout(function() {
+		$scope.loading = false;
+	},2000);
+
+	$scope.load_sign();
+	$scope.url = "Rubah Password";
+	$scope.submit_token = false;
+	$scope.datass = {};
+	$scope.load = true;
+	$scope.text = false;
+
+	$scope.cek_status = function () {
+    	$http.post(base_url+'cek_status').then(function(data) {
+			
+		}, function(x) {
+			$location.path('/rubah/password');
+		});
+    }
+    $scope.cek_status();
+	$scope.save_rubah = function () {
+    	if ($scope.datass.new_password !== $scope.datass.repeat_password) {
+    		SweetAlert.swal({
+    			title: 'Password Tidak Sama',
+    			text: 'Password yang anda masukan tidak sama',
+    			timer: 3000,
+    			buttons: false,
+    			type: "error",
+    			showCancelButton: false,
+    			showConfirmButton: false,
+    		});
+    	}else{
+    		$http.post(base_url+'send_rubah_password/'+$scope.user.id_user,$scope.datass).then(function(data) {
+    			$scope.kurir = data.data.kurir;
+    			$scope.load = true;
+    			$scope.text = false;
+    			SweetAlert.swal({
+    				title: 'Update Password Berhasil',
+    				text: 'Login Kembali Dengan Password Baru',
+    				timer: 3000,
+    				buttons: false,
+    				type: "success",
+    				showCancelButton: false,
+    				showConfirmButton: false,
+    			});
+    			$timeout(function() {
+    				$scope.logout();
+    			},3000);
+    		}, function(x) {
+    			$scope.load = true;
+    			$scope.text = false;
+    			SweetAlert.swal({
+    				title: 'Update Password Gagal',
+    				text: 'Update Password terjadi kesalahan',
+    				timer: 3000,
+    				buttons: false,
+    				type: "error",
+    				showCancelButton: false,
+    				showConfirmButton: false,
+    			});
+    		});
+    	}
+    }
+}]);
+
+

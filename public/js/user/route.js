@@ -84,6 +84,17 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
         templateUrl:'../views/search.html',
     });
     
+    $routeProvider.when('/rubah/password',{
+        templateUrl:'../views/change.html',
+    });
+
+    $routeProvider.when('/otp',{
+        templateUrl:'../views/otp.html',
+    });
+
+    $routeProvider.when('/password_rubah',{
+        templateUrl:'../views/password_rubah.html',
+    });
     
     
     // $routeProvider.when('/dashboard',{

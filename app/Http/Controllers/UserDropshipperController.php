@@ -10,6 +10,7 @@ use App\Models\tb_transaksi;
 use Validator;
 use Response;
 use Cookie;
+use Mail;
 use Illuminate\Support\Facades\Hash;
 
 class UserDropshipperController extends Controller
@@ -47,7 +48,7 @@ class UserDropshipperController extends Controller
     public function session_user()
     {
     	$datass = Cookie::get('id_user');
-        $get_user = tb_user::select('id_user','nama','foto_user','username')->where('id_user', $datass)->first();
+        $get_user = tb_user::select('id_user','nama','foto_user','username','telephone','id_provinsi','id_kabupaten','id_kecamatan','address')->where('id_user', $datass)->first();
         
     	if ($datass) {
             $get_user['count_track'] = tb_transaksi::where('id_user', $datass)->whereNotNull('status_transaksi')
@@ -152,10 +153,77 @@ class UserDropshipperController extends Controller
         return Response::json(200);
     }
 
-    public function count_track($value='')
+    public function change_email(Request $request)
     {
-       $datass = Cookie::get('id_user');
-       var_dump ($datass);
-       die();
+        $post = $request->input();
+        $data_user = tb_user::where('email', $post['email'])->first();
+        if ($data_user == null) {
+            return response()->json(['status' => 'error'], 500);   
+        }else{
+            $otp = rand(1000, 9999);
+            $request->session()->push('otp', $otp);
+            $details = [
+                'otp' => $otp, 
+                'email' => $data_user->email,
+                'nama' => $data_user->nama,
+            ];
+            \Mail::to($data_user->email)->send(new \App\Mail\MailSendOTP($details));
+            return Response::json(200);
+        }
+    }
+
+    public function cek_otp(Request $request)
+    {
+        if ($request->session()->has('otp')) {
+            return Response::json(200);
+        }else{
+            return response()->json(['status' => 'error'], 500); 
+        }
+    }
+    public function cek_status(Request $request)
+    {
+        if ($request->session()->has('register')) {
+            return Response::json(200);
+        }else{
+            return response()->json(['status' => 'error'], 500); 
+        }
+    }
+    public function send_otp($id, Request $request)
+    {
+        $post = $request->input();
+        $marge = implode("",$post);
+        $token = $request->session()->get('otp');
+        $status = false;
+        foreach ($token as $datass) {
+            if ($datass == $marge) {
+                $status = true;
+                $request->session()->forget('otp');
+                $request->session()->push('register', 'success');
+            }
+        }
+        if ($status) {
+            return Response::json(200);
+        }else{
+          return response()->json(['status' => 'error'], 500);  
+        }   
+    }
+
+    public function send_rubah_password($id, Request $request)
+    {
+        $post = $request->input();
+        $data_user = tb_user::where('id_user', $id)->first();
+        if ($data_user) {
+            if (Hash::check($post['old_password'], $data_user->password)) {
+                tb_user::where('id_user', $id)->update([
+                    'password' => bcrypt($post['new_password'])
+                ]);
+                $request->session()->forget('register');
+            } else {
+                $response = ["message" => "Update Gagal"];
+                return response($response, 422);
+            }
+        }else{
+            return response()->json(['status' => 'error'], 500);
+        }
     }
 }

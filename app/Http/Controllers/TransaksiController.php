@@ -185,7 +185,7 @@ class TransaksiController extends Controller
             'data_transaksi' => $data_transaksi,
             'data_transaksi_detail' => $data_transaksi_detail,
         ];
-        //\Mail::to($data_transaksi['email'])->send(new \App\Mail\MailPembayaran($details));
+        \Mail::to($data_transaksi['email'])->send(new \App\Mail\MailPembayaran($details));
         \Cookie::queue(\Cookie::forget('cart'));
         $encrypted = Crypt::encryptString($id);
         return response()->json($encrypted,200);

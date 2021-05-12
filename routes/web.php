@@ -91,6 +91,13 @@ Route::post('upload/slider','admin\AdminController@upload');
 // upload transaksi 
 Route::post('upload/transaksi','upload\UploadImage@transaksi');
 
+// OTP
+Route::post('change_email','UserDropshipperController@change_email'); 
+Route::post('cek_otp','UserDropshipperController@cek_otp');
+Route::post('cek_status','UserDropshipperController@cek_status');
+Route::post('send_otp/{id}','UserDropshipperController@send_otp');
+Route::post('send_rubah_password/{id}','UserDropshipperController@send_rubah_password');
+ 
 
 
 

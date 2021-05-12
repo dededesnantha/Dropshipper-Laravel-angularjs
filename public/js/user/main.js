@@ -1,6 +1,6 @@
 'use strict';
-myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','$window','$route',
-    function($scope,$http,$location,$rootScope,$window, $route) {
+myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','$window','$route','SweetAlert',
+    function($scope,$http,$location,$rootScope,$window, $route, SweetAlert) {
       $rootScope.loading = true;
 
       //check token
@@ -8,9 +8,23 @@ myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','
           $http.get(base_url+'api/session_user').then(function(response){
             if (response.status == 200) {
                 $rootScope.user = response.data;
-                $scope.image_user = base_url+'image/'+$rootScope.user.foto_user
-                if ($location.path() == '/login') {
-                    $location.path('/home');
+                if ($rootScope.user.foto_user == null || $scope.user_datass.foto_user == '') {
+                  $scope.image_user = base_url+'css/noimg.png';
+                }else{
+                  $scope.image_user = base_url+'image/'+$rootScope.user.foto_user
+                }
+                if (!$rootScope.user.address || !$rootScope.user.id_kabupaten || !$rootScope.user.id_kecamatan || !$rootScope.user.id_provinsi || !$rootScope.user.telephone) {
+                    $location.path('/edit-profile');
+                    SweetAlert.swal("Wajib Mengisi Data Pribadi Anda", "error")
+                    SweetAlert.swal({
+                      title: 'Wajib Mengisi Data Pribadi',
+                      text: 'Data Pribadi Anda Belom Lengkap',
+                      type: "error",
+                    });
+                }else{
+                  if ($location.path() == '/login') {
+                      $location.path('/home');
+                  }
                 }
             }else{
                 $location.path('/login');
@@ -36,7 +50,7 @@ myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','
        
        $scope.route = $location.path();
 
-       $scope.logout = function(){     
+       $rootScope.logout = function(){     
          $http.post(base_url+'api/logout', $scope.user)
           .then(function(response) {
         $scope.load_sign();
