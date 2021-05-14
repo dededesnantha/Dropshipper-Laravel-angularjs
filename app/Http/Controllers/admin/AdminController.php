@@ -27,12 +27,14 @@ use App\Models\tb_kabupaten;
 use App\Models\tb_kecamatan;
 use App\Models\tb_kurir;
 use App\Models\tb_ongkir;
+use App\Models\tb_transaksi;
+use App\Models\tb_order;
 
-
-
+use Mail;
 use DB;
 use File;
 use Storage;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -768,4 +770,410 @@ class AdminController extends Controller
     {
        return tb_ongkir::where('id_ongkir',$id)->delete();
     }
+
+    // transaksi
+     public function date_convert($date)
+    {        
+        $date = strtotime($date);
+        $now_date = time();
+        $range = (int) round(($now_date - $date) / (60 * 60 * 24));
+
+        $month = ['Januari','February','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];         
+        $sort_month = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+        $convert = array(            
+            'long_month' => $month[(int) date("m",$date) - 1],
+            'sort_month' => $sort_month[(int) date("m",$date) - 1],
+            'day' => date("l",$date),
+            'sort_day' => date("D",$date),            
+            'second' => date("s",$date),
+            'month' => date("m",$date),
+            'menit' => date("M",$date),            
+            'year' => date("Y",$date),
+            'sort_year' => date("y",$date),
+            'date' => date("d",$date),
+            'minute' => date("i",$date),
+            'hour' => date("H",$date),
+            'distance' => $range
+        );
+
+        switch (date("l",$date)) {
+            case 'Sunday':
+                $convert['day'] = "Minggu";
+                break;
+            case 'Monday':
+                $convert['day'] = "Senin";
+                break;
+            case 'Tuesday':
+                $convert['day'] = "Selasa";
+                break;
+            case 'Wednesday':
+                $convert['day'] = "Rabu";
+                break;
+            case 'Thursday':
+                $convert['day'] = "Kamis";
+                break;
+            case 'Friday':
+                $convert['day'] = "Jumat";
+                break;
+            case 'Saturday':
+                $convert['day'] = "Sabtu";
+                break;
+            
+            default:
+                
+                break;
+        }
+        return $convert;
+    }
+    
+    // transaksi
+    public function list_pembayaran(Request $request)
+    {
+        $post = $request->input();
+        if ($post['search'] == NULL) {
+            $data = DB::table('tb_transaksi')
+                    ->where('tb_transaksi.status_transaksi','=','pembayaran')
+                    ->whereNotNull('tb_transaksi.status_transaksi')
+                    ->whereNotNull('tb_transaksi.metode_transaksi')
+                    ->whereNotNull('tb_transaksi.tgl_transkasi')
+                    ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
+                    ->select('tb_transaksi.id_transaksi',
+                        'tb_transaksi.status_transaksi',
+                        'tb_transaksi.id_transaksi',
+                        'tb_transaksi.tgl_transkasi',
+                        'tb_transaksi.total_transkasi',
+                        'tb_transaksi.metode_transaksi',
+                        'tb_transaksi.code_transaksi',
+                        'tb_transaksi.tgl_expired',
+                        'tb_transaksi.image_transfer',
+                        'tb_transaksi.tgl_konfirm',
+                        'tb_user.nama',
+                        'tb_user.email',
+                        'tb_user.address',
+                        'tb_user.telephone')
+                    ->orderBy('tb_transaksi.id_transaksi',$post['order'])
+                    ->paginate($post['much']);
+          
+        }else if ($post['field_search'] && $post['search'] !==NULL) {
+            $data = DB::table('tb_transaksi')
+                    ->where('tb_transaksi.status_transaksi','=','pembayaran')
+                    ->whereNotNull('tb_transaksi.status_transaksi')
+                    ->whereNotNull('tb_transaksi.metode_transaksi')
+                    ->whereNotNull('tb_transaksi.tgl_transkasi')
+                    ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
+                    ->select('tb_transaksi.id_transaksi',
+                        'tb_transaksi.status_transaksi',
+                        'tb_transaksi.id_transaksi',
+                        'tb_transaksi.tgl_transkasi',
+                        'tb_transaksi.total_transkasi',
+                        'tb_transaksi.metode_transaksi',
+                        'tb_transaksi.code_transaksi',
+                        'tb_transaksi.tgl_expired',
+                        'tb_transaksi.image_transfer',
+                        'tb_transaksi.tgl_konfirm',
+                        'tb_user.nama',
+                        'tb_user.email',
+                        'tb_user.address',
+                        'tb_user.telephone')
+                        ->orderBy('tb_transaksi.id_transaksi',$post['order'])
+                        ->where($post['field_search'],'like',"%".$post['search']."%")
+                        ->paginate($post['much']);
+        }
+        return $data;
+    }
+
+    public function list_proses(Request $request)
+    {
+        $post = $request->input();
+        if ($post['search'] == NULL) {
+            $data = DB::table('tb_transaksi')
+                    ->where('tb_transaksi.status_transaksi','=','Order')
+                    ->whereNotNull('tb_transaksi.status_transaksi')
+                    ->whereNotNull('tb_transaksi.metode_transaksi')
+                    ->whereNotNull('tb_transaksi.tgl_transkasi')
+                    ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
+                    ->select('tb_transaksi.id_transaksi',
+                        'tb_transaksi.status_transaksi',
+                        'tb_transaksi.id_transaksi',
+                        'tb_transaksi.tgl_transkasi',
+                        'tb_transaksi.total_transkasi',
+                        'tb_transaksi.metode_transaksi',
+                        'tb_transaksi.code_transaksi',
+                        'tb_transaksi.tgl_expired',
+                        'tb_transaksi.image_transfer',
+                        'tb_transaksi.tgl_konfirm',
+                        'tb_user.nama',
+                        'tb_user.email',
+                        'tb_user.address',
+                        'tb_user.telephone')
+                    ->orderBy('tb_transaksi.id_transaksi',$post['order'])
+                    ->paginate($post['much']);
+          
+        }else if ($post['field_search'] && $post['search'] !==NULL) {
+            $data = DB::table('tb_transaksi')
+                    ->where('tb_transaksi.status_transaksi','=','Order')
+                    ->whereNotNull('tb_transaksi.status_transaksi')
+                    ->whereNotNull('tb_transaksi.metode_transaksi')
+                    ->whereNotNull('tb_transaksi.tgl_transkasi')
+                    ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
+                    ->select('tb_transaksi.id_transaksi',
+                        'tb_transaksi.status_transaksi',
+                        'tb_transaksi.id_transaksi',
+                        'tb_transaksi.tgl_transkasi',
+                        'tb_transaksi.total_transkasi',
+                        'tb_transaksi.metode_transaksi',
+                        'tb_transaksi.code_transaksi',
+                        'tb_transaksi.tgl_expired',
+                        'tb_transaksi.image_transfer',
+                        'tb_transaksi.tgl_konfirm',
+                        'tb_user.nama',
+                        'tb_user.email',
+                        'tb_user.address',
+                        'tb_user.telephone')
+                        ->orderBy('tb_transaksi.id_transaksi',$post['order'])
+                        ->where($post['field_search'],'like',"%".$post['search']."%")
+                        ->paginate($post['much']);
+        }
+        return $data;
+    }
+
+    public function get_transaksi($id)
+    {
+         $data['data_transaksi'] = tb_transaksi::where('id_transaksi', $id)
+                            ->join('tb_ongkir', 'tb_transaksi.id_ongkir','=','tb_ongkir.id_ongkir')
+                            ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
+                            ->join('tb_provinsi', 'tb_user.id_provinsi','=','tb_provinsi.id_provinsi')
+                            ->join('tb_kabupaten', 'tb_user.id_kabupaten','=','tb_kabupaten.id_kabupaten')
+                            ->join('tb_kecamatan', 'tb_user.id_kecamatan','=','tb_kecamatan.id_kecamatan')
+                            ->select('tb_transaksi.id_transaksi',
+                                'tb_transaksi.id_transaksi',
+                                'tb_transaksi.status_transaksi',
+                                'tb_transaksi.tgl_transkasi',
+                                'tb_transaksi.total_transkasi',
+                                'tb_transaksi.metode_transaksi',
+                                'tb_transaksi.code_transaksi',
+                                'tb_transaksi.tgl_expired',
+                                'tb_transaksi.image_transfer',
+                                'tb_ongkir.harga',
+                                'tb_user.nama',
+                                'tb_user.email',
+                                'tb_user.address',
+                                'tb_user.telephone',
+                                'tb_provinsi.provinsi',
+                                'tb_kabupaten.kabupaten',
+                                'tb_kecamatan.kecamatan')->first();
+        $temp_date = $this->date_convert($data['data_transaksi']->tgl_expired);
+        $data['data_transaksi']->tgl_expired =  $temp_date['date'].' '.$temp_date['sort_month'].' '.$temp_date['year'];
+        $temp_date = $this->date_convert($data['data_transaksi']->tgl_transkasi);
+        $data['data_transaksi']->tgl_transkasi =  $temp_date['date'].' '.$temp_date['sort_month'].' '.$temp_date['year'];
+        $data['data_transaksi_detail'] = tb_order::where('id_transaksi', $id)
+                        ->join('tb_produk', 'tb_order.id_produk','=','tb_produk.id')
+                        ->leftJoin('tb_color','tb_order.id_color','=','tb_color.id')
+                        ->select('tb_produk.nama_produk',
+                            'tb_produk.harga',
+                            'tb_produk.harga_promo',
+                            'tb_produk.jenis_label',
+                            'tb_produk.text_label',
+                            'tb_produk.gambar',
+                            'tb_produk.slug',
+                            'tb_produk.stok',
+                            'tb_color.color',
+                            'tb_color.text',
+                            'tb_order.kuantitas',
+                            'tb_order.size')->get();
+        $total_produk = 0;
+        $total_kuantitas = 0;
+        foreach ($data['data_transaksi_detail'] as $key => $value) {
+                if ($value->harga_promo == null) {
+                    $data['data_transaksi']->total_produk += $value->kuantitas * $value->harga;
+                    $data['data_transaksi_detail'][$key]->totals_produks = $value->kuantitas * $value->harga;
+                }else{
+                    $data['data_transaksi']->total_produk += $value->kuantitas * $value->harga_promo;
+                    $data['data_transaksi_detail'][$key]->totals_produks = $value->kuantitas * $value->harga_promo;
+                }
+                $total_kuantitas += $value->kuantitas;
+            }
+        return $data;
+    }
+
+    public function update_transaksi($id, Request $request)
+    {
+        $post = $request->input();
+        $transaksi = tb_transaksi::where('id_transaksi', $id)
+                    ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
+                    ->select('tb_transaksi.status_transaksi',
+                        'tb_user.nama',
+                        'tb_user.email',
+                        'tb_user.address',
+                        'tb_user.telephone',
+                        'tb_transaksi.status_transaksi',
+                        'tb_transaksi.total_transkasi',
+                        'tb_transaksi.code_transaksi',
+                        'tb_transaksi.tgl_konfirm')->first();
+        if ($transaksi->status_transaksi == 'Order') {
+            if ($post['status_transaksi'] == 'Dikirim') {
+                tb_transaksi::where('id_transaksi', $id)->update([
+                    'status_transaksi' => $post['status_transaksi'],
+                ]);
+                
+                $date = $this->date_convert($transaksi->tgl_konfirm);
+                $tgl_konfirm =  $date['date'].' '.$date['sort_month'].' '.$date['year'];
+                // send email
+                $details = [
+                    'total_transkasi' => $transaksi->total_transkasi,
+                    'tgl_konfirm' => $tgl_konfirm,
+                    'code_transaksi' => $transaksi->code_transaksi,
+                    'status_transaksi' => $post['status_transaksi']
+                ];
+                \Mail::to($transaksi->email)->send(new \App\Mail\OrderEmail($details));
+
+                return response()->json(['status'=>'success'],200);
+            }else{
+                return response()->json(['status'=>'error'],500);
+            }
+        }elseif ($transaksi->status_transaksi == 'Dikirim') {
+            if ($post['status_transaksi'] == 'Diterima') {
+                tb_transaksi::where('id_transaksi', $id)->update([
+                    'status_transaksi' => $post['status_transaksi'],
+                    'tgl_expired' => Carbon::now()->addDays(2)->toDateTimeString()
+                ]);
+                $date = $this->date_convert($transaksi->tgl_konfirm);
+                $tgl_konfirm =  $date['date'].' '.$date['sort_month'].' '.$date['year'];
+                // send email
+                $details = [
+                    'total_transkasi' => $transaksi->total_transkasi,
+                    'tgl_konfirm' => $tgl_konfirm,
+                    'code_transaksi' => $transaksi->code_transaksi,
+                    'status_transaksi' => $post['status_transaksi']
+                ];
+                \Mail::to($transaksi->email)->send(new \App\Mail\OrderEmail($details));
+
+                return response()->json(['status'=>'success'],200);
+            }else{
+                return response()->json(['status'=>'error'],500);
+            }
+        }else{
+             return response()->json(['status'=>'error'],500);
+        }   
+    }
+    public function list_dikirim(Request $request)
+    {
+        $post = $request->input();
+        if ($post['search'] == NULL) {
+            $data = DB::table('tb_transaksi')
+                    ->where('tb_transaksi.status_transaksi','=','Dikirim')
+                    ->whereNotNull('tb_transaksi.status_transaksi')
+                    ->whereNotNull('tb_transaksi.metode_transaksi')
+                    ->whereNotNull('tb_transaksi.tgl_transkasi')
+                    ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
+                    ->select('tb_transaksi.id_transaksi',
+                        'tb_transaksi.status_transaksi',
+                        'tb_transaksi.id_transaksi',
+                        'tb_transaksi.tgl_transkasi',
+                        'tb_transaksi.total_transkasi',
+                        'tb_transaksi.metode_transaksi',
+                        'tb_transaksi.code_transaksi',
+                        'tb_transaksi.tgl_expired',
+                        'tb_transaksi.image_transfer',
+                        'tb_transaksi.tgl_konfirm',
+                        'tb_user.nama',
+                        'tb_user.email',
+                        'tb_user.address',
+                        'tb_user.telephone')
+                    ->orderBy('tb_transaksi.id_transaksi',$post['order'])
+                    ->paginate($post['much']);
+          
+        }else if ($post['field_search'] && $post['search'] !==NULL) {
+            $data = DB::table('tb_transaksi')
+                    ->where('tb_transaksi.status_transaksi','=','Dikirim')
+                    ->whereNotNull('tb_transaksi.status_transaksi')
+                    ->whereNotNull('tb_transaksi.metode_transaksi')
+                    ->whereNotNull('tb_transaksi.tgl_transkasi')
+                    ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
+                    ->select('tb_transaksi.id_transaksi',
+                        'tb_transaksi.status_transaksi',
+                        'tb_transaksi.id_transaksi',
+                        'tb_transaksi.tgl_transkasi',
+                        'tb_transaksi.total_transkasi',
+                        'tb_transaksi.metode_transaksi',
+                        'tb_transaksi.code_transaksi',
+                        'tb_transaksi.tgl_expired',
+                        'tb_transaksi.image_transfer',
+                        'tb_transaksi.tgl_konfirm',
+                        'tb_user.nama',
+                        'tb_user.email',
+                        'tb_user.address',
+                        'tb_user.telephone')
+                        ->orderBy('tb_transaksi.id_transaksi',$post['order'])
+                        ->where($post['field_search'],'like',"%".$post['search']."%")
+                        ->paginate($post['much']);
+        }
+        return $data;
+    }
+
+    public function list_diterima(Request $request)
+    {
+        $post = $request->input();
+        if ($post['search'] == NULL) {
+            $data = DB::table('tb_transaksi')
+                    ->where('tb_transaksi.status_transaksi','=','Diterima')
+                    ->whereNotNull('tb_transaksi.status_transaksi')
+                    ->whereNotNull('tb_transaksi.metode_transaksi')
+                    ->whereNotNull('tb_transaksi.tgl_transkasi')
+                    ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
+                    ->select('tb_transaksi.id_transaksi',
+                        'tb_transaksi.status_transaksi',
+                        'tb_transaksi.id_transaksi',
+                        'tb_transaksi.tgl_transkasi',
+                        'tb_transaksi.total_transkasi',
+                        'tb_transaksi.metode_transaksi',
+                        'tb_transaksi.code_transaksi',
+                        'tb_transaksi.tgl_expired',
+                        'tb_transaksi.image_transfer',
+                        'tb_transaksi.tgl_konfirm',
+                        'tb_user.nama',
+                        'tb_user.email',
+                        'tb_user.address',
+                        'tb_user.telephone')
+                    ->orderBy('tb_transaksi.id_transaksi',$post['order'])
+                    ->paginate($post['much']);
+          
+        }else if ($post['field_search'] && $post['search'] !==NULL) {
+            $data = DB::table('tb_transaksi')
+                    ->where('tb_transaksi.status_transaksi','=','Diterima')
+                    ->whereNotNull('tb_transaksi.status_transaksi')
+                    ->whereNotNull('tb_transaksi.metode_transaksi')
+                    ->whereNotNull('tb_transaksi.tgl_transkasi')
+                    ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
+                    ->select('tb_transaksi.id_transaksi',
+                        'tb_transaksi.status_transaksi',
+                        'tb_transaksi.id_transaksi',
+                        'tb_transaksi.tgl_transkasi',
+                        'tb_transaksi.total_transkasi',
+                        'tb_transaksi.metode_transaksi',
+                        'tb_transaksi.code_transaksi',
+                        'tb_transaksi.tgl_expired',
+                        'tb_transaksi.image_transfer',
+                        'tb_transaksi.tgl_konfirm',
+                        'tb_user.nama',
+                        'tb_user.email',
+                        'tb_user.address',
+                        'tb_user.telephone')
+                        ->orderBy('tb_transaksi.id_transaksi',$post['order'])
+                        ->where($post['field_search'],'like',"%".$post['search']."%")
+                        ->paginate($post['much']);
+        }
+        return $data;
+    }
+
+    public function count_transaksi()
+    {
+        $data['pembayaran'] = tb_transaksi::where('tb_transaksi.status_transaksi','=','pembayaran')->count();
+        $data['order'] = tb_transaksi::where('tb_transaksi.status_transaksi','=','Order')->count();
+        $data['dikirim'] = tb_transaksi::where('tb_transaksi.status_transaksi','=','Dikirim')->count();
+        $data['diterima'] = tb_transaksi::where('tb_transaksi.status_transaksi','=','Diterima')->count();
+
+        return $data;
+    }
+    
 }

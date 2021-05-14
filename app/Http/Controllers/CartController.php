@@ -105,7 +105,7 @@ class CartController extends Controller
         {
             foreach($cart_data as $keys => $values)
             { 
-                if($cart_data[$keys]["id_produk"] == $post['id'] && $cart_data[$keys]["id_color"] == $post['color'] && $cart_data[$keys]["size"] == $post['size'])
+                if($cart_data[$keys]["id_produk"] == $post['id'])
                 {
                     unset($cart_data[$keys]);
                 }
@@ -124,9 +124,9 @@ class CartController extends Controller
         foreach ($post as $key => $datss) {
                 $item_array = array(
                     'id_produk' => $datss['id'],
-                    'id_color' => $datss['color']['id'],
+                    'id_color' => $datss['color']['id'] ?? NULL,
                     'kuantitas' => $datss['qty'],
-                    'size' => $datss['size']
+                    'size' => $datss['size'] ?? NULL
                 );
                 $cart_data[] = $item_array;
         }

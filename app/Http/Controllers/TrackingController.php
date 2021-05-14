@@ -69,12 +69,17 @@ class TrackingController extends Controller
 
     public function get($id)
     {
-		$transaksi = tb_transaksi::where('id_user', $id)->whereNotNull('status_transaksi')
+        $transaksi = tb_transaksi::where('id_user', $id)->whereNotNull('status_transaksi')
 					->whereNotNull('metode_transaksi')
 					->whereNotNull('tgl_transkasi')
-					->where('tgl_expired','>=',date('Y-m-d'))
 					->orderBy('id_transaksi','DESC')
-					->get();
+                    ->where('tgl_expired', '>=', date('Y-m-d'));
+                    // ->where(function ($transaksi) {
+                    //         $transaksi->where('tgl_expired', '>=', date('Y-m-d'))
+                    //         ->WhereNull('tgl_expired');
+                    //     }
+                    // );
+        $transaksi = $transaksi->get();
 		foreach ($transaksi as $key => $rows) {
 	    	$temp_date = $this->date_convert($rows->tgl_konfirm);
 	        $transaksi[$key]['tgl_konfirm'] =  $temp_date['date'].' '.$temp_date['sort_month'].' '.$temp_date['year'];
@@ -110,11 +115,16 @@ class TrackingController extends Controller
 
     public function count_track($id)
     {
-    	$transaksi = tb_transaksi::where('id_user', $id)->whereNotNull('status_transaksi')
-					->whereNotNull('metode_transaksi')
-					->whereNotNull('tgl_transkasi')
-					->where('tgl_expired','>=',date('Y-m-d'))
-					->count();
+        $transaksi = tb_transaksi::where('id_user', $id)->whereNotNull('status_transaksi')
+                    ->whereNotNull('metode_transaksi')
+                    ->whereNotNull('tgl_transkasi')
+                    ->orderBy('id_transaksi','DESC')
+                    ->where(function ($transaksi) {
+                            $transaksi->where('tgl_expired', '>=', date('Y-m-d'))
+                            ->orWhereNull('tgl_expired');
+                        }
+                    );
+        $transaksi = $transaksi->count();
 		return $transaksi;
     }
 }

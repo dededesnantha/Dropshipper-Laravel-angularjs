@@ -33,6 +33,12 @@ angular.module('app')
                             ]
                         }
                     })
+                    
+                    .state('app.crm-dashboard.pembayaran', {
+                        url: '/{fold}',
+                        templateUrl: 'partials/transaksi/transaksi-list.html'
+                    })
+
                     .state('app.mail', {
                         abstract: true,
                         url: '/mail',

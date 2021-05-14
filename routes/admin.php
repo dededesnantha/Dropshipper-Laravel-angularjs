@@ -12,7 +12,6 @@ Route::group(['middleware' => 'auth:api'], function(){
 	Route::put('kategori_update/{id}','admin\AdminController@kategori_update');
 	Route::delete('kategori/{id}','admin\AdminController@kategori_delete');
 
-
 	//produk
 	Route::get('get_cion','admin\AdminController@get_cion');
 	Route::get('get_kategori','admin\AdminController@get_kategori_list');
@@ -81,8 +80,6 @@ Route::group(['middleware' => 'auth:api'], function(){
 	Route::get('rubah_user/{id}','admin\UserController@rubah_user');
 	Route::post('update_user/{id}','admin\UserController@update_user');
 	Route::delete('user_delete/{id}','admin\UserController@delete_user');
-	
-	
 
 	// slider
 	Route::post('slider_add','admin\AdminController@slider_add');
@@ -99,6 +96,16 @@ Route::group(['middleware' => 'auth:api'], function(){
 	Route::post('profile_update/{id}','admin\AdminController@profile_update');
 	Route::get('profile_get_text/{id}','admin\AdminController@profile_get_text');
 	Route::post('profile_update_text/{id}','admin\AdminController@profile_update_text');
+	
+	// transaksi
+	
+	Route::get('count_transaksi','admin\AdminController@count_transaksi');
+	Route::post('pembayaran','admin\AdminController@list_pembayaran');
+	Route::post('order','admin\AdminController@list_proses');
+	Route::post('dikirim','admin\AdminController@list_dikirim');
+	Route::post('diterima','admin\AdminController@list_diterima');
+	Route::get('get_transaksi/{id}','admin\AdminController@get_transaksi');
+	Route::post('update_transaksi/{id}','admin\AdminController@update_transaksi');
 	
 });
 

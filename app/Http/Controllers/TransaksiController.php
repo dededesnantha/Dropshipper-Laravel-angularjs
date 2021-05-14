@@ -102,9 +102,9 @@ class TransaksiController extends Controller
         foreach ($cart_data as $key => $datasss) {
             tb_order::create([
                'id_produk' => $datasss['id_produk'],
-               'id_color' => $datasss['id_color'],
+               'id_color' => $datasss['id_color'] ?? NULL,
                'kuantitas' => $datasss['kuantitas'],
-               'size' => $datasss['size'],
+               'size' => $datasss['size'] ?? NULL,
                'id_transaksi' => $id
            ]);
         }
@@ -212,7 +212,6 @@ class TransaksiController extends Controller
     {
         $id = Crypt::decryptString($id);
         $data_transaksi = tb_transaksi::where('id_transaksi', $id)
-                            ->where('tb_transaksi.tgl_expired','>=',date('Y-m-d'))
                             ->join('tb_ongkir', 'tb_transaksi.id_ongkir','=','tb_ongkir.id_ongkir')
                             ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
                             ->join('tb_provinsi', 'tb_user.id_provinsi','=','tb_provinsi.id_provinsi')
@@ -234,8 +233,13 @@ class TransaksiController extends Controller
                                 'tb_user.telephone',
                                 'tb_provinsi.provinsi',
                                 'tb_kabupaten.kabupaten',
-                                'tb_kecamatan.kecamatan')->first();
-        
+                                'tb_kecamatan.kecamatan')
+                            ->where(function ($transaksi) {
+                                    $transaksi->where('tb_transaksi.tgl_expired', '>=', date('Y-m-d'))
+                                    ->orWhereNull('tb_transaksi.tgl_expired');
+                                }
+                            );
+        $data_transaksi = $data_transaksi->first();
         if ($data_transaksi !== null) {
             $temp_date = $this->date_convert($data_transaksi->tgl_expired);
             $data_transaksi->tgl_expired =  $temp_date['date'].' '.$temp_date['sort_month'].' '.$temp_date['year'];
@@ -288,7 +292,8 @@ class TransaksiController extends Controller
         'tgl_konfirm' => $date_konfrim,
         'image_transfer' => $post['image_transfer']['data'],
         'bank_transfer' => $post['bank_transfer'],
-        'status_transaksi' => 'Order'
+        'status_transaksi' => 'Order',
+        'tgl_expired' => NULL,
        ]);
        $datas = tb_transaksi::where('id_transaksi',$id)
                 ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
@@ -305,4 +310,10 @@ class TransaksiController extends Controller
         \Mail::to($datas->email)->send(new \App\Mail\OrderEmail($details));
        return response()->json(200);
     }   
+
+    public function redirct_email($id, Request $request)
+    {
+        $request->session()->push('redirect_email', $id);
+        return redirect('/');
+    }
 }

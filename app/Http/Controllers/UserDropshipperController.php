@@ -54,8 +54,13 @@ class UserDropshipperController extends Controller
             $get_user['count_track'] = tb_transaksi::where('id_user', $datass)->whereNotNull('status_transaksi')
                     ->whereNotNull('metode_transaksi')
                     ->whereNotNull('tgl_transkasi')
-                    ->where('tgl_expired','>=',date('Y-m-d'))
-                    ->count();
+                    ->orderBy('id_transaksi','DESC')
+                    ->where(function ($transaksi) {
+                            $transaksi->where('tgl_expired', '>=', date('Y-m-d'))
+                            ->orWhereNull('tgl_expired');
+                        }
+                    );
+        $get_user['count_track'] = $get_user['count_track']->count();
     		return $get_user;
     	}else{
     		return response()->json($datass, 500);

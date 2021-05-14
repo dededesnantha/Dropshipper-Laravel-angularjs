@@ -211,4 +211,15 @@ class HomeController extends Controller
                     ->get();
         return Response::json($data,200);
     }
+
+    public function redirct_email(Request $request)
+    {
+       if ($request->session()->has('redirect_email')) {
+            $id = $request->session()->get('redirect_email');
+            $request->session()->forget('redirect_email');
+            return Response::json(['id' => $id[0] ], 200);
+        }else{
+            return response()->json(['status' => 'home'], 500); 
+        }
+    }
 }

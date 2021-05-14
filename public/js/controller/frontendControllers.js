@@ -29,7 +29,13 @@ myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','
 	function($scope, $http, SweetAlert, $location, $route, $uibModal){
 	$scope.load_sign();
 	
-	// $scope.loading = false;
+	// cek redirct email 
+	$http.get(base_url+'to_email').then(function(data) {
+              $scope.id_email = data.data.id;
+              $location.path("/order/"+$scope.id_email);
+	}, function(x) {
+	     
+	});
 	// get slider
 	$scope.slider = [];
 	$http.get(base_url+'get_slider').then(function(data) {
@@ -120,7 +126,11 @@ myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$
 	    });
 
   $scope.addchart = function(){
-  	if ($scope.produks.warna.length > 0 && $scope.produks.size.length === 0) {
+  	if ($scope.produks.warna.length === 0 && $scope.produks.size.length === 0) {
+  		$scope.datass.colors = '';
+  		$scope.datass.size = '';
+  		$scope.post($scope.datass, items);
+  	}else if($scope.produks.warna.length > 0 && $scope.produks.size.length === 0) {
   		if (!$scope.datass.colors) {
   			$scope.notif.color = false;
   		}else{
@@ -554,7 +564,12 @@ myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$loc
 	}
 
 	$scope.addchart = function(){
-  	if ($scope.produks.warna.length > 0 && $scope.produks.size.length === 0) {
+	if ($scope.produks.warna.length === 0 && $scope.produks.size.length === 0) {
+  		$scope.datass.colors = '';
+  		$scope.datass.size = '';
+  		$scope.post($scope.datass, $scope.produks.id);
+	}
+  	else if ($scope.produks.warna.length > 0 && $scope.produks.size.length === 0) {
   		if (!$scope.datass.colors) {
   			$scope.notif.color = false
   		}else{
@@ -729,9 +744,9 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 		});
 	}
 	$scope.datass();
-	$scope.qty_tambah = function(item, id, size, color){
+	$scope.qty_tambah = function(item, id){
 		angular.forEach($scope.produks, function (values, key) {
-    		if (values.id === id && values.size === size && values.color.color === color) {
+    		if (values.id === id) {
 	       		if ( item >= values.stok) {
 		  			values['notif'] = false;
 		  		}else{
@@ -741,10 +756,10 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	    });
 	    $scope.getTotal();
 	}
-	$scope.qty_kurang = function(item, id, size, color){
+	$scope.qty_kurang = function(item, id){
 		$scope.notif = true;
 		angular.forEach($scope.produks, function (values, key) {
-	       	if (values.id === id && values.size === size && values.color.color === color) {
+	       	if (values.id === id) {
 			    if(item > 1){
 			       values['qty'] = item - 1;
 			       values['notif'] = true;
@@ -753,10 +768,10 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 		});
 		$scope.getTotal();
 	}
-	$scope.update_totals = function(item, id, size, color){
+	$scope.update_totals = function(item, id){
 			if (item !== 0) {
 				angular.forEach($scope.produks, function (values, key) {
-			       	if (values.id === id && values.size === size && values.color.color === color) {
+			       	if (values.id === id) {
 			       		if ( item >= values.stok) {
 				  			values['notif'] = false;
 				  			values['qty'] = values.stok;

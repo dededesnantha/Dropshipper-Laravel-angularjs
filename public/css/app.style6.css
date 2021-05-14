@@ -12090,3 +12090,6 @@ top: -5px;
   display: block;
 }
 
+.app-modal-window .modal-dialog {
+  width: 95%;
+}

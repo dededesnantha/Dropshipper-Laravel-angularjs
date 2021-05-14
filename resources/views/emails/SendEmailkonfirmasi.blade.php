@@ -378,6 +378,10 @@
                     <tr>
                       @if($details['status_transaksi'] == 'Order')
                         <td class="soapbox-title">Pesanan Kamu Diproses</td>
+                      @elseif($details['status_transaksi'] == 'Dikirim')
+                        <td class="soapbox-title">Pesanan Kamu Dikirim</td>
+                      @elseif($details['status_transaksi'] == 'Diterima')
+                        <td class="soapbox-title">Pesanan Kamu Diterima</td>
                       @endif
                     </tr>
                   </table>
@@ -398,6 +402,34 @@
                         <td class="status-cell active">
                           <div><b>Step&nbsp;4</b></div>
                           Pesanan Diterima
+                        </td>
+                      @elseif($details['status_transaksi'] == 'Dikirim')
+                        <td class="status-cell success">
+                            <img class="status-image" src="https://www.filepicker.io/api/file/gd9yTMfATWV8fPJlmyRC" alt="✓">&nbsp;<b>Step&nbsp;1 Pembayaran</b>
+                        </td>
+                        <td class="status-cell success">
+                          <img class="status-image" src="https://www.filepicker.io/api/file/gd9yTMfATWV8fPJlmyRC" alt="✓">&nbsp;<b>Step&nbsp;2 Pesanan Diproses</b>
+                        </td>
+                        <td class="status-cell active">
+                          <div><b>Step&nbsp;3</b></div>
+                          Pesanan Dikirim
+                        </td>
+                        <td class="status-cell active">
+                          <div><b>Step&nbsp;4</b></div>
+                          Pesanan Diterima
+                        </td>
+                        @elseif($details['status_transaksi'] == 'Diterima')
+                        <td class="status-cell success">
+                            <img class="status-image" src="https://www.filepicker.io/api/file/gd9yTMfATWV8fPJlmyRC" alt="✓">&nbsp;<b>Step&nbsp;1 Pembayaran</b>
+                        </td>
+                        <td class="status-cell success">
+                          <img class="status-image" src="https://www.filepicker.io/api/file/gd9yTMfATWV8fPJlmyRC" alt="✓">&nbsp;<b>Step&nbsp;2 Pesanan Diproses</b>
+                        </td>
+                        <td class="status-cell success">
+                          <img class="status-image" src="https://www.filepicker.io/api/file/gd9yTMfATWV8fPJlmyRC" alt="✓">&nbsp;<b>Step&nbsp;3 Pesanan Dikirim</b>
+                        </td>
+                        <td class="status-cell success">
+                          <img class="status-image" src="https://www.filepicker.io/api/file/gd9yTMfATWV8fPJlmyRC" alt="✓">&nbsp;<b>Step&nbsp;4 Pesanan Diterima</b>
                         </td>
                       @endif
                     </tr>
@@ -429,7 +461,75 @@
                                   </tr>
                                   <tr>
                                     <td class="status-cell">
-                                      Tanggal Konfirmasi 
+                                      Tanggal Konfirmasi Pesanan
+                                    </td>
+                                    <td class="status-cell" style="width: 25px">:</td>
+                                    <td class="status-cell" style="text-align: center;">
+                                      {{ $details['tgl_konfirm'] }}
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                          @elseif($details['status_transaksi'] == 'Dikirim')
+                          <div class="body-title">Step 3 Pesanan Dikirim</div>
+                          <table class="body-text">
+                            <tr>
+                              <td class="body-text-cell">
+                                Pesanan Kamu dengan detail sebagai berikut :
+                                <table class="status" cellspacing="0">
+                                  <tr>
+                                    <td class="status-cell">
+                                      Total 
+                                    </td>
+                                    <td class="status-cell" style="width: 25px">:</td>
+                                    <td class="status-cell" style="text-align: center;color: red"> Rp. {{number_format($details['total_transkasi'],0,',','.')}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td class="status-cell">
+                                      Code Transaksi
+                                    </td>
+                                    <td class="status-cell" style="width: 25px">:</td>
+                                    <td class="status-cell" style="text-align: center;"><b>{{ $details['code_transaksi'] }}</b></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="status-cell">
+                                      Tanggal Konfirmasi Pesanan
+                                    </td>
+                                    <td class="status-cell" style="width: 25px">:</td>
+                                    <td class="status-cell" style="text-align: center;">
+                                      {{ $details['tgl_konfirm'] }}
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                          @elseif($details['status_transaksi'] == 'Diterima')
+                          <div class="body-title">Step 4 Pesanan Diterima</div>
+                          <table class="body-text">
+                            <tr>
+                              <td class="body-text-cell">
+                                Pesanan Kamu dengan detail sebagai berikut :
+                                <table class="status" cellspacing="0">
+                                  <tr>
+                                    <td class="status-cell">
+                                      Total 
+                                    </td>
+                                    <td class="status-cell" style="width: 25px">:</td>
+                                    <td class="status-cell" style="text-align: center;color: red"> Rp. {{number_format($details['total_transkasi'],0,',','.')}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td class="status-cell">
+                                      Code Transaksi
+                                    </td>
+                                    <td class="status-cell" style="width: 25px">:</td>
+                                    <td class="status-cell" style="text-align: center;"><b>{{ $details['code_transaksi'] }}</b></td>
+                                  </tr>
+                                  <tr>
+                                    <td class="status-cell">
+                                      Tanggal Konfirmasi Pesanan
                                     </td>
                                     <td class="status-cell" style="width: 25px">:</td>
                                     <td class="status-cell" style="text-align: center;">
@@ -445,7 +545,7 @@
                         <table class="body-text">
                           <tr>
                             <td class="body-text-cell">
-                              Untuk melihat status order kamu bisa di cek di menu orderan
+                              Terimakasi atas pembelian dari produk kami.
                             </td>
                           </tr>
                         </table>
@@ -468,30 +568,6 @@
           </div>
         </td>
         <td></td>
-      </tr>
-    </table>
-
-    <table class="footer-wrap w320 full-width-gmail-android" bgcolor="#e5e5e5">
-      <tr>
-        <td>
-          <div class="content footer-lead">
-            <a href="#"><b>Get in touch</b></a> if you have any questions or feedback
-          </div>
-        </td>
-      </tr>
-    </table>
-    <table class="footer-wrap w320 full-width-gmail-android" bgcolor="#e5e5e5">
-      <tr>
-        <td>
-          <div class="content">
-            <a href="#">Contact Us</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-            <span class="footer-group">
-              <a href="#">Facebook</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-              <a href="#">Twitter</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-              <a href="#">Support</a>
-            </span>
-          </div>
-        </td>
       </tr>
     </table>
   </div>

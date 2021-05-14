@@ -1,0 +1,77 @@
+<div class="col-md-12 col-sm-12 col-xs-12 table-responsive" ng-controller="TransaksiCtrl">
+    <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+        <div id="user_table_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="dataTables_length" id="user_table_length">
+                        <label style="font-weight: normal">Show 
+
+                            <select name="user_table_length" aria-controls="user_table" class="form-control input-sm" ng-model="form.much" style="margin: 3px;" ng-change="init()">
+                                <option value="3">3</option>
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>  
+                            <select name="user_table_length" aria-controls="user_table" class="form-control input-sm" ng-model="form.order"ng-change="init()">
+                                <option value="desc">Terbaru</option>
+                                <option value="asc">Terlama</option>
+                            </select>
+                        </label>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+                    <div id="user_table_filter" class="dataTables_filter" style="float: right;">
+                        <form ng-submit="search()">
+                            <label style="font-weight: normal">Search : 
+
+                                <select name="user_table_length" aria-controls="user_table" class="form-control input-sm" ng-model="form.field_search" style="margin: 3px;" ng-change="init()">
+                                    <option value="tb_user.nama">Nama</option>
+                                    <option value="tb_transaksi.code_transaksi">Code</option>
+                                    <option value="tb_user.email">Email</option>
+                                </select>
+                            </label><input type="search"  ng-model="form.search" class="form-control input-sm" placeholder="" aria-controls="user_table">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th style="width:5%">Code Transaksi</th>
+                <th style="width:13%">Nama</th>
+                <th style="width:10%">Email</th>
+                <th style="width:5%">Tanggal Konfirmasi</th>
+                <th style="width:5%" ng-if="fold === 'pembayaran'">Tanggal Kadaluarsa</th>
+                <th style="width:8%">Status Transaksi</th>
+                <th style="width:8%">Action</th>
+            </tr>
+        </thead>
+        <tr class="{{transaksi.state}}" ng-repeat="transaksi in datass | filter:fold">
+            <td>{{transaksi.code_transaksi}}</td>
+            <td>{{transaksi.nama}}</td>
+            <td>{{transaksi.email}}</td>
+            <td>
+                <span  class="label label-success">{{transaksi.tgl_transkasi}}</span>
+            </td>
+            <td ng-if="fold === 'pembayaran'">
+                <span  class="label label-danger">{{transaksi.tgl_expired}}</span>
+            </td>
+            <td>
+                <span ng-if="fold === 'pembayaran'" class="label label-warning">{{transaksi.status_transaksi}}</span>
+                <span ng-if="fold === 'order'" class="label label-default" style="background-color: #4a8ac9">{{transaksi.status_transaksi}}</span>
+                <span ng-if="fold === 'dikirim'" class="label label-default" style="background-color: #4ac6c9">{{transaksi.status_transaksi}}</span>
+                <span ng-if="fold === 'diterima'" class="label label-success">{{transaksi.status_transaksi}}</span>
+            </td>
+            <td >
+                <a ng-click="show(transaksi.id_transaksi)" class="btn btn-xs " style="margin-bottom: 5px;background-color: #59c2e6;color: #fff"><i class="fa fa-navicon"></i> Detail Transaksi</a>
+            </td>
+        </tr>
+    </table>
+    <uib-pagination ng-if="datass.length > 0" total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" ng-click="selectPage(currentPage)"></uib-pagination>
+        <div class="clearfix"></div>
+</div>

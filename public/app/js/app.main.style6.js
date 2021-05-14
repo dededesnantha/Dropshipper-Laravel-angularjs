@@ -55,7 +55,6 @@ angular.module('app').controller('AppCtrl', ['$scope', '$http','$rootScope', '$l
             'Authorization': 'Bearer '+$localStorage.token
         }
         //check token ke server
-        console.log($scope.auth_config)
           $http.get(baseurl+'api/session',$scope.auth_config).then(function(response){
             if(response.data.success){
                 $scope.user = $localStorage.user;
@@ -65,7 +64,8 @@ angular.module('app').controller('AppCtrl', ['$scope', '$http','$rootScope', '$l
             }
           },function (error){
                 $location.path('/access/signin');
-            });  
+            }); 
+          
         }     
        $scope.load_sign();
 
@@ -75,7 +75,6 @@ angular.module('app').controller('AppCtrl', ['$scope', '$http','$rootScope', '$l
         
         $scope.load_sign();
       }
-
 
         $scope.changeMenuHeight = function() {
             //console.log($scope.settings.menuProfile);

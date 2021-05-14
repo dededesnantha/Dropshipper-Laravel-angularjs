@@ -1,109 +1,133 @@
-(function() {
-    'use strict';
 
-    /*  var app = angular.module('examples', ['chart.js', 'ui.bootstrap']);*/
+'use strict';
 
-    app.config(function(ChartJsProvider) {
-        // Configure all charts
-        ChartJsProvider.setOptions({
-            colours: ['#FF6E40', '#FBC02E', '#673AB7', '#66bd78', '#f05050'],
-            responsive: true
-        });
-        // Configure all doughnut charts
-        ChartJsProvider.setOptions('Doughnut', {
-            animateScale: true
-        });
-    });
+    app.controller('Dashboard', ['$scope', '$http','$log','$uibModal','notify','$rootScope',
+    function ($scope, $http, $log, $modal,notify,$rootScope) {
+        $scope.load_sign();
 
-    app.controller('MenuCtrl', function($scope) {
-        $scope.isCollapsed = true;
-        $scope.charts = ['Line', 'Bar', 'Doughnut', 'Pie', 'Polar Area', 'Radar', 'Base'];
-    });
-
-    app.controller('TargetsAchievedCtrl', ['$scope', '$timeout', function($scope, $timeout) {
-        $scope.options = {
-            scaleShowVerticalLines: false
-        };
-        $scope.labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
-        $scope.series = ['Series A', 'Series B','Series C'];
-        $scope.data = [
-            [81, 80, 81, 86, 75],
-            [88, 90, 99, 56, 77],
-            [91, 70, 61, 66, 55],
+        $scope.folds = [
+        {name: 'Pembayaran', filter:'', icon:'fa-money', badge:'warning', count: ''},
+        {name: 'Pesanan Diproses', filter:'order', icon:'fa-shopping-cart', badge: '', count: ''},
+        {name: 'Pesanan Dikirim', filter:'dikirim', icon:'fa-truck', badge: '', count: ''},
+        {name: 'Pesanan Diterima', filter:'diterima', icon:'fa-check-square-o', badge:'success', count: ''}
         ];
-        $scope.colours = [{ // grey
-                fillColor: "#568c98",
-                strokeColor: "#568c98",
-                highlightFill: "#568c98",
-                highlightStroke: "#568c98"
-        }, { // dark grey
-                fillColor: "#ec8e72",
-                strokeColor: "#ec8e72",
-                highlightFill: "#ec8e72",
-                highlightStroke: "#ec8e72"
-        }, { // dark grey
-                fillColor: "#fdb45d",
-                strokeColor: "#fdb45d",
-                highlightFill: "#fdb45d",
-                highlightStroke: "#fdb45d"
-        }];
 
-        $timeout(function() {
-            $scope.options = {
-                scaleShowVerticalLines: true
-            };
-        }, 3000);
+        $scope.count_transaksis = {};
+        $rootScope.count_transaksi = function () {
+            $http.get(baseurl+'admin/count_transaksi',$scope.auth_config).then(function(data) {
+              $scope.count_transaksis = data.data
+              angular.forEach($scope.folds, function (values, key) {
+                if (values['name'] == 'Pembayaran') {
+                    values['count'] = String($scope.count_transaksis.pembayaran);
+                }else if (values['name'] == 'Pesanan Diproses') {
+                    values['count'] = String($scope.count_transaksis.order);
+                }else if(values['name'] == 'Pesanan Dikirim'){
+                  values['count'] = String($scope.count_transaksis.dikirim);
+                }else if(values['name'] == 'Pesanan Diterima'){
+                  values['count'] = String($scope.count_transaksis.diterima);
+                }
+              });
+          }, function(x) {
+          });
+        }
+        $rootScope.count_transaksi();
     }]);
 
+    app.controller('TransaksiCtrl', ['$scope', '$http','$log','$uibModal','notify','$stateParams',
+    function ($scope, $http, $log, $modal,notify, $stateParams) {
+        $scope.form = {};
+        $scope.fold = $stateParams.fold;
+        if ($scope.fold == '') {
+            $scope.fold = 'pembayaran'   
+        }
 
-    app.controller('PeopleCountCtrl', ['$scope', '$timeout', function($scope, $timeout) {
-        $scope.labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-        $scope.series = ['Customers', 'Leads','Contacts'];
-        $scope.data = [
-                [78, 68, 70, 89, 86, 97, 60],
-                [65, 69, 70, 81, 76, 45, 50],
-                [68, 60, 90, 89, 76, 57, 70]
-        ];
-        $scope.onClick = function(points, evt) {
-            console.log(points, evt);
+        $scope.form={
+          much : '10',    
+          order : 'desc',
+          search : '',
+          field_search: 'tb_user.nama'
         };
-        $scope.onHover = function(points) {
-            if (points.length > 0) {
-                console.log('Point', points[0].value);
-            } else {
-                console.log('No point');
+
+        $scope.init = function (paging = '') {
+          if ( paging  == '') {
+            $scope.currentPage = 1;
+          }
+            $scope.maxSize = 20;
+            $http.post(baseurl+'admin/'+$scope.fold+'?page='+$scope.currentPage,$scope.form,$scope.auth_config)
+            .then(function(data) {
+              $scope.list=data.data
+              $scope.datass=$scope.list.data
+              $scope.totalItems = $scope.list.total;
+              $scope.count_transaksi();
+            }, function(x) {
+              notify({ message:'Server Error', 
+                position:'right',
+                duration:'10000',
+                classes: 'alert-danger'
+              });
+            });
+
+            $scope.itemsPerPage = $scope.form.much;
+        }
+
+        $scope.init();
+
+       $scope.currentPage = 1;
+        $scope.selectPage = function (pageNo) {
+            $scope.currentPage = pageNo;
+            $scope.init(pageNo);
+        };
+        $scope.pageChanged = function() {
+          $scope.currentPage = $scope.currentPage;
+          $scope.init($scope.currentPage);
+        };
+        $scope.search = function () {
+          $scope.init($scope.currentPage, $scope.search_name);
+        }
+
+        $scope.show = function (id) {
+          var modalInstance = $modal.open({
+            templateUrl: 'partials/modal/modal_transaksi.html',
+            controller: 'ModalTransaksi',
+            windowClass: 'app-modal-window',
+            resolve: {
+              items: function () {
+                return id;
+              }
             }
-        };
-        $scope.colours = [{ // grey
-                fillColor: "rgba(86,140,152,0)",
-                strokeColor: "#568c98",
-                pointColor: "#568c98",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "#568c98"
-        }, { // dark grey
-                fillColor: "rgba(236,142,114,0)",
-                strokeColor: "#ec8e72",
-                pointColor: "#ec8e72",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "#ec8e72"
-        }, { // dark grey
-                fillColor: "rgba(253,180,93,0)",
-                strokeColor: "#fdb45d",
-                pointColor: "#fdb45d",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "#fdb45d"
-        }];
-
+          });
+          modalInstance.result.then(function () {
+            $scope.init();
+          }, function () {
+            $scope.init();
+          });
+        }
     }]);
 
-    function getRandomValue(data) {
-        var l = data.length,
-            previous = l ? data[l - 1] : 50;
-        var y = previous + Math.random() * 10 - 5;
-        return y < 0 ? 0 : y > 100 ? 100 : y;
-    }
+app.controller('ModalTransaksi', ['$scope','$uibModalInstance','items','$http','$location','notify','$uibModal', function($scope, $modalInstance, items,$http,$location,notify,$modal) { 
+   $scope.form ={};
+    // // get revisi
+    $http.get(baseurl+'admin/get_transaksi/'+items,$scope.auth_config).then(function(data) {
+              $scope.form = data.data;
+              $scope.form.data_transaksi.image_transfer = baseurl +'transaksi/'+$scope.form.data_transaksi.image_transfer;
+              angular.forEach($scope.form.data_transaksi_detail, function (values, key) {
+                values['gambar'] = baseurl +'image/'+values['gambar'];
+              });
+      }, function(x) {
+    });
 
-})();
+    $scope.update_status = function () {
+      $scope.datass = {};
+      $scope.datass.status_transaksi = $scope.form.data_transaksi.status_transaksi
+      $http.post(baseurl+'admin/update_transaksi/'+items,$scope.datass,$scope.auth_config).then(function(data) {
+        notify({ message:'Update Berhasil', position:'right', duration:'10000', classes: 'alert-success' }); 
+      }, function(x) {
+        notify({ message:'Update Gagal', position:'right', duration:'10000', classes: 'alert-danger' }); 
+      });
+
+      $modalInstance.close($scope.items);
+    }
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+}]);

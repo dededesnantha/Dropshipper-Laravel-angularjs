@@ -1,0 +1,155 @@
+<div class="modal-header" style="background-color: #59c2e6;">
+    <h3 class="modal-title" style="color: #fff">Detail Transaksi</h3>
+</div>
+<div class="modal-body" style="background-color: #f0f3f6">
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <section class="box ">
+                <header class="panel_header">
+                    <h2 class="title pull-left">Produk</h2>
+                </header>
+                <div class="content-body padding-bottom-0">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+                            <table class="table">
+                                <tbody ng-repeat="row in form.data_transaksi_detail">
+                                    <tr>
+                                        <td><img ng-src="{{row.gambar}}" width="80" alt=""></td>  
+                                        <td><span class="label label-success" ng-if="row.jenis_label === 'bigsale'">{{row.text_label}}</span>
+                                            <span class="label label-primary" ng-if="row.jenis_label === 'new'">{{row.text_label}}</span>
+                                            <span class="label label-danger" ng-if="row.jenis_label === 'disc'">{{row.text_label}}</span>
+                                            {{row.nama_produk}}
+                                            <br>
+                                            <span ng-if="row.harga_promo !== ''">
+                                                <b><span class="sale-price" >Rp. {{row.harga | currency : "" : 0}}</span></b>
+                                            </span>
+                                            <span ng-if="row.harga_promo">
+                                                <span class="sale-price" >Rp. {{row.harga_promo | currency : "" : 0}} </span> <span style="text-decoration: line-through;">Rp. {{row.harga | currency : "" : 0}}</span>
+                                            </span>
+                                            <br>
+                                            <label class="btn btn-default" ng-if="row.color"><i class="sel-color" style="background-color:{{ row.color }};display: inline-block;margin-right: 5px"></i>{{row.text}}</label>
+                                            <br>
+                                            <label style="margin-top: 5px" ng-if="row.size" class="btn btn-default" ng-if="row.color">{{row.size}}</label>
+                                        </td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Kuantitas : </td>
+                                        <td>{{row.kuantitas}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total : </td>
+                                        <td>Rp. {{row.totals_produks | currency : "" : 0}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <section class="box ">
+                <header class="panel_header">
+                    <h2 class="title pull-left">Transaksi</h2>
+                </header>
+                <div class="content-body padding-bottom-0">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>Code :</td>  
+                                        <td>{{form.data_transaksi.code_transaksi}}</td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Ongkos Kirim :</td>  
+                                        <td>Rp. {{form.data_transaksi.harga | currency : "" : 0}}</td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Total Produk :</td>  
+                                        <td>Rp. {{form.data_transaksi.total_produk | currency : "" : 0}}</td>  
+                                    </tr>
+                                    <tr>
+                                        <td><b>Total : </b></td>
+                                        <td><b>Rp. {{form.data_transaksi.total_transkasi | currency : "" : 0}}</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Status Transaksi : </b></td>
+                                        <td><b>{{form.data_transaksi.status_transaksi}}</b></td>
+                                    </tr>
+                                    <tr ng-hide="form.data_transaksi.status_transaksi === 'pembayaran'">
+                                        <td><b>Bukti Transaksi : </b></td>
+                                        <td><img ng-src="{{form.data_transaksi.image_transfer}}" width="80"></td>
+                                    </tr>
+                                    <tr ng-hide="form.data_transaksi.status_transaksi === 'pembayaran'">
+                                        <td><b>Update Status Transaksi : </b></td>
+                                        <td>
+                                            <div class="input-group" inputgroup>
+                                                <select class="form-control" ng-model="form.data_transaksi.status_transaksi">
+                                                    <option value="Order" >Order </option>
+                                                    <option value="Dikirim" >Dikirim</option>
+                                                    <option value="Diterima" >Diterima</option>
+                                                </select>
+                                            </div>
+                                             <button style="width: 100%" class="btn btn-success" ng-click="update_status()">Update Status</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <section class="box ">
+                <header class="panel_header">
+                    <h2 class="title pull-left">Profile</h2>
+                </header>
+                <div class="content-body padding-bottom-0">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>Nama :</td>  
+                                        <td><b>{{form.data_transaksi.nama}}</b></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Email :</td>  
+                                        <td><b>{{form.data_transaksi.email}}</b></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>No Telephone :</td>  
+                                        <td><b>{{form.data_transaksi.telephone}}</b></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Metode Transfer :</td>  
+                                        <td><b>{{form.data_transaksi.metode_transaksi}}</b></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Tanggal Transaksi :</td>  
+                                        <td><b>{{form.data_transaksi.tgl_transkasi}}</b></td>  
+                                    </tr>
+                                    <tr>
+                                        <td>Alamat :</td>  
+                                        <td><b>{{form.data_transaksi.provinsi}}, {{form.data_transaksi.kabupaten}}, {{form.data_transaksi.kecamatan}}
+                                            <br>
+                                            {{form.data_transaksi.address}}
+                                            </b></td>  
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </div>
+</div>
+<div class="modal-footer">                  
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

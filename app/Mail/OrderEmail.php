@@ -28,7 +28,7 @@ class OrderEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Email | Konfirmasi Pembayaran Berhasil')
+        return $this->subject('Email | Konfirmasi Pesanan')
                     ->view('emails.SendEmailkonfirmasi');
     }
 }
