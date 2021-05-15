@@ -8,9 +8,19 @@ use Illuminate\Http\Request;
 use DB;
 use Mail;
 use App\Models\tb_user;
+use App\Models\profile_web;
 
 class UserController extends Controller
 {
+    public function profile_web()
+    {
+        $data = profile_web::select('id','nama','no_tlp','email','logo','address','deskripsi')->first();
+        if(substr(trim($data->no_tlp), 0, 1)=='0'){
+             $data->no_tlp_convert = '62'.substr(trim($data->no_tlp), 1);
+         }
+        return $data;
+    }  
+
     public function add_user(Request $request)
     {
     	$post = $request->input();
@@ -68,7 +78,8 @@ class UserController extends Controller
                 'nama' => $post['nama'],
                 'email' => $post['email'],
                 'username' => $post['username'],
-                'password' => $post['password']
+                'password' => $post['password'],
+                'profile_web' => $this->profile_web(),
             ];
             $post['password'] = bcrypt($post['password']);
         }

@@ -31,8 +31,18 @@ myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','
 	
 	// cek redirct email 
 	$http.get(base_url+'to_email').then(function(data) {
+		if (data.data.id) {
               $scope.id_email = data.data.id;
               $location.path("/order/"+$scope.id_email);
+        }
+	}, function(x) {
+	     
+	});
+	// suceess pembayaran 
+	$http.get(base_url+'to_update_transaksi').then(function(data) {
+		if (data.data.id) {
+              $location.path("/success/"+data.data.id);
+		}
 	}, function(x) {
 	     
 	});
@@ -134,12 +144,14 @@ myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$
   		if (!$scope.datass.colors) {
   			$scope.notif.color = false;
   		}else{
+  			$scope.datass.size = '';
   			$scope.post($scope.datass, items)
   		}
   	}else if($scope.produks.warna.length === 0 && $scope.produks.size.length > 0){
   		if (!$scope.datass.size) {
   			$scope.notif.size = false;
   		}else{
+  			$scope.datass.colors = '';
   			$scope.post($scope.datass, items)
   		}
   	}else{
@@ -737,7 +749,9 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	               	values['gambar'] = base_url +'image/'+values['gambar'];
 	               	values['notif'] = true;
 	              });
-	              $scope.getTotal();
+	              if ($scope.produks.length > 0) {
+					$scope.getTotal();
+	              }
 	              $scope.loading = false;
 		}, function(x) {
 		     SweetAlert.swal("Terjadi Kesalahan!","","error")
@@ -1242,7 +1256,6 @@ myApp.controller('TrackTransaksiController', ['$scope', '$http','SweetAlert','$l
 	}, function(x) {
 		SweetAlert.swal("Terjadi Kesalahan!", "error")
 	});
-	console.log($routeParams.id)
 }]);
 
 myApp.controller('SearchController', ['$scope', '$http','SweetAlert','$location', '$routeParams','$uibModal', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal){
@@ -1475,4 +1488,6 @@ myApp.controller('RubahPasswordController', ['$scope', '$http','SweetAlert','$lo
     }
 }]);
 
-
+myApp.controller('SuceessController', ['$scope', '$http','SweetAlert','$location', '$routeParams','$uibModal','$timeout', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal, $timeout){
+	$scope.load_sign();
+}]);

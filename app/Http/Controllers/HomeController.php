@@ -11,7 +11,9 @@ use App\Models\Color;
 use App\Models\tb_produk_gambar;
 use App\Models\tb_user;
 use App\Models\tb_ongkir;
+use App\Models\tb_transaksi;
 
+use Illuminate\Support\Facades\Crypt;
 use Response;
 
 
@@ -219,7 +221,9 @@ class HomeController extends Controller
             $request->session()->forget('redirect_email');
             return Response::json(['id' => $id[0] ], 200);
         }else{
-            return response()->json(['status' => 'home'], 500); 
+            $request->session()->forget('redirect_email');
+            return response()->json(['id' => ''], 200); 
         }
     }
+
 }

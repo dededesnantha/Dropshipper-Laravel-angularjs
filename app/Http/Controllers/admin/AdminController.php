@@ -38,6 +38,15 @@ use Carbon\Carbon;
 
 class AdminController extends Controller
 {
+    public function profile_web()
+    {
+        $data = profile_web::select('id','nama','no_tlp','email','logo','address','deskripsi')->first();
+        if(substr(trim($data->no_tlp), 0, 1)=='0'){
+             $data->no_tlp_convert = '62'.substr(trim($data->no_tlp), 1);
+         }
+        return $data;
+    }  
+
     public function add_kategori(Request $request)
     {
     	$post = $request->input();
@@ -1001,7 +1010,8 @@ class AdminController extends Controller
         $post = $request->input();
         $transaksi = tb_transaksi::where('id_transaksi', $id)
                     ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
-                    ->select('tb_transaksi.status_transaksi',
+                    ->select('tb_transaksi.id_transaksi',
+                        'tb_transaksi.status_transaksi',
                         'tb_user.nama',
                         'tb_user.email',
                         'tb_user.address',
@@ -1020,10 +1030,12 @@ class AdminController extends Controller
                 $tgl_konfirm =  $date['date'].' '.$date['sort_month'].' '.$date['year'];
                 // send email
                 $details = [
+                    'id_transkasi' => $transaksi->id_transaksi,
                     'total_transkasi' => $transaksi->total_transkasi,
                     'tgl_konfirm' => $tgl_konfirm,
                     'code_transaksi' => $transaksi->code_transaksi,
-                    'status_transaksi' => $post['status_transaksi']
+                    'status_transaksi' => $post['status_transaksi'],
+                    'profile_web' => $this->profile_web(),
                 ];
                 \Mail::to($transaksi->email)->send(new \App\Mail\OrderEmail($details));
 
@@ -1035,7 +1047,7 @@ class AdminController extends Controller
             if ($post['status_transaksi'] == 'Diterima') {
                 tb_transaksi::where('id_transaksi', $id)->update([
                     'status_transaksi' => $post['status_transaksi'],
-                    'tgl_expired' => Carbon::now()->addDays(2)->toDateTimeString()
+                    'tgl_expired' => Carbon::now()->toDateTimeString()
                 ]);
                 $date = $this->date_convert($transaksi->tgl_konfirm);
                 $tgl_konfirm =  $date['date'].' '.$date['sort_month'].' '.$date['year'];
@@ -1044,7 +1056,8 @@ class AdminController extends Controller
                     'total_transkasi' => $transaksi->total_transkasi,
                     'tgl_konfirm' => $tgl_konfirm,
                     'code_transaksi' => $transaksi->code_transaksi,
-                    'status_transaksi' => $post['status_transaksi']
+                    'status_transaksi' => $post['status_transaksi'],
+                    'profile_web' => $this->profile_web(),
                 ];
                 \Mail::to($transaksi->email)->send(new \App\Mail\OrderEmail($details));
 

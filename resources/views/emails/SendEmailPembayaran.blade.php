@@ -54,7 +54,7 @@
                       Halo <strong>{{ $details['data_transaksi']->nama }}</strong>, <br>
                       <br>
                       <b style="font-size: 20px" style="font-weight: 800">
-                        Menunggu pembayaran dengan Transfer Bank sebelum tanggal, {{ $details['data_transaksi']->tgl_expired }}
+                        Menunggu pembayaran dengan Transfer Bank sebelum tanggal, <span style="color: red">{{ $details['data_transaksi']->tgl_expired }}</span>
                       </b>
                     </td>
                   </tr>
@@ -274,7 +274,7 @@
                   <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#E5E5E5">
                     <tr>
                       <td class="center" style="padding:25px; text-align:center;">
-                        <b><a href="#">Get in touch</a></b> if you have any questions or feedback
+                        <b>Butuh Bantuan ?</b>
                       </td>
                     </tr>
                   </table>
@@ -293,11 +293,9 @@
                   <table cellspacing="0" cellpadding="0" width="100%" bgcolor="#E5E5E5">
                     <tr>
                       <td class="center footer" style="font-size:12px;">
-                        <a href="#">Contact Us</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <a href="https://api.whatsapp.com/send?phone={{$details['profile_web']->no_tlp_convert}}">WhatsApp</a>&nbsp;&nbsp;|&nbsp;&nbsp;
                         <span class="footer-group">
-                          <a href="#">Facebook</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                          <a href="#">Twitter</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                          <a href="#">Support</a>
+                          <a href="mailto:{{$details['profile_web']->email}}">Email</a>
                         </span>
                       </td>
                     </tr>

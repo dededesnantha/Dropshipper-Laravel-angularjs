@@ -12,8 +12,29 @@
 	<!-- conntent -->
 	<div class="page-content-wrapper">
 		<div class="my-order-wrapper pt-3">
-			<div class="card w-100">
-				<div class="card-body p-4">
+			<div class="w-100">
+				<div ng-if="datass.status_transaksi == 'Order'" class=" py-3 align-items-center justify-content-center">
+					<div class="offline-text text-center" style="position: relative;top: -19px;"><img class="mb-4 px-5" src="../css/order.png" width="400" alt="">
+						<h5>Pesanan Diproses</h5>
+						<p>Pesanan Kamu Sudah Diporses</p>
+					</div>
+				</div>
+				<div ng-if="datass.status_transaksi == 'Dikirim'" class=" py-3 align-items-center justify-content-center">
+					<div class="offline-text text-center" style="position: relative;top: -19px;"><img class="mb-4 px-5" src="../css/kirim.png" width="400" alt="">
+						<h5>Pesanan Dikirim</h5>
+						<p>Pesanan Kamu Sudah Dikirim, Ditunggu ya..</p>
+					</div>
+				</div>
+				<div ng-if="datass.status_transaksi == 'Diterima'" class=" py-3 align-items-center justify-content-center">
+					<div class="offline-text text-center" style="position: relative;top: 10px;"><img class="mb-4 px-5" src="../css/terima.png" width="270" alt="">
+						<h5>Pesanan Diterima</h5>
+						<p>Pesanan Sampai Ditujuan Dan Sudah Kamu Terima</p>
+					</div>
+					<div class="text-center">
+						<a class="btn btn-warning mt-3" href="#!home">Yuk Belanja Lagi</a>
+					</div>
+				</div>
+				<div class="card card-body p-4">
 					<div class="single-order-status active">
 						<div class="order-icon shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-check" viewBox="0 0 16 16">
 							<path d="M11.354 6.354a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
@@ -26,39 +47,39 @@
 							<path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/></svg>
 						</div>
 					</div>
-					<div class="single-order-status">
+					<div class="single-order-status" ng-class="{'active': datass.status_transaksi == 'Order' || datass.status_transaksi == 'Dikirim' || datass.status_transaksi == 'Diterima'}">
 						<div class="order-icon shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-in-down" viewBox="0 0 16 16">
 							<path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1h-2z"/>
 							<path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
 						</div>
 						<div class="order-text">
 							<h6>Pesanan Diproses</h6>
-							<span>Diproses...</span>
+							<span ng-hide="datass.status_transaksi == 'Order' || datass.status_transaksi == 'Dikirim' || datass.status_transaksi == 'Diterima'">Diproses...</span>
 						</div>
 						<div class="order-status"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-patch-check-fill" viewBox="0 0 16 16">
 							<path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/></svg>
 						</div>
 					</div>
-					<div class="single-order-status">
+					<div class="single-order-status" ng-class="{'active': datass.status_transaksi == 'Dikirim' || datass.status_transaksi == 'Diterima'}">
 						<div class="order-icon shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
 							<path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>
 						</div>
 						<div class="order-text">
 							<h6>Pesanan Dikirim</h6>
-							<span>Diproses...</span>
+							<span ng-hide="datass.status_transaksi == 'Dikirim' || datass.status_transaksi == 'Diterima'">Diproses...</span>
 						</div>
 						<div class="order-status"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-patch-check-fill" viewBox="0 0 16 16">
 							<path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/></svg>
 						</div>
 					</div>
-					<div class="single-order-status">
+					<div class="single-order-status" ng-class="{'active': datass.status_transaksi == 'Diterima'}">
 						<div class="order-icon shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-check" viewBox="0 0 16 16">
 								<path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
 								<path fill-rule="evenodd" d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/></svg>
 						</div>
 					<div class="order-text">
 						<h6>Pesanan Diterima</h6>
-						<span>Diproses...</span>
+						<span ng-hide="datass.status_transaksi == 'Diterima'">Diproses...</span>
 					</div>
 					<div class="order-status"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-patch-check-fill" viewBox="0 0 16 16">
 						<path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/></svg>

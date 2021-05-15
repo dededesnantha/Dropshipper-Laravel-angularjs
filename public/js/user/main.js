@@ -8,7 +8,7 @@ myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','
           $http.get(base_url+'api/session_user').then(function(response){
             if (response.status == 200) {
                 $rootScope.user = response.data;
-                if ($rootScope.user.foto_user == null || $scope.user_datass.foto_user == '') {
+                if ($rootScope.user.foto_user == null || $rootScope.user.foto_user == '') {
                   $scope.image_user = base_url+'css/noimg.png';
                 }else{
                   $scope.image_user = base_url+'image/'+$rootScope.user.foto_user

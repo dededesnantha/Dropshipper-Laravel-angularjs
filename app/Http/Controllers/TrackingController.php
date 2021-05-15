@@ -73,13 +73,12 @@ class TrackingController extends Controller
 					->whereNotNull('metode_transaksi')
 					->whereNotNull('tgl_transkasi')
 					->orderBy('id_transaksi','DESC')
-                    ->where('tgl_expired', '>=', date('Y-m-d'));
-                    // ->where(function ($transaksi) {
-                    //         $transaksi->where('tgl_expired', '>=', date('Y-m-d'))
-                    //         ->WhereNull('tgl_expired');
-                    //     }
-                    // );
-        $transaksi = $transaksi->get();
+                    ->where(function ($q) {
+                            $q->where('tgl_expired', '>=', date('Y-m-d'))
+                            ->orWhereNull('tgl_expired');
+                        }
+                    )
+                    ->get();
 		foreach ($transaksi as $key => $rows) {
 	    	$temp_date = $this->date_convert($rows->tgl_konfirm);
 	        $transaksi[$key]['tgl_konfirm'] =  $temp_date['date'].' '.$temp_date['sort_month'].' '.$temp_date['year'];

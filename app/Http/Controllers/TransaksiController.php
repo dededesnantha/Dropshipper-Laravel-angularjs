@@ -11,11 +11,12 @@ use App\Models\tb_user;
 use Cookie;
 use Illuminate\Support\Facades\Crypt;
 use Mail;
+use App\Models\profile_web;
 
 class TransaksiController extends Controller
 {
 
-     public function date_convert($date)
+    public function date_convert($date)
     {        
         $date = strtotime($date);
         $now_date = time();
@@ -68,6 +69,15 @@ class TransaksiController extends Controller
         }
         return $convert;
     }
+
+    public function profile_web()
+    {
+        $data = profile_web::select('id','nama','no_tlp','email','logo','address','deskripsi')->first();
+        if(substr(trim($data->no_tlp), 0, 1)=='0'){
+             $data->no_tlp_convert = '62'.substr(trim($data->no_tlp), 1);
+         }
+        return $data;
+    }  
 
     public function add_transaksi(Request $request)
     {
@@ -184,6 +194,7 @@ class TransaksiController extends Controller
         $details = [
             'data_transaksi' => $data_transaksi,
             'data_transaksi_detail' => $data_transaksi_detail,
+            'profile_web' => $this->profile_web(),
         ];
         \Mail::to($data_transaksi['email'])->send(new \App\Mail\MailPembayaran($details));
         \Cookie::queue(\Cookie::forget('cart'));
@@ -276,6 +287,7 @@ class TransaksiController extends Controller
             $details = [
                 'data_transaksi' => $data_transaksi,
                 'data_transaksi_detail' => $data_transaksi_detail,
+                'profile_web' => $this->profile_web(),
             ];
             return response()->json($details,200);
         }else{
@@ -305,7 +317,8 @@ class TransaksiController extends Controller
             'total_transkasi' => $datas->total_transkasi,
             'tgl_konfirm' => $tgl_konfirm,
             'code_transaksi' => $datas->code_transaksi,
-            'status_transaksi' => $datas->status_transaksi
+            'status_transaksi' => $datas->status_transaksi,
+            'profile_web' => $this->profile_web(),
         ];
         \Mail::to($datas->email)->send(new \App\Mail\OrderEmail($details));
        return response()->json(200);
@@ -315,5 +328,50 @@ class TransaksiController extends Controller
     {
         $request->session()->push('redirect_email', $id);
         return redirect('/');
+    }
+
+    public function redirct_success($id, Request $request)
+    {
+        $id = Crypt::encryptString($id);
+        $request->session()->put('pesanan_diterima', $id);
+        return redirect('/');
+    }
+    public function to_update_transaksi(Request $request)
+    {
+       if ($request->session()->has('pesanan_diterima')) {
+            $id = $request->session()->get('pesanan_diterima');
+            $id = Crypt::decryptString($id);
+            $datas = tb_transaksi::where('id_transaksi', $id)
+                    ->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')
+                    ->where('status_transaksi', '!=', 'Diterima')
+                    ->select('tb_user.email','tb_transaksi.total_transkasi','tb_transaksi.tgl_konfirm','tb_transaksi.code_transaksi','tb_transaksi.status_transaksi')
+                    ->first();
+            if (!empty($datas)) {
+                tb_transaksi::where('id_transaksi', $id)->update([
+                    'status_transaksi' => 'Diterima',
+                    'tgl_expired' => Carbon::now()->toDateTimeString()
+                ]);
+                $date = $this->date_convert($datas->tgl_konfirm);
+                $tgl_konfirm =  $date['date'].' '.$date['sort_month'].' '.$date['year'];
+                $details = [
+                    'total_transkasi' => $datas->total_transkasi,
+                    'tgl_konfirm' => $tgl_konfirm,
+                    'code_transaksi' => $datas->code_transaksi,
+                    'status_transaksi' => 'Diterima',
+                    'profile_web' => $this->profile_web(),
+                ];
+                $id = Crypt::encryptString($id);
+                $request->session()->forget('pesanan_diterima');
+
+                \Mail::to($datas->email)->send(new \App\Mail\OrderEmail($details));
+                return response()->json(['id' => $id], 200); 
+            }else{
+                $request->session()->forget('pesanan_diterima');
+                return response()->json(['id' => ''], 200); 
+            }
+        }else{
+            $request->session()->forget('pesanan_diterima');
+            return response()->json(['id' => ''], 200); 
+        }
     }
 }

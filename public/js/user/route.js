@@ -95,6 +95,10 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
     $routeProvider.when('/password_rubah',{
         templateUrl:'../views/password_rubah.html',
     });
+
+    $routeProvider.when('/success/:id',{
+        templateUrl:'../views/components/sucess.html',
+    });
     
     
     // $routeProvider.when('/dashboard',{

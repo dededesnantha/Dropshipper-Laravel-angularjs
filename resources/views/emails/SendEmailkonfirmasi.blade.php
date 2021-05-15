@@ -377,11 +377,11 @@
                   <table class="soapbox">
                     <tr>
                       @if($details['status_transaksi'] == 'Order')
-                        <td class="soapbox-title">Pesanan Kamu Diproses</td>
+                        <td class="soapbox-title">Pesanan Kamu Lagi Diproses</td>
                       @elseif($details['status_transaksi'] == 'Dikirim')
-                        <td class="soapbox-title">Pesanan Kamu Dikirim</td>
+                        <td class="soapbox-title">Pesanan Kamu Sudah Dikirim</td>
                       @elseif($details['status_transaksi'] == 'Diterima')
-                        <td class="soapbox-title">Pesanan Kamu Diterima</td>
+                        <td class="soapbox-title">Pesanan Diterima</td>
                       @endif
                     </tr>
                   </table>
@@ -440,108 +440,50 @@
                       <td class="body-padded">
                         @if($details['status_transaksi'] == 'Order')
                           <div class="body-title">Step 2 Pesanan Diproses</div>
-                          <table class="body-text">
-                            <tr>
-                              <td class="body-text-cell">
-                                Pesanan Kamu dengan detail sebagai berikut :
-                                <table class="status" cellspacing="0">
-                                  <tr>
-                                    <td class="status-cell">
-                                      Total 
-                                    </td>
-                                    <td class="status-cell" style="width: 25px">:</td>
-                                    <td class="status-cell" style="text-align: center;color: red"> Rp. {{number_format($details['total_transkasi'],0,',','.')}}</td>
-                                  </tr>
-                                  <tr>
-                                    <td class="status-cell">
-                                      Code Transaksi
-                                    </td>
-                                    <td class="status-cell" style="width: 25px">:</td>
-                                    <td class="status-cell" style="text-align: center;"><b>{{ $details['code_transaksi'] }}</b></td>
-                                  </tr>
-                                  <tr>
-                                    <td class="status-cell">
-                                      Tanggal Konfirmasi Pesanan
-                                    </td>
-                                    <td class="status-cell" style="width: 25px">:</td>
-                                    <td class="status-cell" style="text-align: center;">
-                                      {{ $details['tgl_konfirm'] }}
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                          @elseif($details['status_transaksi'] == 'Dikirim')
+                        @elseif($details['status_transaksi'] == 'Dikirim')
                           <div class="body-title">Step 3 Pesanan Dikirim</div>
-                          <table class="body-text">
-                            <tr>
-                              <td class="body-text-cell">
-                                Pesanan Kamu dengan detail sebagai berikut :
-                                <table class="status" cellspacing="0">
-                                  <tr>
-                                    <td class="status-cell">
-                                      Total 
-                                    </td>
-                                    <td class="status-cell" style="width: 25px">:</td>
-                                    <td class="status-cell" style="text-align: center;color: red"> Rp. {{number_format($details['total_transkasi'],0,',','.')}}</td>
-                                  </tr>
-                                  <tr>
-                                    <td class="status-cell">
-                                      Code Transaksi
-                                    </td>
-                                    <td class="status-cell" style="width: 25px">:</td>
-                                    <td class="status-cell" style="text-align: center;"><b>{{ $details['code_transaksi'] }}</b></td>
-                                  </tr>
-                                  <tr>
-                                    <td class="status-cell">
-                                      Tanggal Konfirmasi Pesanan
-                                    </td>
-                                    <td class="status-cell" style="width: 25px">:</td>
-                                    <td class="status-cell" style="text-align: center;">
-                                      {{ $details['tgl_konfirm'] }}
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                          @elseif($details['status_transaksi'] == 'Diterima')
+                        @elseif($details['status_transaksi'] == 'Diterima')
                           <div class="body-title">Step 4 Pesanan Diterima</div>
-                          <table class="body-text">
-                            <tr>
-                              <td class="body-text-cell">
-                                Pesanan Kamu dengan detail sebagai berikut :
-                                <table class="status" cellspacing="0">
-                                  <tr>
-                                    <td class="status-cell">
-                                      Total 
-                                    </td>
-                                    <td class="status-cell" style="width: 25px">:</td>
-                                    <td class="status-cell" style="text-align: center;color: red"> Rp. {{number_format($details['total_transkasi'],0,',','.')}}</td>
-                                  </tr>
-                                  <tr>
-                                    <td class="status-cell">
-                                      Code Transaksi
-                                    </td>
-                                    <td class="status-cell" style="width: 25px">:</td>
-                                    <td class="status-cell" style="text-align: center;"><b>{{ $details['code_transaksi'] }}</b></td>
-                                  </tr>
-                                  <tr>
-                                    <td class="status-cell">
-                                      Tanggal Konfirmasi Pesanan
-                                    </td>
-                                    <td class="status-cell" style="width: 25px">:</td>
-                                    <td class="status-cell" style="text-align: center;">
-                                      {{ $details['tgl_konfirm'] }}
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
                         @endif
-
+                          <div style="background-color: #f3f3f3;border-radius: 5px">
+                            <div style="padding: 12px">
+                              <table cellspacing="0" cellpadding="0" width="100%">
+                                <tr style="padding-bottom:20px;">
+                                  <td class="left" style="text-align:left;">
+                                    Total Bayar
+                                  </td>
+                                  <td>
+                                    :
+                                  </td>
+                                  <td>
+                                    <strong style="color: red;font-weight: 600">Rp. {{number_format($details['total_transkasi'],0,',','.')}}</strong>
+                                  </td>
+                                </tr>
+                                <tr style="padding-bottom:20px;">
+                                  <td class="left" style="text-align:left;">
+                                    Kode Pembayaran
+                                  </td>
+                                  <td>
+                                    :
+                                  </td>
+                                  <td>
+                                    {{ $details['code_transaksi'] }}
+                                  </td>
+                                </tr>
+                                <tr style="padding-bottom:20px;">
+                                  <td class="left" style="text-align:left;">
+                                    Tanggal Konfirmasi Pesanan
+                                  </td>
+                                  <td>
+                                    :
+                                  </td>
+                                  <td>
+                                    {{ $details['tgl_konfirm'] }}
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
+                          </div>
                         <table class="body-text">
                           <tr>
                             <td class="body-text-cell">
@@ -549,6 +491,18 @@
                             </td>
                           </tr>
                         </table>
+
+                        @if($details['status_transaksi'] == 'Dikirim')
+                         <p>Jika Pesanan Sudah Diterima Diharapkan Segera Mengkonfirmasi Dengan Mengklik Tombol Pesnan Diterima,</p>
+                          <table cellspacing="0" cellpadding="0" width="100%">
+                            <tr>
+                              <td class="mobile-center" align="left" style="padding:40px 0;">
+                                <div class="mobile-center" style="font-size: 14px;border-radius: .4rem;color: #fffff8;background-color: #00b894;box-shadow: none;font-weight: 700;border-color: #00b894;padding: 12px;text-align: center;">
+                                <a href="{{ url('pesanan_diterima').'/'.$details['id_transkasi'] }}" style="color: #fff;text-decoration: none">Pesanan Diterima</a></div>
+                              </td>
+                            </tr>
+                          </table>
+                        @endif
 
                         <table class="body-signature-block">
                           <tr>
@@ -568,6 +522,27 @@
           </div>
         </td>
         <td></td>
+      </tr>
+    </table>
+    <table class="footer-wrap w320 full-width-gmail-android" bgcolor="#e5e5e5">
+      <tr>
+        <td>
+          <div class="content footer-lead">
+             <b>Butuh Bantuan ?</b>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <table class="footer-wrap w320 full-width-gmail-android" bgcolor="#e5e5e5">
+      <tr>
+        <td>
+          <div class="content">
+            <a href="https://api.whatsapp.com/send?phone={{$details['profile_web']->no_tlp_convert}}">WhatsApp</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+            <span class="footer-group">
+              <a href="mailto:{{$details['profile_web']->email}}">Email</a>
+            </span>
+          </div>
+        </td>
       </tr>
     </table>
   </div>

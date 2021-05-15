@@ -78,10 +78,15 @@ Route::post('transaction/{id}','TransaksiController@transaction_end');
 Route::get('get/transaction/{id}','TransaksiController@transaction_get');
 Route::get('detail/transaksi/{id}','TransaksiController@detail_transaksi');
 Route::put('update_transaksi','TransaksiController@update_transaksi');
+
 Route::get('order/{id}','TransaksiController@redirct_email');
+Route::get('pesanan_diterima/{id}','TransaksiController@redirct_success');
+
 
 // to email
 Route::get('to_email','HomeController@redirct_email');
+// to sucess
+Route::get('to_update_transaksi','TransaksiController@to_update_transaksi');
 
 
 // tracking

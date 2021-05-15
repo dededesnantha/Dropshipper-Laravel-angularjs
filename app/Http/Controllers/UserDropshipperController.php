@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\tb_user;
 use App\Models\tb_order;
 use App\Models\tb_transaksi;
+use App\Models\profile_web;
+
 
 use Validator;
 use Response;
@@ -158,6 +160,15 @@ class UserDropshipperController extends Controller
         return Response::json(200);
     }
 
+    public function profile_web()
+    {
+        $data = profile_web::select('id','nama','no_tlp','email','logo','address','deskripsi')->first();
+        if(substr(trim($data->no_tlp), 0, 1)=='0'){
+             $data->no_tlp_convert = '62'.substr(trim($data->no_tlp), 1);
+         }
+        return $data;
+    }
+
     public function change_email(Request $request)
     {
         $post = $request->input();
@@ -171,6 +182,7 @@ class UserDropshipperController extends Controller
                 'otp' => $otp, 
                 'email' => $data_user->email,
                 'nama' => $data_user->nama,
+                'profile_web' => $this->profile_web(),
             ];
             \Mail::to($data_user->email)->send(new \App\Mail\MailSendOTP($details));
             return Response::json(200);

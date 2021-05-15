@@ -12,11 +12,11 @@
 	<!-- conntent -->
 	<div class="page-content-wrapper">
 		<div class="container">
-			<div class="checkout-wrapper-area py-3">
+			<div class="checkout-wrapper-area py-3" ng-if="datass.length > 0">
 				<div class="shipping-method-choose mb-3" ng-repeat="item in datass">
-					<div class="card shipping-method-choose-title-card" style="background-color: #818181">
+					<div class="card shipping-method-choose-title-card" ng-style="item.status_transaksi === 'Diterima' && {'background-color':'green'}  || count !== 'Diterima' && {'background-color':'#818181'}">
 						<div class="card-body">
-							<h6 class="text-left mb-0 text-white">Status Transaksi : {{item.status_transaksi}}</h6>
+							<h6 class="text-left mb-0 text-white" style="text-transform: capitalize;">Status Transaksi : {{item.status_transaksi}}</h6>
 						</div>
 					</div>
 					<div class="card shipping-method-choose-card">
@@ -41,7 +41,9 @@
 										<tr style="font-size: 14px" ng-repeat="items in item.produks">
 											<td>
 												<img ng-src="{{url_img}}{{items.gambar}}" class="img-checkout" alt="{{items.nama_produk}}">
-												<br>
+												
+											</td>
+											<td style="text-align: right;">
 												<span class="badge badge-success" ng-if="items.jenis_label === 'bigsale'">{{items.text_label}}</span>
 												<span class="badge badge-primary" ng-if="items.jenis_label === 'new'">{{items.text_label}}</span>
 												<span class="badge badge-danger" ng-if="items.jenis_label === 'disc'">{{items.text_label}}</span>
@@ -61,6 +63,14 @@
 								</table>
 							</div>
 						</div>
+					</div>
+				</div>
+			</div>
+			<div ng-if="datass.length == 0">
+				<div class="offline-area-wrapper py-3 d-flex align-items-center justify-content-center">
+					<div class="offline-text text-center"><img class="mb-4 px-5" src="../css/track-null.png" width="400" alt="">
+						<h5>Opps. Transaksi Tidak Ditemukan</h5>
+						<p>Pada Saat ini Tidak Ada Transaksi..</p><a class="btn btn-primary" href="#!home">Belanja Sekarang</a>
 					</div>
 				</div>
 			</div>

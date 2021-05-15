@@ -491,24 +491,22 @@
       </tr>
     </table>
 
-    <table class="footer-wrap w320 full-width-gmail-android" bgcolor="#e5e5e5">
+     <table class="footer-wrap w320 full-width-gmail-android" bgcolor="#e5e5e5">
       <tr>
-        <td class="container">
+        <td>
           <div class="content footer-lead">
-            <b>Butuh Bantuan ?</b>
+             <b>Butuh Bantuan ?</b>
           </div>
         </td>
       </tr>
     </table>
     <table class="footer-wrap w320 full-width-gmail-android" bgcolor="#e5e5e5">
       <tr>
-        <td class="container">
+        <td>
           <div class="content">
-            <a href="#">Contact Us</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="https://api.whatsapp.com/send?phone={{$details['profile_web']->no_tlp_convert}}">WhatsApp</a>&nbsp;&nbsp;|&nbsp;&nbsp;
             <span class="footer-group">
-              <a href="#">Facebook</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-              <a href="#">Twitter</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-              <a href="#">Support</a>
+              <a href="mailto:{{$details['profile_web']->email}}">Email</a>
             </span>
           </div>
         </td>
