@@ -1,8 +1,8 @@
 
 'use strict';
 
-    app.controller('Dashboard', ['$scope', '$http','$log','$uibModal','notify','$rootScope',
-    function ($scope, $http, $log, $modal,notify,$rootScope) {
+    app.controller('Dashboard', ['$scope', '$http','$log','$uibModal','notify','$rootScope','$location',
+    function ($scope, $http, $log, $modal,notify,$rootScope,$location) {
         $scope.load_sign();
 
         $scope.folds = [
@@ -11,6 +11,10 @@
         {name: 'Pesanan Dikirim', filter:'dikirim', icon:'fa-truck', badge: '', count: ''},
         {name: 'Pesanan Diterima', filter:'diterima', icon:'fa-check-square-o', badge:'success', count: ''}
         ];
+
+        if($location.url() == '/app/dashboard'){
+          $location.url('/app/dashboard/');
+        }
 
         $scope.count_transaksis = {};
         $rootScope.count_transaksi = function () {

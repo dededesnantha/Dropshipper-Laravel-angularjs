@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserDropshipperController extends Controller
 {
+
     public function login()
     {	
     	return view('login');
@@ -63,6 +64,7 @@ class UserDropshipperController extends Controller
                         }
                     );
         $get_user['count_track'] = $get_user['count_track']->count();
+        $get_user['profile_web'] = $this->profile_web();
     		return $get_user;
     	}else{
     		return response()->json($datass, 500);

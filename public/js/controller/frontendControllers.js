@@ -3,7 +3,11 @@
 myApp.controller('login', ['$scope', '$http','SweetAlert', function($scope, $http, SweetAlert){
 	$scope.load_sign();
 	$scope.form = {};
+	$scope.load = true;
+	$scope.text = false;
 	$scope.save = function () {
+		$scope.load = false;
+		$scope.text = true;
 		$http.post(base_url+'api/login_user', {username: $scope.form.username, password: $scope.form.password})
       	.then(function(response) {
 			SweetAlert.swal({
@@ -17,6 +21,8 @@ myApp.controller('login', ['$scope', '$http','SweetAlert', function($scope, $htt
 				})
 			setTimeout(function () {
 		       $scope.load_sign();
+		        $scope.load = true;
+				$scope.text = false;
 		    }, 3000);
       }, function(x) {
       		SweetAlert.swal("Login Gagal!", "Username dan Password Salah", "error")
@@ -585,12 +591,14 @@ myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$loc
   		if (!$scope.datass.colors) {
   			$scope.notif.color = false
   		}else{
+  			$scope.datass.size = '';
   			$scope.post($scope.datass, $scope.produks.id)
   		}
   	}else if($scope.produks.warna.length === 0 && $scope.produks.size.length > 0){
   		if (!$scope.datass.size) {
   			$scope.notif.size = false
   		}else{
+  			$scope.datass.colors = '';
   			$scope.post($scope.datass, $scope.produks.id)
   		}
   	}else{

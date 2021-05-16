@@ -3,7 +3,7 @@
       <div class="background-shape"></div>
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-12 col-sm-9 col-md-7 col-lg-6 col-xl-5"><img class="big-logo" src="img/core-img/logo-white.png" alt="">
+          <div class="col-12 col-sm-9 col-md-7 col-lg-6 col-xl-5">
             <!-- Register Form-->
             <div class="register-form mt-5 px-4">
               <form ng-submit="save()" >
@@ -15,7 +15,10 @@
                   <label for="password"><i class="lni lni-lock"></i></label>
                   <input class="form-control" id="password" type="password" placeholder="********************" ng-model="form.password">
                 </div>
-                <button class="btn btn-success btn-lg w-100" type="submit">Log In</button>
+                <button class="btn btn-success btn-lg w-100" type="submit">
+                  <span style="color: #fff;font-size: 16px" ng-hide="text">Login</span> 
+                  <div class="spinner-border text-black" role="status" style="width: 20px;height: 20px" ng-hide="load"><span class="sr-only">Loading...</span></div> 
+                </button>
               </form>
             </div>
           </div>

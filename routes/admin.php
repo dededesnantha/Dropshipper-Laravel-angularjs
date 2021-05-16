@@ -106,6 +106,15 @@ Route::group(['middleware' => 'auth:api'], function(){
 	Route::post('diterima','admin\AdminController@list_diterima');
 	Route::get('get_transaksi/{id}','admin\AdminController@get_transaksi');
 	Route::post('update_transaksi/{id}','admin\AdminController@update_transaksi');
+
+	// admin
+	Route::post('all_administrator','admin\ProtectController@all_admin');
+	Route::post('admin/add','admin\ProtectController@add_admin');
+	Route::get('get_akses/{id}','admin\ProtectController@get_akses');
+	Route::post('update_hakases/{id}','admin\ProtectController@update_hakases');
+	Route::get('admin_rubah/{id}','admin\ProtectController@admin_rubah');
+	Route::put('admin_update/{id}','admin\ProtectController@admin_update');
+	Route::delete('admin_delete/{id}','admin\ProtectController@admin_delete');
 	
 });
 

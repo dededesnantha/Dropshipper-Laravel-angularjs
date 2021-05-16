@@ -1020,12 +1020,38 @@ class AdminController extends Controller
                         'tb_transaksi.total_transkasi',
                         'tb_transaksi.code_transaksi',
                         'tb_transaksi.tgl_konfirm')->first();
+
+        $data['data_transaksi_detail'] = tb_order::where('id_transaksi', $id)
+                        ->join('tb_produk', 'tb_order.id_produk','=','tb_produk.id')
+                        ->leftJoin('tb_color','tb_order.id_color','=','tb_color.id')
+                        ->select('tb_produk.id',
+                            'tb_produk.nama_produk',
+                            'tb_produk.harga',
+                            'tb_produk.harga_promo',
+                            'tb_produk.jenis_label',
+                            'tb_produk.text_label',
+                            'tb_produk.gambar',
+                            'tb_produk.slug',
+                            'tb_produk.stok',
+                            'tb_color.color',
+                            'tb_color.text',
+                            'tb_order.kuantitas',
+                            'tb_order.size')->get();
+
         if ($transaksi->status_transaksi == 'Order') {
             if ($post['status_transaksi'] == 'Dikirim') {
                 tb_transaksi::where('id_transaksi', $id)->update([
                     'status_transaksi' => $post['status_transaksi'],
                 ]);
-                
+
+                foreach ($data['data_transaksi_detail'] as $key => $rows) {
+                    if ($rows['stok'] >= $rows['kuantitas']) {
+                        produk::where('id', $rows['id'])->update([
+                            'stok' => $rows['stok'] - $rows['kuantitas']
+                        ]);
+                    }
+                }
+
                 $date = $this->date_convert($transaksi->tgl_konfirm);
                 $tgl_konfirm =  $date['date'].' '.$date['sort_month'].' '.$date['year'];
                 // send email

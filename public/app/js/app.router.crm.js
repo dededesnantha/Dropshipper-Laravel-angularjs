@@ -400,8 +400,37 @@ angular.module('app')
                                     }
                             ]
                         }
-
-                    })         
+                    }).state('app.setting.administrator', {
+                        url: '/administrator',
+                        templateUrl: 'partials/setting/administrator.html',
+                        resolve: {
+                            deps: ['uiLoad',
+                            function(uiLoad) {
+                                return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css']);
+                            }
+                            ]
+                        }
+                    }).state('app.setting.admin_add', {
+                        url: '/administrator_add',
+                        templateUrl: 'partials/setting/administrator_add.html',
+                        resolve: {
+                            deps: ['uiLoad',
+                            function(uiLoad) {
+                                return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css']);
+                            }
+                            ]
+                        }
+                    }).state('app.setting.admin_rubah', {
+                        url: '/admin_rubah/:id',
+                        templateUrl: 'partials/setting/admin_rubah.html',
+                        resolve: {
+                            deps: ['uiLoad',
+                                function(uiLoad) {
+                                    return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css']);
+                                }
+                            ]
+                        }
+                    })      
                     .state('access', {
                         abstract: true,
                         url: '/access',

@@ -13,6 +13,7 @@ myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','
                 }else{
                   $scope.image_user = base_url+'image/'+$rootScope.user.foto_user
                 }
+                $scope.user.profile_web.logo= base_url+'image/'+$rootScope.user.profile_web.logo;
                 if (!$rootScope.user.address || !$rootScope.user.id_kabupaten || !$rootScope.user.id_kecamatan || !$rootScope.user.id_provinsi || !$rootScope.user.telephone) {
                     $location.path('/edit-profile');
                     SweetAlert.swal("Wajib Mengisi Data Pribadi Anda", "error")

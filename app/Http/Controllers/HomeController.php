@@ -56,6 +56,7 @@ class HomeController extends Controller
                                     'tb_produk.text_label','tb_produk.updated_at')
                             ->where('tb_kategori.status','=',1)
                             ->where('tb_produk.status','=',1)
+                            ->where('tb_produk.stok','>=',1)
                             ->whereNotNull('tb_produk.jenis_label')
                             ->orderBy('tb_produk.updated_at','DESC')
                             ->limit(8)
@@ -70,6 +71,7 @@ class HomeController extends Controller
                                     'tb_produk.text_label','tb_produk.updated_at')
                             ->where('tb_kategori.status','=',1)
                             ->where('tb_produk.status','=',1)
+                             ->where('tb_produk.stok','>=',1)
                             ->whereNull('tb_produk.jenis_label')
                             ->orderBy('tb_produk.id','DESC')
                             ->limit(12)
@@ -82,6 +84,7 @@ class HomeController extends Controller
                         ->where('tb_produk.slug', $slug)
                         ->where('tb_kategori.status','=',1)
                         ->where('tb_produk.status','=',1)
+                         ->where('tb_produk.stok','>=',1)
                         ->select('tb_produk.id','tb_produk.nama_produk','tb_produk.deskripsi','tb_produk.gambar',
                                 'tb_produk.status','tb_produk.harga','tb_produk.stok','tb_produk.size',
                                 'tb_produk.warna','tb_produk.harga_promo','tb_produk.jenis_label','tb_produk.text_label')
@@ -127,6 +130,7 @@ class HomeController extends Controller
                                     'tb_produk.text_label','tb_produk.updated_at')
                             ->where('tb_kategori.status','=',1)
                             ->where('tb_produk.status','=',1)
+                             ->where('tb_produk.stok','>=',1)
                             ->whereNotNull('tb_produk.jenis_label')
                             ->orderBy('tb_produk.updated_at','DESC')
                             ->get();
@@ -141,6 +145,7 @@ class HomeController extends Controller
                                     'tb_produk.text_label','tb_produk.updated_at')
                             ->where('tb_kategori.status','=',1)
                             ->where('tb_produk.status','=',1)
+                             ->where('tb_produk.stok','>=',1)
                             ->whereNull('tb_produk.jenis_label')
                             ->orderBy('tb_produk.id','DESC')
                             ->get();
@@ -155,6 +160,7 @@ class HomeController extends Controller
                                     'tb_produk.text_label','tb_produk.size','tb_produk.warna')
                             ->where('tb_kategori.status','=',1)
                             ->where('tb_produk.status','=',1)
+                             ->where('tb_produk.stok','>=',1)
                             ->where('tb_produk.id','=',$id)
                             ->first();
         if ($produk) {
@@ -208,6 +214,7 @@ class HomeController extends Controller
                                     'tb_produk.text_label','tb_produk.updated_at')
                     ->where('tb_kategori.status','=',1)
                     ->where('tb_produk.status','=',1)
+                    ->where('tb_produk.stok','>',0)
                     ->where('tb_produk.nama_produk','like',"%".$search."%")
                     ->orderBy('tb_produk.id','DESC')
                     ->get();

@@ -9,6 +9,7 @@ use App\Models\User;
 use Validator;
 use Response;
 use Cookie;
+use DB;
 use Illuminate\Support\Facades\Hash;
 
 class ProtectController extends Controller
@@ -56,5 +57,75 @@ class ProtectController extends Controller
         $user = User::create($request->toArray());
         $response = ['success' => 'success'];
         return response($response, 200);
+    }
+
+    public function all_admin(Request $request)
+    {
+        $post = $request->input();
+        
+        if ($post['search'] == NULL) {
+            $data = DB::table('tb_admin')
+                            ->select('id','nama','username')
+                            ->orderBy('id', $post['order'])
+                            ->paginate($post['much']);
+        }else{
+            $data = DB::table('tb_admin')
+                            ->select('id','nama','username')
+                            ->orderBy('id', $post['order'])
+                            ->where('title','like','%'.$post['search'].'%')
+                            ->paginate($post['much']);
+        }
+        return $data;
+    }
+
+    public function add_admin(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+        'nama' => 'required',
+        'username' => 'required',
+        'password' => 'required',
+        ]);
+        if ($validator->fails())
+        {
+            return response(['errors'=>$validator->errors()->all()], 422);
+        }else{
+            $post = $request->input();
+            $count = User::where('username', $post['username'])->count();
+            if ($count == 0) {
+                User::create([
+                    'nama' => $post['nama'],
+                    'username' => $post['username'],
+                    'password' => Hash::make($post['password']),
+                ]);
+                $response = ['success' => 'success'];
+                return response($response, 200);
+            }else{
+                $response = ['success' => 'error'];
+                return response($response, 500);
+            }
+        }
+    }
+    public function admin_rubah($id)
+    {
+      return User::where('id', $id)->first();
+    }
+    public function admin_update(Request $request, $id)
+    {
+      $post = $request->input();
+
+      if (!empty($post['new_password'])) {
+        $data = [
+          'nama' => $post['nama'] ?? '',
+          'username' => $post['username'] ?? '',
+          'password' => Hash::make($post['new_password']),
+        ];
+      }else{
+        $data = [
+          'nama' => $post['nama'] ?? '',
+          'username' => $post['username'] ?? '',
+        ];
+      }
+    User::where('id',$id)->update($data);
+    return response()->json(['status'=>'success'],200);
     }
 }

@@ -27,9 +27,13 @@
                                                 <span class="sale-price" >Rp. {{row.harga_promo | currency : "" : 0}} </span> <span style="text-decoration: line-through;">Rp. {{row.harga | currency : "" : 0}}</span>
                                             </span>
                                             <br>
-                                            <label class="btn btn-default" ng-if="row.color"><i class="sel-color" style="background-color:{{ row.color }};display: inline-block;margin-right: 5px"></i>{{row.text}}</label>
+                                            <label class="label label-default" ng-if="row.color">
+                                                <i class="sel-color" style="background-color:{{ row.color }};display: inline-block;margin-right: 5px"></i>{{row.text}}</label>
                                             <br>
-                                            <label style="margin-top: 5px" ng-if="row.size" class="btn btn-default" ng-if="row.color">{{row.size}}</label>
+                                            <label style="margin-top: 5px" ng-if="row.size" class="label label-default">{{row.size}}</label>
+                                            <br>
+                                            <label style="margin-top: 5px" ng-if="row.stok > 0" class="label label-success">Stok Ready</label>
+                                             <label style="margin-top: 5px" ng-if="row.stok == 0" class="label label-danger">Stok Habis</label>
                                         </td>  
                                     </tr>
                                     <tr>
