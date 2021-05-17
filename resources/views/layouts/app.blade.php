@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, shrink-to-fit=no">
     <meta name="description" content="Suha - Multipurpose Ecommerce Mobile HTML Template">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/png" href="../images/logobaliya-128.png">
     <meta name="theme-color" content="#100DD1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <!-- The above tags *must* come first in the head, any other head content must come *after* these tags-->
     <!-- Title-->
-    <title>Multipurpose Ecommerce Mobile HTML Template</title>
+    <title>Dropshipper Baliya</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap">
     
@@ -27,6 +28,9 @@
 
     <!-- slect -->
     <link rel="stylesheet" href="{{asset('css/template/select2.css') }}">
+
+    <!-- PWA -->
+    <link rel="manifest" href="{{asset('manifest.json') }}">
 
     <script> 
         var base_url = "{{ url('/')}}/" ; 
@@ -66,6 +70,7 @@
     <script src="{{asset('js/user/route.js')}}"></script>
     <!-- end "user" -->
     <script src="{{asset('js/controller/frontendControllers.js')}}"></script>
-
+    <!-- PWA -->
+    <link rel="manifest" href="{{asset('js/pwa.js') }}">
 </body>
 </html>

@@ -1,6 +1,6 @@
 'use strict';
-myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','$window','$route','SweetAlert',
-    function($scope,$http,$location,$rootScope,$window, $route, SweetAlert) {
+myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','$window','$route','SweetAlert', '$timeout',
+    function($scope,$http,$location,$rootScope,$window, $route, SweetAlert, $timeout) {
       $rootScope.loading = true;
 
       //check token
@@ -71,6 +71,14 @@ myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','
         $('#sidenavWrapper').removeClass('nav-active');
         $('.sidenav-black-overlay').removeClass('active');
       }
+
+       $scope.close = function(){
+        $('#close').addClass('toast');
+      }
+
+      $timeout(function() {
+          $('#close').addClass('toast');
+        },10000);
 
       $scope.Back = function () {
         $window.history.back();
