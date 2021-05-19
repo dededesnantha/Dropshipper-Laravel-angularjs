@@ -51,7 +51,7 @@ class UserDropshipperController extends Controller
     public function session_user()
     {
     	$datass = Cookie::get('id_user');
-        $get_user = tb_user::select('id_user','nama','foto_user','username','telephone','id_provinsi','id_kabupaten','id_kecamatan','address')->where('id_user', $datass)->first();
+        $get_user = tb_user::select('id_user','nama','foto_user','username','telephone','id_provinsi','id_kabupaten','id_kecamatan','address','token_firabase')->where('id_user', $datass)->first();
         
     	if ($datass) {
             $get_user['count_track'] = tb_transaksi::where('id_user', $datass)->whereNotNull('status_transaksi')
@@ -244,5 +244,14 @@ class UserDropshipperController extends Controller
         }else{
             return response()->json(['status' => 'error'], 500);
         }
+    }
+
+    public function update_token_firabase(Request $request)
+    {
+        $post = $request->input();
+        tb_user::where('id_user', $post['id_user'])->update([
+            'token_firabase' => $post['tokens'] ?? NULL
+        ]);
+        return response()->json(['status' => 'success'], 200); 
     }
 }

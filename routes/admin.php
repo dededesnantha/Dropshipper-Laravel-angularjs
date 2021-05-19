@@ -115,6 +115,9 @@ Route::group(['middleware' => 'auth:api'], function(){
 	Route::get('admin_rubah/{id}','admin\ProtectController@admin_rubah');
 	Route::put('admin_update/{id}','admin\ProtectController@admin_update');
 	Route::delete('admin_delete/{id}','admin\ProtectController@admin_delete');
+
+	// Push Notifikasi
+	Route::post('notifikasi/{id}','admin\NotifikasiController@push_notif');
 	
 });
 

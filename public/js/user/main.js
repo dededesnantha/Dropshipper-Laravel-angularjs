@@ -80,6 +80,11 @@ myApp.controller('AppCtrlFront', ['$scope', '$http', '$location', '$rootScope','
           $('#close').addClass('toast');
         },10000);
 
+      $scope.close_notifikasi = function(){
+        $('#close_notifikasi').addClass('toast');
+      }
+      
+
       $scope.Back = function () {
         $window.history.back();
       }

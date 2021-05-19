@@ -162,15 +162,15 @@ app.controller('Modalnotif', ['$scope','$uibModalInstance','items','$http','$loc
     //   }, function(x) {
     // });
 
-    // $scope.save = function () {
-    //   $http.post(baseurl+'admin/update_revisi/'+items,$scope.form,$scope.auth_config)
-    //       .then(function (response){
-    //         notify({ message:'Update Berhasil Ditambah', position:'right', duration:'10000', classes: 'alert-success' }); 
-    //        },function (error){
-    //         notify({ message:'Data Error',  position:'right', duration:'10000', classes: 'alert-danger' }); 
-    //        });
-    //   $modalInstance.close($scope.items);
-    // };
+    $scope.save = function () {
+      $http.post(baseurl+'admin/notifikasi/'+items,$scope.form,$scope.auth_config)
+          .then(function (response){
+            notify({ message:'Update Berhasil Dikirim', position:'right', duration:'10000', classes: 'alert-success' }); 
+           },function (error){
+            notify({ message:'Data Error',  position:'right', duration:'10000', classes: 'alert-danger' }); 
+           });
+      $modalInstance.close($scope.items);
+    };
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };

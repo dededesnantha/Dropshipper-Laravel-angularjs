@@ -78,8 +78,6 @@
     <script src="{{asset('app/js/directives/ui-chatwindow.js')}}"></script>
     <script src="{{asset('app/js/directives/ui-sectionbox.js')}}"></script>
     <script src="{{asset('app/js/controllers/bootstrap.js')}}"></script>
-    <script src="{{asset('app/js/controllers/topbar.js')}}"></script>
-    <script src="{{asset('app/js/controllers/chat.js')}}"></script>
     <!-- App JS - End -->
     <script src="{{asset('bower_components/Chart.js/Chart.js')}}"></script>
 

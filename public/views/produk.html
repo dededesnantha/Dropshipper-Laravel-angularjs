@@ -13,7 +13,7 @@
                   <span class="badge badge-danger" ng-if="item.jenis_label === 'disc'">{{item.text_label}}</span>
                   <a class="product-thumbnail d-block" href="#!produk/{{item.slug}}">
                     <div class="img-card">
-                      <img class="mb-2" src="{{item.gambar}}" alt="{{item.nama_produk}}">
+                      <img class="mb-2" ng-src="{{item.gambar}}" alt="{{item.nama_produk}}">
                     </div>
                   </a>
                     <a class="product-title d-block" href="#!produk/{{item.slug}}">{{item.nama_produk}}</a>
@@ -44,7 +44,7 @@
                 <div class="card-body d-flex align-items-center">
                   <div class="product-thumbnail-side">
                     <a class="product-thumbnail d-block" href="#!produk/{{items.slug}}">
-                      <img src="{{items.gambar}}" alt="{{items.nama_produk}}"></a>
+                      <img ng-src="{{items.gambar}}" alt="{{items.nama_produk}}"></a>
                     </div>
                   <div class="product-description">
                     <a class="product-title d-block" href="#!produk/{{items.slug}}">{{items.nama_produk}}</a>

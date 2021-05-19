@@ -30,7 +30,8 @@ class UserController extends Controller
 		        'nama' => $post['nama'],
 		        'email' => $post['email'],
 		        'username' => $post['username'],
-		        'password' => $post['password']
+		        'password' => $post['password'],
+                'profile_web' => $this->profile_web(),
 		    ];
 		    \Mail::to($post['email'])->send(new \App\Mail\MailSendLogin($details));
     		$post['password'] = bcrypt($post['password']);
@@ -71,7 +72,8 @@ class UserController extends Controller
             $details = [
                 'nama' => $post['nama'],
                 'email' => $post['email'],
-                'username' => $post['username']
+                'username' => $post['username'],
+                'profile_web' => $this->profile_web(),
             ];
         }else{
             $details = [

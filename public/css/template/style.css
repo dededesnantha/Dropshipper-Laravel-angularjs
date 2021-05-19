@@ -564,7 +564,6 @@ textarea:invalid {
     .preview-iframe-wrapper .preview-hero-area::after {
       position: absolute;
       content: "";
-      background-image: url(img/core-img/curve.png);
       bottom: 50px;
       width: 142px;
       height: 121px;

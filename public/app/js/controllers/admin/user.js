@@ -97,7 +97,7 @@ app.controller('UserAdd', ['$scope', '$http','$log','$uibModal','notify','$state
     $scope.form = {};
 
     $scope.save = function () {
-      $http.post(baseurl+'admin/add_user/',$scope.form,$scope.auth_config)
+      $http.post(baseurl+'admin/add_user',$scope.form,$scope.auth_config)
           .then(function (response){
             notify({ message:'Data User Berhasil Ditambah ', position:'right', duration:'10000', classes: 'alert-success' }); 
             $location.path('/app/user/user-all');

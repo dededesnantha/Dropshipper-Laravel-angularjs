@@ -107,7 +107,8 @@ Route::post('cek_status','UserDropshipperController@cek_status');
 Route::post('send_otp/{id}','UserDropshipperController@send_otp');
 Route::post('send_rubah_password/{id}','UserDropshipperController@send_rubah_password');
  
-
+// token firabase
+Route::put('update_token_firabase','UserDropshipperController@update_token_firabase'); 
 
 
 // Route::get('session', 'admin\ProtectController@refresh');

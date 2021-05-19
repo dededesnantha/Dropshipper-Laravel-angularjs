@@ -31,8 +31,8 @@ myApp.controller('login', ['$scope', '$http','SweetAlert', function($scope, $htt
 	}
 }]);
 
-myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','$route','$uibModal', 
-	function($scope, $http, SweetAlert, $location, $route, $uibModal){
+myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','$route','$uibModal','$rootScope',
+	function($scope, $http, SweetAlert, $location, $route, $uibModal, $rootScope){
 	$scope.load_sign();
 	
 	// cek redirct email 
@@ -56,9 +56,6 @@ myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','
 	$scope.slider = [];
 	$http.get(base_url+'get_slider').then(function(data) {
               $scope.slider = data.data;
-              angular.forEach($scope.slider, function (values, key) {
-               	values['image'] = base_url +'gallery/'+values['image'];
-              });
 	}, function(x) {
 	     SweetAlert.swal("Terjadi Kesalahan!", "error")
 	});
@@ -108,20 +105,38 @@ myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','
         });
 	};
 
-	// $scope.form = {};
-	// $scope.save = function () {
-	// 	$http.post(base_url+'api/login_user', {username: $scope.form.username, password: $scope.form.password})
- //      	.then(function(response) {
-	// 		SweetAlert.swal("Good job!", "You clicked the button!", "success")
-	// 		console.log(response)
-	// 		$scope.load_sign();
- //          // $localStorage.user = response.data.user;
- //          // $localStorage.token = response.data.token;
- //      }, function(x) {
- //      		SweetAlert.swal("Login Gagal!", "Username dan Password Salah", "error")
- //      });
-
-	// }
+	$scope.notifikasi = function() {
+		$scope.notifikasi = {};
+		messaging
+            .requestPermission()
+            .then(function () {
+                return messaging.getToken()
+            })
+            .then(function (tokens) {
+            	$rootScope.token_firabase = tokens
+            	$scope.notifikasi.tokens = $rootScope.token_firabase
+            	$scope.notifikasi.id_user = $scope.user.id_user;
+            	$http.put(base_url+'update_token_firabase',$scope.notifikasi)
+            	.then(function(response) {
+            		SweetAlert.swal({
+            			title: 'Notifikasi Aktif',
+            			text: 'Anda Akan Mendapatkan Notifikasi Dari Kami',
+            			timer: 3000,
+            			buttons: false,
+            			type: "success",
+            			showCancelButton: false,
+            			showConfirmButton: false,
+            		})
+            		$('#close_notifikasi').addClass('toast');
+            	}, function(x) {
+            		SweetAlert.swal("Terjadi Kesalahan!", "Mohon Untuk Mengulangi Pesanan Anda", "error")
+            	});
+            })
+	}
+	$scope.abaikan = function() {
+		$('#close_notifikasi').addClass('toast');
+	}
+	
 }]);
 
 myApp.controller('ModalContentCtrl', ['$scope', '$uibModalInstance', 'items', '$http','SweetAlert','$location','$route','$cookies',
@@ -742,8 +757,59 @@ myApp.controller('ListKategoriAllController', ['$scope', '$http','SweetAlert','$
 }]);
 
 myApp.controller('SettingController', ['$scope', '$http','SweetAlert','$location','$routeParams','$window', function($scope, $http, SweetAlert, $location, $routeParams, $window){
-	$scope.load_sign();
+	$scope.notifikasi = {};
+	
+	$scope.notifikas_get = function(){
+		$scope.load_sign();
+		if ($scope.user.token_firabase === undefined) {
+	          $scope.notifikasi.status = false; 
+	        }else{$scope.notifikasi.status = true ;}
+	}
 
+	$scope.notifikas_get();
+
+	$scope.notifikas = function(index){
+		$scope.notifikasi = {};
+		$scope.notifikasi.id_user = $scope.user.id_user;
+		if (index == false) {
+			$scope.notifikasi.status = false;
+			messaging
+            .requestPermission()
+            .then(function () {
+                return messaging.deleteToken()
+            })
+            $scope.notifikasi.tokens = '';
+            $scope.notifikas_send($scope.notifikasi)
+		}else{
+			$scope.notifikasi.status = true;
+			messaging
+            .requestPermission()
+            .then(function () {
+                return messaging.getToken()
+            })
+            .then(function (tokens) {
+				$scope.notifikasi.tokens = tokens
+				$scope.notifikas_send($scope.notifikasi)
+            })
+		}
+	}
+	$scope.notifikas_send = function(index){
+		$http.put(base_url+'update_token_firabase',index)
+		.then(function(response) {
+			SweetAlert.swal({
+				title: 'Notifikasi Berhasil Di Update',
+				text: 'Pembaharuan Notifikasi Berhasil',
+				timer: 3000,
+				buttons: false,
+				type: "success",
+				showCancelButton: false,
+				showConfirmButton: false,
+			})
+		}, function(x) {
+			$scope.load_sign();
+			SweetAlert.swal("Terjadi Kesalahan!", "Mohon Untuk Mengulangi Pesanan Anda", "error")
+		});
+	}
 }]);
 
 myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','$routeParams','$window', function($scope, $http, SweetAlert, $location, $routeParams, $window){
@@ -1067,9 +1133,7 @@ myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$locatio
            }
 	    });
 	    modalInstance.result.then(function() {
-	        $scope.loading = true 
-	    }, function () {
-	    	$scope.loading = true 
+	    }, function () { 
         });
 	};
 
