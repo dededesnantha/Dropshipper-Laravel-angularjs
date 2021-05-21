@@ -30,6 +30,7 @@ class Notification
             'notification' => [
                 'title' => $options['title'],
                 'body' => $options['body'],
+                'click_action' =>  $options['click_action'],
                 'sound' => 'default',
                 'icon' =>  $options['icon'],
             ],

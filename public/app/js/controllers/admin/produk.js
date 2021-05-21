@@ -165,7 +165,7 @@ app.controller('Modalnotif', ['$scope','$uibModalInstance','items','$http','$loc
     $scope.save = function () {
       $http.post(baseurl+'admin/notifikasi/'+items,$scope.form,$scope.auth_config)
           .then(function (response){
-            notify({ message:'Update Berhasil Dikirim', position:'right', duration:'10000', classes: 'alert-success' }); 
+            notify({ message:'Kirim Notififkasi Berhasil Dikirim', position:'right', duration:'10000', classes: 'alert-success' }); 
            },function (error){
             notify({ message:'Data Error',  position:'right', duration:'10000', classes: 'alert-danger' }); 
            });
@@ -585,7 +585,7 @@ app.controller('FileUploadCtrl', ['$scope', 'FileUploader','$stateParams','notif
           $scope.currentPage = 1;
       }
       $scope.maxSize = 20;
-    $http.post(baseurl+'admin/all_produk_gambar/'+$stateParams.id+'/?page='+$scope.currentPage,$scope.form,$scope.auth_config)
+    $http.post(baseurl+'admin/all_produk_gambar/'+$stateParams.id+'?page='+$scope.currentPage,$scope.form,$scope.auth_config)
           .then(function(data) {
               $scope.list=data.data
               $scope.image=$scope.list.data

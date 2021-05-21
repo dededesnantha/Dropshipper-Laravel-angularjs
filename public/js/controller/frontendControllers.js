@@ -25,6 +25,8 @@ myApp.controller('login', ['$scope', '$http','SweetAlert', function($scope, $htt
 				$scope.text = false;
 		    }, 3000);
       }, function(x) {
+      		$scope.load = true;
+			$scope.text = false;
       		SweetAlert.swal("Login Gagal!", "Username dan Password Salah", "error")
       });
 
@@ -33,8 +35,9 @@ myApp.controller('login', ['$scope', '$http','SweetAlert', function($scope, $htt
 
 myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','$route','$uibModal','$rootScope',
 	function($scope, $http, SweetAlert, $location, $route, $uibModal, $rootScope){
+
 	$scope.load_sign();
-	
+		
 	// cek redirct email 
 	$http.get(base_url+'to_email').then(function(data) {
 		if (data.data.id) {
@@ -266,6 +269,14 @@ myApp.controller('ProfileController', ['$scope', '$http','SweetAlert','$location
 	$scope.get_user = function(){
 		$http.post(base_url+'user',$scope.user).then(function(data) {
 	              $scope.user_datass = data.data;
+					if (!$scope.user_datass.address || !$scope.user_datass.id_kabupaten || !$scope.user_datass.id_kecamatan || !$scope.user_datass.id_provinsi || !$scope.user_datass.telephone) {
+						$location.path('/edit-profile');
+						SweetAlert.swal({
+							title: 'Wajib Mengisi Data Pribadi',
+							text: 'Data Pribadi Anda Belom Lengkap',
+							type: "error",
+						});
+					}
 	              $scope.user_datass.telephone =$scope.user_datass.telephone
 	              $scope.get_kabupaten($scope.user_datass.id_provinsi)
 	              $scope.get_kecamatan($scope.user_datass.id_kabupaten)
@@ -315,6 +326,7 @@ myApp.controller('ProfileController', ['$scope', '$http','SweetAlert','$location
     }
 
 	$scope.save = function () {
+		$scope.loading = true;
 		$http({
 		method  : 'POST',
 		url     : base_url+'upload/gambar',
@@ -331,8 +343,23 @@ myApp.controller('ProfileController', ['$scope', '$http','SweetAlert','$location
 	        $scope.user_datass.id_user = $scope.user.id_user;
 	        $http.post(base_url+'update_profile',$scope.user_datass)
 	        .then(function(response) {
-            	SweetAlert.swal("Update Berhasil!", "Hay, Data Kamu Sudah di Update", "success")
+	        	$scope.loading = false;
             	$scope.load_sign();
+            	
+            	SweetAlert.swal({
+				   title: "Update Berhasil!",
+				   text: "Data Kamu Sudah Berhasil Diupdate",
+				   type: "success",
+				   showCancelButton: false,
+				   confirmButtonColor: "#00b894",
+				   confirmButtonText: "Halaman Home",
+				   closeOnConfirm: true,
+					closeOnCancel: true}, 
+					function(isConfirm){ 
+						if (isConfirm) {
+							$location.path( "/home" );
+						} 
+				});
 			}, function(x) {
             	SweetAlert.swal("Terjadi Kesalahan!"," ", "error")        
 			});
@@ -758,17 +785,19 @@ myApp.controller('ListKategoriAllController', ['$scope', '$http','SweetAlert','$
 
 myApp.controller('SettingController', ['$scope', '$http','SweetAlert','$location','$routeParams','$window', function($scope, $http, SweetAlert, $location, $routeParams, $window){
 	$scope.notifikasi = {};
+	$scope.load_sign();
 	
 	$scope.notifikas_get = function(){
-		$scope.load_sign();
-		if ($scope.user.token_firabase === undefined) {
-	          $scope.notifikasi.status = false; 
+		$scope.loading = false;
+		if (!$scope.user.token_firabase || $scope.user.token_firabase === undefined) {
+			$scope.notifikasi.status = false; 
 	        }else{$scope.notifikasi.status = true ;}
 	}
 
 	$scope.notifikas_get();
 
 	$scope.notifikas = function(index){
+		$scope.loading = true;
 		$scope.notifikasi = {};
 		$scope.notifikasi.id_user = $scope.user.id_user;
 		if (index == false) {
@@ -796,6 +825,7 @@ myApp.controller('SettingController', ['$scope', '$http','SweetAlert','$location
 	$scope.notifikas_send = function(index){
 		$http.put(base_url+'update_token_firabase',index)
 		.then(function(response) {
+			$scope.loading = false;
 			SweetAlert.swal({
 				title: 'Notifikasi Berhasil Di Update',
 				text: 'Pembaharuan Notifikasi Berhasil',

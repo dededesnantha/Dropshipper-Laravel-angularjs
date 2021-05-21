@@ -69,6 +69,10 @@
     <!-- firabase -->
     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
+
+      <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-messaging.js"></script>
     <script src="{{asset('js/firabase.js') }}"></script>
 </body>

@@ -474,7 +474,9 @@
                           <tr>
                             <td class="body-signature-cell">
                               <p>Terimakasih, </p>
-                              <p class="body-signature"><img src="https://www.filepicker.io/api/file/2R9HpqboTPaB4NyF35xt" alt="Company Name"></p>
+                              <p class="body-signature">
+                                <img src="https://www.baliya.id/asset/image/logo.png" style="max-width: 150px">
+                              </p>
                             </td>
                           </tr>
                         </table>

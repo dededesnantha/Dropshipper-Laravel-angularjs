@@ -22,12 +22,12 @@ class NotifikasiController extends Controller
                 $response = Notification::send([
 	                'to' => $tokens->token_firabase,
 	                'title' => $post['text'],
+                    'click_action' => url(),
 	                'body' => $produk['nama_produk'],
 	                'icon' => url('images/logobaliya-128.png')
 	            ]);
         	}
         }
         return response()->json($response);
-
     }
 }

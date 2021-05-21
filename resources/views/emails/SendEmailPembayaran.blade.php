@@ -116,7 +116,7 @@
                 <table cellspacing="0" cellpadding="0" width="100%" style="margin-bottom: 20px">
                   <tr style="padding-bottom:20px;">
                     <td>
-                      <img src="{{url('css/img')}}/bri.jpg" alt="Bank BRI">
+                      <img src="{{ $message->embed(public_path().'/css/img/bri.jpg') }}" alt="Bank BRI">
                     </td>
                     <td>
                       <span>Bank BRI</span>
@@ -128,7 +128,7 @@
                   </tr>
                   <tr style="padding-bottom:20px;">
                     <td>
-                      <img src="{{url('css/img')}}/bca.jpg" alt="Bank BCA">
+                      <img src="{{ $message->embed(public_path().'/css/img/bca.jpg') }}" alt="Bank BCA">
                     </td>
                     <td>
                       <span>Bank BCA</span>
@@ -140,7 +140,7 @@
                   </tr>
                   <tr style="padding-bottom:20px;">
                     <td>
-                      <img src="{{url('css/img')}}/mdniri.png" alt="Bank MANDIRI">
+                      <img src="{{ $message->embed(public_path().'/css/img/mdniri.png') }}" alt="Bank MANDIRI">
                     </td>
                     <td>
                       <span>Bank MANDIRI</span>
@@ -199,7 +199,7 @@
                   @foreach($details['data_transaksi_detail'] as $key)
                     <tr>
                       <td>
-                        <img src="{{url('image').'/'.$key->gambar }}" alt="{{$key->nama_produk}}">
+                        <img src="{{ $message->embed(public_path().'/image/'.$key->gambar) }}" alt="{{$key->nama_produk}}" width="70">
                       </td>
                       <td>
                         <span>{{$key->nama_produk}}</span>

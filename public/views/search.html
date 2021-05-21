@@ -26,7 +26,7 @@
         							<span class="badge badge-danger" ng-if="item.jenis_label === 'disc'">{{item.text_label}}</span>
         							<a class="product-thumbnail d-block" href="#!produk/{{item.slug}}">
         								<div class="img-card">
-        									<img class="mb-2" src="{{item.gambar}}" alt="{{item.nama_produk}}">
+        									<img class="mb-2" ng-src="{{item.gambar}}" alt="{{item.nama_produk}}">
         								</div>
         							</a>
         							<a class="product-title d-block" href="#!produk/{{item.slug}}">{{item.nama_produk}}</a>
