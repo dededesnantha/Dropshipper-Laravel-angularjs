@@ -7,7 +7,8 @@
           <ul class="h-100 d-flex align-items-center justify-content-between ps-0">
             <li ng-class="{active: $route.current.activetab == 'home'}"><a href="#!home"><i class="lni lni-home"></i>Home</a></li>
             <li ng-class="{active: $route.current.activetab == 'cart'}"><a href="#!cart"><span class="badge badge-danger" style="position: absolute;font-size: 9px;" ng-if="cart >= 1">{{cart}}</span><i class="lni lni-shopping-basket"></i>Keranjang</a></li>
-            <li  ng-class="{active: $route.current.activetab == 'setting'}"><a href="#!setting"><i class="lni lni-cog"></i>Setting</a></li>
+            <li  ng-class="{active: $route.current.activetab == 'profile'}">
+              <a href="#!profile"><i class="lni lni-user"></i>Profile</a></li>
           </ul>
         </div>
       </div>

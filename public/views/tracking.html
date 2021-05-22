@@ -47,6 +47,7 @@
 												<span class="badge badge-success" ng-if="items.jenis_label === 'bigsale'">{{items.text_label}}</span>
 												<span class="badge badge-primary" ng-if="items.jenis_label === 'new'">{{items.text_label}}</span>
 												<span class="badge badge-danger" ng-if="items.jenis_label === 'disc'">{{items.text_label}}</span>
+												<span class="badge badge-danger" ng-if="items.stok == 0 && item.status_transaksi == 'pembayaran'">Stok Barang Habis</span>
 												<a href="#!produk/{{items.slug}}" class="top-product-card" style="font-size: 15px">
 													{{items.nama_produk}}
 													<br>

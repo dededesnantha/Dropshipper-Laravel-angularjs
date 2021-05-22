@@ -109,6 +109,7 @@ myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','
 	};
 
 	$scope.notifikasi = function() {
+		$scope.loading = true;
 		$scope.notifikasi = {};
 		messaging
             .requestPermission()
@@ -121,6 +122,8 @@ myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','
             	$scope.notifikasi.id_user = $scope.user.id_user;
             	$http.put(base_url+'update_token_firabase',$scope.notifikasi)
             	.then(function(response) {
+            		$scope.user.token_firabase = true;
+            		$scope.loading = false;
             		SweetAlert.swal({
             			title: 'Notifikasi Aktif',
             			text: 'Anda Akan Mendapatkan Notifikasi Dari Kami',
@@ -132,9 +135,16 @@ myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','
             		})
             		$('#close_notifikasi').addClass('toast');
             	}, function(x) {
+            		$scope.loading = false;
             		SweetAlert.swal("Terjadi Kesalahan!", "Mohon Untuk Mengulangi Pesanan Anda", "error")
             	});
             })
+            .catch(function (err) {
+            	$('#close_notifikasi').addClass('toast');
+			   $scope.loading = false;
+			   SweetAlert.swal("Notifikasi Diblok Oleh Browser","untuk mengkatifkan notifikasi bisa anda lakukan dengan klik bagian kunci di url browser atau di bagian setting.  Rubah status notifikasi ke 'allow' ","error")
+			   $scope.notifikasi.status = false;
+			});
 	}
 	$scope.abaikan = function() {
 		$('#close_notifikasi').addClass('toast');
@@ -512,7 +522,8 @@ myApp.controller('ListKategoriController', ['$scope', '$http','SweetAlert','$loc
 				    $scope.loading = false;
 				  }
 		}, function(x) {
-		     SweetAlert.swal("Terjadi Kesalahan!","","error")
+			$scope.loading = false;
+			$location.path( "/404" );
 		});
 	}
 	$scope.init();
@@ -549,12 +560,18 @@ myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$loc
 	});
 	$http.get(base_url+'produk/'+$routeParams.slug).then(function(data) {
               $scope.produks = data.data.produk;
-              angular.forEach($scope.produks.gambar, function (values, key) {
-               	values['gambar'] = base_url +'image/'+values['gambar'];
-              });
-              document.getElementById("desc_text").innerHTML = $scope.produks.deskripsi;
-              $scope.loading = false;
+              if (!$scope.produks) {
+              	$scope.loading = false;
+              	$location.path( "/404" );
+              }else{
+              	angular.forEach($scope.produks.gambar, function (values, key) {
+	               	values['gambar'] = base_url +'image/'+values['gambar'];
+	              });
+	              document.getElementById("desc_text").innerHTML = $scope.produks.deskripsi;
+	              $scope.loading = false;
+              }
 	}, function(x) {
+		$scope.loading = false;
 	     SweetAlert.swal("Terjadi Kesalahan!","","error")
 	});
 
@@ -783,15 +800,22 @@ myApp.controller('ListKategoriAllController', ['$scope', '$http','SweetAlert','$
 	});
 }]);
 
-myApp.controller('SettingController', ['$scope', '$http','SweetAlert','$location','$routeParams','$window', function($scope, $http, SweetAlert, $location, $routeParams, $window){
+myApp.controller('SettingController', ['$scope', '$http','SweetAlert','$location','$window','$rootScope', function($scope, $http, SweetAlert, $location, $window, $rootScope){
 	$scope.notifikasi = {};
-	$scope.load_sign();
 	
 	$scope.notifikas_get = function(){
-		$scope.loading = false;
-		if (!$scope.user.token_firabase || $scope.user.token_firabase === undefined) {
-			$scope.notifikasi.status = false; 
-	        }else{$scope.notifikasi.status = true ;}
+		$http.get(base_url+'api/session_user').then(function(response){
+	            if (response.status == 200) {
+	                $scope.token_firabase = response.data.token_firabase;
+	            }
+	            if (!$scope.token_firabase || $scope.token_firabase === undefined || $scope.token_firabase === null) {
+	            	$scope.notifikasi.status = false; 
+	            	$scope.loading = false;
+	            }else{
+	            	$scope.loading = false;
+	            	$scope.notifikasi.status = true;
+	            }
+	    })
 	}
 
 	$scope.notifikas_get();
@@ -820,6 +844,11 @@ myApp.controller('SettingController', ['$scope', '$http','SweetAlert','$location
 				$scope.notifikasi.tokens = tokens
 				$scope.notifikas_send($scope.notifikasi)
             })
+            .catch(function (err) {
+			   $scope.loading = false;
+			   SweetAlert.swal("Notifikasi Diblok Oleh Browser","untuk mengkatifkan notifikasi bisa anda lakukan dengan klik bagian kunci di url browser atau di bagian setting.  Rubah status notifikasi ke 'allow' ","error")
+			   $scope.notifikasi.status = false;
+			});
 		}
 	}
 	$scope.notifikas_send = function(index){
@@ -862,9 +891,10 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 		});
 	}
 	$scope.datass();
-	$scope.qty_tambah = function(item, id){
+	$scope.qty_tambah = function(array, item, id){
 		angular.forEach($scope.produks, function (values, key) {
-    		if (values.id === id) {
+		
+		if (array == key) {
 	       		if ( item >= values.stok) {
 		  			values['notif'] = false;
 		  		}else{
@@ -874,10 +904,10 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	    });
 	    $scope.getTotal();
 	}
-	$scope.qty_kurang = function(item, id){
+	$scope.qty_kurang = function(array, item, id){
 		$scope.notif = true;
 		angular.forEach($scope.produks, function (values, key) {
-	       	if (values.id === id) {
+	       	if (array == key) {
 			    if(item > 1){
 			       values['qty'] = item - 1;
 			       values['notif'] = true;
@@ -886,10 +916,10 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 		});
 		$scope.getTotal();
 	}
-	$scope.update_totals = function(item, id){
+	$scope.update_totals = function(array, item, id){
 			if (item !== 0) {
 				angular.forEach($scope.produks, function (values, key) {
-			       	if (values.id === id) {
+			       	if (array == key) {
 			       		if ( item >= values.stok) {
 				  			values['notif'] = false;
 				  			values['qty'] = values.stok;
@@ -919,7 +949,7 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	    });
 	}
 
-	$scope.delete = function(id, size, color) {
+	$scope.delete = function(array, id, size, color) {
 		$scope.datass_delete = {};
 		SweetAlert.swal({
 		   title: "Hapus barang?",
@@ -932,6 +962,7 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 			closeOnCancel: true}, 
 		function(isConfirm){ 
 			if (isConfirm) {
+				$scope.datass_delete.no_array = array;
 				$scope.datass_delete.id = id;
 				$scope.datass_delete.size = size;
 				$scope.datass_delete.color = color;
@@ -1213,6 +1244,7 @@ myApp.directive('onlyNumbers', function () {
 
 myApp.controller('PaymentController', ['$scope', '$http','SweetAlert','$location', '$routeParams','$uibModal', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal){
 	$scope.load_sign();
+	$scope.count_cart();
 	$scope.url = "Detail Pembayaran";
 	$scope.datass = {};
 
@@ -1220,7 +1252,8 @@ myApp.controller('PaymentController', ['$scope', '$http','SweetAlert','$location
 		$scope.loading = false;
 		$scope.datass = data.data;
 	}, function(x) {
-		SweetAlert.swal("Terjadi Kesalahan!", "error")
+		$scope.loading = false;
+		$location.path( "/404" );
 	});
 
 	$scope.detail = function(data){
@@ -1272,7 +1305,8 @@ myApp.controller('OrderController', ['$scope', '$http','SweetAlert','$location',
 		$scope.datass.date_now = new Date();
 		$scope.loading = false;
 	}, function(x) {
-		SweetAlert.swal("Terjadi Kesalahan!", "error")
+		$scope.loading = false;
+		$location.path( "/404" );
 	});
 
 	$scope.file = [];

@@ -8,6 +8,7 @@ use App\Models\tb_transaksi;
 use Carbon\Carbon;
 use App\Models\tb_order;
 use App\Models\tb_user;
+use App\Models\produk;
 use Cookie;
 use Illuminate\Support\Facades\Crypt;
 use Mail;
@@ -165,7 +166,8 @@ class TransaksiController extends Controller
         $data_transaksi_detail = tb_order::where('id_transaksi', $id)
                         ->join('tb_produk', 'tb_order.id_produk','=','tb_produk.id')
                         ->leftJoin('tb_color','tb_order.id_color','=','tb_color.id')
-                        ->select('tb_produk.nama_produk',
+                        ->select('tb_produk.id',
+                            'tb_produk.nama_produk',
                             'tb_produk.harga',
                             'tb_produk.harga_promo',
                             'tb_produk.jenis_label',
@@ -205,6 +207,7 @@ class TransaksiController extends Controller
     public function transaction_get($id)
     {
         $id = Crypt::decryptString($id);
+
         $data_transaksi = tb_transaksi::where('id_transaksi', $id)
                             ->select('tb_transaksi.id_transaksi',
                                 'tb_transaksi.id_transaksi',
@@ -219,7 +222,7 @@ class TransaksiController extends Controller
         return response()->json($data_transaksi,200);
     }
 
-    public function detail_transaksi($id)
+    public function detail_transaksi($id, Request $request)
     {
         $id = Crypt::decryptString($id);
         $data_transaksi = tb_transaksi::where('id_transaksi', $id)
@@ -255,6 +258,8 @@ class TransaksiController extends Controller
             $temp_date = $this->date_convert($data_transaksi->tgl_expired);
             $data_transaksi->tgl_expired =  $temp_date['date'].' '.$temp_date['sort_month'].' '.$temp_date['year'];
             $data_transaksi->id_transaksi = Crypt::encryptString($data_transaksi->id_transaksi);
+
+
             $data_transaksi_detail = tb_order::where('id_transaksi', $id)
                             ->join('tb_produk', 'tb_order.id_produk','=','tb_produk.id')
                             ->leftJoin('tb_color','tb_order.id_color','=','tb_color.id')
@@ -269,27 +274,49 @@ class TransaksiController extends Controller
                                 'tb_color.color',
                                 'tb_color.text',
                                 'tb_order.kuantitas',
-                                'tb_order.size')->get();
+                                'tb_order.size',
+                                'tb_order.id_produk')->get();
             $total_produk = 0;
             $total_kuantitas = 0;
+
+            $status = true;
             foreach ($data_transaksi_detail as $key => $value) {
-                if ($value->harga_promo == null) {
-                    $total_produk += $value->kuantitas * $value->harga;
-                    $data_transaksi_detail[$key]->totals_produks = $value->kuantitas * $value->harga;
-                }else{
-                    $total_produk += $value->kuantitas * $value->harga_promo;
-                    $data_transaksi_detail[$key]->totals_produks = $value->kuantitas * $value->harga_promo;
+                if ($value->stok == 0 || $value['kuantitas'] > $value['stok']) {
+                    if ($request->session()->has('transaksi_update')) {
+                        $status = true;
+                        $request->session()->forget('transaksi_update');
+                        break;
+                    }else{
+                        $status = false;
+                        break;
+                    }
                 }
-                $total_kuantitas += $value->kuantitas;
             }
-            $data_transaksi->total_produk = $total_produk;
-            $data_transaksi->total_kuantitas = $total_kuantitas;
-            $details = [
-                'data_transaksi' => $data_transaksi,
-                'data_transaksi_detail' => $data_transaksi_detail,
-                'profile_web' => $this->profile_web(),
-            ];
-            return response()->json($details,200);
+
+            if ($status) {
+                foreach ($data_transaksi_detail as $key => $value) {
+                        if ($value->harga_promo == null) {
+                            $total_produk += $value->kuantitas * $value->harga;
+                            $data_transaksi_detail[$key]->totals_produks = $value->kuantitas * $value->harga;
+                        }else{
+                            $total_produk += $value->kuantitas * $value->harga_promo;
+                            $data_transaksi_detail[$key]->totals_produks = $value->kuantitas * $value->harga_promo;
+                        }
+                        $total_kuantitas += $value->kuantitas;
+                }
+
+
+                $data_transaksi->total_produk = $total_produk;
+                $data_transaksi->total_kuantitas = $total_kuantitas;
+                $details = [
+                    'data_transaksi' => $data_transaksi,
+                    'data_transaksi_detail' => $data_transaksi_detail,
+                    'profile_web' => $this->profile_web(),
+                ];
+                return response()->json($details,200);
+            }else{
+                return response()->json(['status' => 'stok habis'],200);
+            }
         }else{
             return response()->json(['status' => 'expired' ],200);
         }
@@ -300,6 +327,21 @@ class TransaksiController extends Controller
        $post = $request->input();
        $date_konfrim = date('Y-m-d', strtotime($post['tgl_konfirm']));
        $id = Crypt::decryptString($post['id_transaksi']);
+
+       $data_transaksi_detail = tb_order::where('id_transaksi', $id)
+       ->join('tb_produk', 'tb_order.id_produk','=','tb_produk.id')
+       ->select('tb_produk.id',
+        'tb_produk.stok',
+        'tb_order.kuantitas')->get();
+
+        foreach ($data_transaksi_detail as $key => $rows) {
+            if ($rows['stok'] >= $rows['kuantitas']) {
+                produk::where('id', $rows['id'])->update([
+                    'stok' => $rows['stok'] - $rows['kuantitas']
+                ]);
+            }
+        }
+
        tb_transaksi::where('id_transaksi', $id)->update([
         'tgl_konfirm' => $date_konfrim,
         'image_transfer' => $post['image_transfer']['data'],
@@ -321,6 +363,7 @@ class TransaksiController extends Controller
             'profile_web' => $this->profile_web(),
         ];
         \Mail::to($datas->email)->send(new \App\Mail\OrderEmail($details));
+        $request->session()->put('transaksi_update', 'success');
        return response()->json(200);
     }   
 

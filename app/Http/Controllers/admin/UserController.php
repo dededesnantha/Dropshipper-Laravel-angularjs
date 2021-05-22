@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use Response;
 use DB;
 use Mail;
 use App\Models\tb_user;
@@ -24,7 +24,7 @@ class UserController extends Controller
     public function add_user(Request $request)
     {
     	$post = $request->input();
-    	$cek = tb_user::where('username', $post)->count();
+    	$cek = tb_user::where('username', $post['username'])->count();
     	if ($cek == 0) {
     		$details = [
 		        'nama' => $post['nama'],
@@ -36,8 +36,8 @@ class UserController extends Controller
 		    \Mail::to($post['email'])->send(new \App\Mail\MailSendLogin($details));
     		$post['password'] = bcrypt($post['password']);
     		return tb_user::create($post);
-    	}else{
-    		return new JsonResponse($errors, 422);   
+    	}else{  
+            return response(422);
     	}
 
     }

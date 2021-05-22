@@ -33,11 +33,18 @@ class CartController extends Controller
             {
                 if($values["id_produk"] == $post['id_produk'] && $values["id_color"] == $post['colors'] && $values['size'] == $post['size'])
                 {
+                    $produks = produk::where('id', $post['id_produk'])->first();
                     $item_kuantitas_list = array_column($cart_data, 'kuantitas');
-                    $cart_data[$keys]["kuantitas"] = $post['qty'] + $item_kuantitas_list[$keys];
-                    $data = true;
+                    if ($item_kuantitas_list[$keys] >= $produks->stok) {
+                        $cart_data[$keys]["kuantitas"] = $produks->stok;
+                        $data = true;
+                    }else{
+                        $cart_data[$keys]["kuantitas"] = $post['qty'] + $item_kuantitas_list[$keys];
+                        $data = true;
+                    }
                 }
             }
+            
             if ($data == false) {
                 $item_array = array(
                     'id_user' => $post['id_user'],
@@ -95,17 +102,19 @@ class CartController extends Controller
     public function delete_cart(Request $request)
     {
         $post = $request->input();
+
         $cookie_data = stripslashes(Cookie::get('cart'));
         $cart_data = json_decode($cookie_data, true);
 
         $item_id_list = array_column($cart_data, 'id_produk');
+
         $prod_id_is_there = $post['id'];
 
         if(in_array($prod_id_is_there, $item_id_list))
         {
             foreach($cart_data as $keys => $values)
             { 
-                if($cart_data[$keys]["id_produk"] == $post['id'])
+                if($keys == $post['no_array'])
                 {
                     unset($cart_data[$keys]);
                 }

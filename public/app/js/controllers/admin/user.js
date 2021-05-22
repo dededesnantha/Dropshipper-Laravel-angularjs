@@ -102,7 +102,7 @@ app.controller('UserAdd', ['$scope', '$http','$log','$uibModal','notify','$state
             notify({ message:'Data User Berhasil Ditambah ', position:'right', duration:'10000', classes: 'alert-success' }); 
             $location.path('/app/user/user-all');
            },function (error){
-            notify({ message:'Data Update Error',  position:'right', duration:'10000', classes: 'alert-danger' }); 
+            notify({ message:'Tambah User Error',  position:'right', duration:'10000', classes: 'alert-danger' }); 
            });
     };
     $scope.cancel = function () {

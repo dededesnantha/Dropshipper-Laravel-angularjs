@@ -18,7 +18,7 @@
 	              <table class="table mb-0">
 	                <tbody>
 	                  <tr ng-repeat="produk in produks">
-	                    <th scope="row" style="width: 50px"><a class="remove-product" ng-click="delete(produk.id, produk.size, produk.color.id)"><i class="lni lni-close"></i></a></th>
+	                    <th scope="row" style="width: 50px"><a class="remove-product" ng-click="delete($index, produk.id, produk.size, produk.color.id)"><i class="lni lni-close"></i></a></th>
 	                    <td style="text-align: center;">
 	                    	<img ng-src="{{produk.gambar}}" class="img-td" alt="{{produk.nama_produk}}">
 	                    </td>
@@ -37,9 +37,9 @@
 	                    <td style="width: 150px;text-align: center;">
 	                      <div class="quantity cart-form">
 					        <div class="order-plus-minus d-flex align-items-center">
-					          <div class="quantity-button-handler" ng-click="qty_kurang(produk.qty, produk.id)" >-</div>
-					          <input class="form-control cart-quantity-input" type="number" name="qty" ng-change="update_totals(produk.qty, produk.id)" ng-model="produk.qty" >
-					          <div class="quantity-button-handler" ng-click="qty_tambah(produk.qty, produk.id)" >+</div>
+					          <div class="quantity-button-handler" ng-click="qty_kurang($index, produk.qty, produk.id)" >-</div>
+					          <input class="form-control cart-quantity-input" type="number" name="qty" ng-change="update_totals($index, produk.qty, produk.id)" ng-model="produk.qty" >
+					          <div class="quantity-button-handler" ng-click="qty_tambah($index, produk.qty, produk.id)" >+</div>
 					        </div>
 					      </div>
 					      <div style="position: relative;">

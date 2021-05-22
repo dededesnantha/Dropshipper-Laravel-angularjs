@@ -144,11 +144,19 @@
 	    </div>
 	 </div>
   </div>
-  <div ng-if="datass.status">
+  <div ng-if="datass.status == 'expired'">
   	<div class="order-success-wrapper">
   		<div class="content"><i class="lni lni-close"></i>
   			<h5>Pesanan Kadaluarsa</h5>
   			<p>Pesanan kamu sudah kadaluarsa, yuk belanja lagi</p><a class="btn btn-warning mt-3" href="#!home">Belanja Lagi</a>
+  		</div>
+  	</div>
+  </div>
+  <div ng-if="datass.status == 'stok habis'">
+  	<div class="order-success-wrapper">
+  		<div class="content"><i class="lni lni-close"></i>
+  			<h5>Pesanan Kamu Tidak Ada Stok</h5>
+  			<p>Untuk Pesanan Yang Kamu Order Sudah Habis Untuk Stok Produk, Tetapi Jangan Sedih Ada Banyak Produk Yang lain</p><a class="btn btn-warning mt-3" href="#!home">Lihat Produk Lain</a>
   		</div>
   	</div>
   </div>

@@ -16,10 +16,12 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
     });
     // profile
     $routeProvider.when('/profile', {
-        templateUrl: '../views/profile.html'
+        templateUrl: '../views/profile.html',
+        activetab: 'profile'
     });
     $routeProvider.when('/edit-profile', {
-        templateUrl: '../views/edit-profile.html'
+        templateUrl: '../views/edit-profile.html',
+        activetab: 'profile'
     });
     // single kategori
     $routeProvider.when('/kategori/:slug', {
@@ -44,7 +46,6 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
     // setting
     $routeProvider.when('/setting', {
         templateUrl: '../views/setting.html',
-        activetab: 'setting'
     })
     //cart
     $routeProvider.when('/cart',{
@@ -100,17 +101,10 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
         templateUrl:'../views/components/sucess.html',
     });
     
-    
-    // $routeProvider.when('/dashboard',{
-    //     templateUrl:'templates/dashboard.html',
-    //     controller:'../controller/frontendController'
-    // });
- 
-    // $routeProvider.when('/logout',{
-    //     templateUrl:'templates/logout.html',
-    //     controller:'frontendController'
-    // });
- 
+    $routeProvider.when('/404',{
+        templateUrl:'../views/components/404.html',
+    });
+
     $routeProvider.otherwise('/home');
     // $locationProvider.html5Mode({
     //   enabled: true,

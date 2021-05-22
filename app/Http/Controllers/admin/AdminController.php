@@ -1044,13 +1044,13 @@ class AdminController extends Controller
                     'status_transaksi' => $post['status_transaksi'],
                 ]);
 
-                foreach ($data['data_transaksi_detail'] as $key => $rows) {
-                    if ($rows['stok'] >= $rows['kuantitas']) {
-                        produk::where('id', $rows['id'])->update([
-                            'stok' => $rows['stok'] - $rows['kuantitas']
-                        ]);
-                    }
-                }
+                // foreach ($data['data_transaksi_detail'] as $key => $rows) {
+                //     if ($rows['stok'] >= $rows['kuantitas']) {
+                //         produk::where('id', $rows['id'])->update([
+                //             'stok' => $rows['stok'] - $rows['kuantitas']
+                //         ]);
+                //     }
+                // }
 
                 $date = $this->date_convert($transaksi->tgl_konfirm);
                 $tgl_konfirm =  $date['date'].' '.$date['sort_month'].' '.$date['year'];
