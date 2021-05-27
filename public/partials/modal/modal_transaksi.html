@@ -87,12 +87,12 @@
                                         <td><b>Bukti Transaksi : </b></td>
                                         <td><img ng-src="{{form.data_transaksi.image_transfer}}" width="80"></td>
                                     </tr>
-                                    <tr ng-hide="form.data_transaksi.status_transaksi === 'pembayaran'">
+                                    <tr ng-hide="form.data_transaksi.status_transaksi === 'pembayaran' || form.data_transaksi.status_transaksi === 'Diterima'">
                                         <td><b>Update Status Transaksi : </b></td>
                                         <td>
                                             <div class="input-group" inputgroup>
                                                 <select class="form-control" ng-model="form.data_transaksi.status_transaksi">
-                                                    <option value="Order" >Order </option>
+                                                    <option value="Order" ng-hide="form.data_transaksi.status_transaksi === 'Dikirim'">Order </option>
                                                     <option value="Dikirim" >Dikirim</option>
                                                     <option value="Diterima" >Diterima</option>
                                                 </select>

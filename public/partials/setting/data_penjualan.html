@@ -1,0 +1,160 @@
+<div class='content-wrapper' ng-controller="DataPenjualan">
+
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <section class="box ">
+                    <header class="panel_header">
+                        <h2 class="title pull-left">List Penjualan</h2>
+                    </header>
+                    <div class="content-body">
+                        <div class="row">
+                        <form role="form" ng-submit = "filter()">
+                            <div class="col-md-6 col-sm-12 col-xs-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="email-1">Tahun:</label>
+                                        <select class="form-control" ng-model="form.tahun">
+                                            <option value="" ng-selected="true">--  Tahun  --</option>
+                                            <option ng-repeat="key in tahun" value="{{key}}" >{{key}}</option>
+                                        </select>
+                                    </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="email-1">Bulan:</label>
+                                        <select class="form-control" ng-model="form.bulan">
+                                            <option value="" ng-selected="true">--  Bulan  --</option>
+                                            <option ng-repeat="key in bulan" value="{{key.no}}" >{{key.name}}</option>
+                                        </select>
+                                    </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group margin-bottom-0">
+                                        <button class="btn btn-secondary btn-icon  pull-right margin-bottom-15" type="submit" style="background-color: #9544bf;">
+                                            <i class="fa fa-random"></i> &nbsp; <span>Filter</span>
+                                        </button>
+                                    </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-12" ng-hide="hide_report">
+                <section class="box ">
+                    <header class="panel_header">
+                        <h2 class="title pull-left">Report Penjualan</h2>
+                    </header>
+                    <div class="content-body padding-bottom-15">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="3">Total Produk</td>
+                                            <td>Rp. {{price.total_produk | currency : "" : 0}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Total Ongkir</td>
+                                            <td>Rp. {{price.total_ongkir | currency : "" : 0}}</td>
+                                        </tr>
+                                        <tr class="success">
+                                            <td colspan="3">Total Penjualan</td>
+                                            <td>Rp. {{price.total_transaksi | currency : "" : 0}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+
+        <div ng-hide="hide_report">
+            <div>
+                <section class="box ">
+                    <header class="panel_header">
+                        <h2 class="title pull-left">Semua Transaksi</h2>
+                    </header>
+                    <div class="content-body padding-bottom-0">
+                        <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+                            <div id="user_table_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="dataTables_length" id="user_table_length">
+                                            <label style="font-weight: normal">Show 
+
+                                                <select name="user_table_length" aria-controls="user_table" class="form-control input-sm" ng-model="form.much" style="margin: 3px;" ng-change="filter()">
+                                                    <option value="1">1</option>
+                                                    <option value="5">5</option>
+                                                    <option value="10">10</option>
+                                                    <option value="25">25</option>
+                                                    <option value="50">50</option>
+                                                    <option value="100">100</option>
+                                                </select>  
+                                                <select name="user_table_length" aria-controls="user_table" class="form-control input-sm" ng-model="form.order"ng-change="filter()">
+                                                    <option value="desc">Terbaru</option>
+                                                    <option value="asc">Terlama</option>
+                                                </select>
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div id="user_table_filter" class="dataTables_filter" style="float: right;">
+                                            <form ng-submit="search()">
+                                                <label style="font-weight: normal">Search : 
+
+                                                    <select name="user_table_length" aria-controls="user_table" class="form-control input-sm" ng-model="form.field_search" style="margin: 3px;" ng-change="filter()">
+                                                        <option value="tb_user.nama">Nama</option>
+                                                        <option value="tb_produk.nama_produk">Produk</option>
+                                                    </select>
+                                                </label><input type="search"  ng-model="form.search" class="form-control input-sm" placeholder="" aria-controls="user_table">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:5%">No</th>
+                                            <th style="width:13%">Nama</th>
+                                            <th style="width:5%">Produk</th>
+                                            <th style="width:5%">Tanggal</th>
+                                            <th style="width:8%">Kuantitas</th>
+                                            <th style="width:20%">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr ng-repeat="row in datass">
+                                            <td>{{$index+1}}</td>
+                                            <td>{{row.nama}}</td>  
+                                            <td>{{row.nama_produk}}</td>  
+                                            <td>
+                                                {{row.tgl_konfirm}}
+                                            </td>
+                                            <td>
+                                                {{row.kuantitas}}
+                                            </td>
+                                            <td>Rp. {{row.total_produks | currency : "" : 0}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" ng-click="selectPage(currentPage)"></uib-pagination>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+    </div>
+</div>

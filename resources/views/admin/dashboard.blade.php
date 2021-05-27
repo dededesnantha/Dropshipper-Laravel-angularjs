@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>CMS PHARMAPP</title>
-    <meta name="description" content="AngularJs Bootstrap Admin Theme, Angular, Admin, Admin theme">
+    <title>Admin Dropshippers</title>
+    <meta name="description" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon" />
@@ -80,6 +80,8 @@
     <script src="{{asset('app/js/controllers/bootstrap.js')}}"></script>
     <!-- App JS - End -->
     <script src="{{asset('bower_components/Chart.js/Chart.js')}}"></script>
+    <!-- chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
 </body>
 

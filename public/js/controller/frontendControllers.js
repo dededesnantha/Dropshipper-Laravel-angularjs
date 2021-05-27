@@ -994,7 +994,7 @@ myApp.controller('CartController', ['$scope', '$http','SweetAlert','$location','
 	}
 }]);
 
-myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$location','$routeParams','$document','$uibModal','$cookies', function($scope, $http, SweetAlert, $location, $routeParams, $document, $uibModal, $cookies){
+myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$location','$routeParams','$document','$uibModal','$cookies','$rootScope', function($scope, $http, SweetAlert, $location, $routeParams, $document, $uibModal, $cookies,$rootScope){
 	$scope.load_sign();
 	$scope.url = "Checkout";
 	$scope.text_kurir = true
@@ -1004,17 +1004,23 @@ myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$locatio
 	$scope.subtotal = 0;
 	$scope.notif = {}
 	$scope.notif.kurir = true;
+
+
 	// get user
 	$scope.get_user = function(){
-		$http.post(base_url+'user',$scope.user).then(function(data) {
-	              $scope.user_datass = data.data;
-	              $scope.user_datass.telephone =$scope.user_datass.telephone
-	              $scope.get_kabupaten($scope.user_datass.id_provinsi)
-	              $scope.get_kecamatan($scope.user_datass.id_kabupaten)
-	              $scope.src = base_url+'image/'+$scope.user_datass.foto_user;
-	    }, function(x) {
-	            SweetAlert.swal("Terjadi Kesalahan!", "error")
-	    });
+		$http.get(base_url+'api/session_user').then(function(response){
+			$rootScope.user = response.data;
+			$http.post(base_url+'user',$scope.user).then(function(data) {
+		              $scope.user_datass = data.data;
+		              $scope.user_datass.telephone =$scope.user_datass.telephone
+		              $scope.get_kabupaten($scope.user_datass.id_provinsi)
+		              $scope.get_kecamatan($scope.user_datass.id_kabupaten)
+		              $scope.src = base_url+'image/'+$scope.user_datass.foto_user;
+		    }, function(x) {
+		            SweetAlert.swal("Terjadi Kesalahan!", "error")
+		    });
+		});
+
 	}
 	$scope.get_user();
     $http.get(base_url+'provinsi').then(function(data) {
@@ -1091,6 +1097,7 @@ myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$locatio
 	$scope.toggleOngkirDropdown = function($event){
 		$scope.text_kurir = false
 		$scope.showload = true
+
 		$http.post(base_url+'get_ongkir',$scope.user).then(function(data) {
 				$scope.text_kurir = true
 				$scope.showload = false
@@ -1202,6 +1209,9 @@ myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$locatio
 
 myApp.controller('ModalPembayaran', ['$scope', '$uibModalInstance', 'items', '$http','SweetAlert','$location','$route','$rootScope', 
 	function($scope, $uibModalInstance, items, $http,SweetAlert,$location,$route,$rootScope) {
+		$scope.text_kurir = true
+		$scope.showload = false
+
 		$http.get(base_url+'payment/'+items).then(function(data) {
 			$scope.total = data.data.total_transkasi;
 			$scope.id_transaksi = items; 
@@ -1210,10 +1220,16 @@ myApp.controller('ModalPembayaran', ['$scope', '$uibModalInstance', 'items', '$h
 		});
 
 	$scope.bayar = function(data){
-		$uibModalInstance.close();
+		$scope.text_kurir = false
+		$scope.showload = true
+		$scope.disabled = true
 		$scope.load_sign();
 		$http.post(base_url+'transaction/'+data).then(function(data) {
 			$location.path("/payment/"+items);
+			$scope.text_kurir = true
+			$scope.showload = false
+			$scope.disabled = false
+			$uibModalInstance.close();
 		}, function(x) {
 		});
 	};
@@ -1370,13 +1386,16 @@ myApp.controller('TrackController', ['$scope', '$http','SweetAlert','$location',
 	$scope.url = "Tracking";
 	$scope.datass = {};
 	$scope.url_img = base_url +'image/';
-	$scope.id_user = $scope.user.id_user;
-	$http.get(base_url+'detail/list/tracking/'+$scope.id_user).then(function(data) {
-		$scope.datass = data.data;
-		$scope.loading = false;
-	}, function(x) {
-		SweetAlert.swal("Terjadi Kesalahan!", "error")
-	});
+	$http.get(base_url+'api/session_user').then(function(response){
+		$scope.id_user = response.data.id_user;	
+		$http.get(base_url+'detail/list/tracking/'+$scope.id_user).then(function(data) {
+			$scope.datass = data.data;
+			$scope.loading = false;
+		}, function(x) {
+			SweetAlert.swal("Terjadi Kesalahan!", "error")
+		});
+	
+	})
 
 	$scope.tracking = function (id) {
 		$location.path("/tracking/"+id);
@@ -1626,4 +1645,26 @@ myApp.controller('RubahPasswordController', ['$scope', '$http','SweetAlert','$lo
 
 myApp.controller('SuceessController', ['$scope', '$http','SweetAlert','$location', '$routeParams','$uibModal','$timeout', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal, $timeout){
 	$scope.load_sign();
+}]);
+
+myApp.controller('TrackControllers', ['$scope', '$http','SweetAlert','$location', '$routeParams','$uibModal', function($scope, $http, SweetAlert, $location, $routeParams, $uibModal){
+	$scope.load_sign();
+	$scope.url = "Daftar Transaksi";
+	$scope.datass = {};
+
+	$http.get(base_url+'api/session_user').then(function(response){
+		$scope.id_user = response.data.id_user;
+		
+		$http.get(base_url+'detail/list/tracking/success/'+$scope.id_user).then(function(data) {
+			$scope.datass = data.data;
+			$scope.loading = false;
+		}, function(x) {
+			SweetAlert.swal("Terjadi Kesalahan!", "error")
+		});
+	
+	})
+
+	$scope.tracking = function (id) {
+		$location.path("/tracking/"+id);
+	}
 }]);

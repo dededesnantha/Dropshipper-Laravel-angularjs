@@ -92,6 +92,8 @@ Route::get('to_update_transaksi','TransaksiController@to_update_transaksi');
 // tracking
 Route::get('detail/list/tracking/{id}','TrackingController@get');
 Route::get('detail/list/tracking/transaksi/{id}','TrackingController@get_tracking');
+Route::get('detail/list/tracking/success/{id}','TrackingController@get_success');
+
 Route::get('get/count/track','UserDropshipperController@count_track');
 // upload gambar
 Route::post('upload/gambar','upload\UploadImage@image_user');

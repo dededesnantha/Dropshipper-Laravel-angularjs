@@ -1,0 +1,43 @@
+<div class='content-wrapper' ng-controller="GrafikPenjualan">
+	<div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <section class="box">
+                    <header class="panel_header">
+                        <h2 class="title pull-left">Grafik Penjualan</h2>
+                    </header>
+                    <div class="content-body">
+                        <div class="row">
+                        <form role="form" ng-submit = "filter_grafik()">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="form-label" for="email-1">Tahun:</label>
+                                        <select class="form-control" ng-model="form.tahun">
+                                            <option value="" ng-selected="true">--  Tahun  --</option>
+                                            <option ng-repeat="key in tahun" value="{{key}}" >{{key}}</option>
+                                        </select>
+                                    </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group margin-bottom-0">
+                                        <button class="btn btn-secondary btn-icon  pull-right margin-bottom-15" type="submit" style="background-color: #9544bf;">
+                                            <i class="fa fa-random"></i> &nbsp; <span>Filter</span>
+                                        </button>
+                                    </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <section class="box ">
+                    <div class="content-body">
+                        <canvas id="userChart"></canvas>
+                    </div>
+                </section>
+            </div>
+         </div>
+    </div>
+</div>

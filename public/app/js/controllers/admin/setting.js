@@ -273,3 +273,173 @@ app.controller('AdminRubah', ['$scope', '$http','$log','$uibModal','notify','$st
       });         
     }
 }]);
+
+app.controller('DataPenjualan', ['$scope', '$http','$log','$uibModal','notify','$stateParams','$state','$location',
+  function ($scope, $http, $log, $modal,notify,$stateParams,$state,$location) {
+    $scope.load_sign();
+    $scope.hide_report = true;
+    $scope.form = {};
+    $scope.tahun = {};
+    var dt = new Date();
+  
+    for (var i = dt.getFullYear(); i >= 2020; i--) {
+      $scope.tahun[i]=i;
+    }
+
+    $scope.bulan = [
+    {no : '01' , name : 'January'},
+    {no : '02' , name : 'February'},
+    {no : '03' , name : 'March'},
+    {no : '04', name : 'April'},
+    {no : '05' , name : 'May'},
+    {no : '06' , name : 'June'},
+    {no : '07' , name : 'July'},
+    {no : '08' , name : 'August'},
+    {no : '09' , name : 'September'},
+    {no : '10' , name : 'October'},
+    {no : '11' , name : 'November'},
+    {no : '12' , name : 'December'}
+  ];
+
+  $scope.form={
+    much : '10',    
+    order : 'desc',
+    search : '',
+    field_search: 'tb_user.nama'
+  };
+
+  $scope.filter = function(paging = '') {  
+    if ( paging  == '') {
+      $scope.currentPage = 1;
+    }
+    
+    $scope.maxSize = 20;
+    $http.post(baseurl+'admin/penjualan/data?page='+$scope.currentPage,$scope.form,$scope.auth_config)
+    .then(function(data) {
+      $scope.price=data.data
+      $scope.hide_report = false;
+      $scope.datass=$scope.price.user.data
+      $scope.totalItems = $scope.price.user.total;
+    }, function(x) {
+      notify({ message:'Server Error', 
+        position:'right',
+        duration:'10000',
+        classes: 'alert-danger'
+      });
+    });
+    $scope.itemsPerPage = $scope.form.much;
+  }
+
+    $scope.currentPage = 1;
+
+    $scope.selectPage = function (pageNo) {
+      $scope.currentPage = pageNo;
+      $scope.filter(pageNo);
+
+    };
+
+    $scope.pageChanged = function() {
+      $scope.currentPage = $scope.currentPage;
+      $scope.filter($scope.currentPage);
+
+    };
+
+    $scope.search = function () {
+      $scope.filter($scope.currentPage, $scope.search_name);
+    }
+}]);
+
+app.controller('GrafikPenjualan', ['$scope', '$http','$log','$uibModal','notify','$stateParams','$state','$location',
+  function ($scope, $http, $log, $modal,notify,$stateParams,$state,$location) {
+  $scope.tahun = {};
+  $scope.form = {};
+  
+  var dt = new Date();
+    for (var i = dt.getFullYear(); i >= 2020; i--) {
+      $scope.tahun[i]=i;
+  }
+
+  $scope.filter_grafik = function () {
+     $http.post(baseurl+'admin/grafik',$scope.form,$scope.auth_config).then(function(data) {
+      $scope.datass = data.data;
+      $scope.datass.labels = ['Januari', 
+          'Februari',
+          'Maret',
+          'April',
+          'Mei',
+          'Juni',
+          'Juli',
+          'Augustus',
+          'September',
+          'October',
+          'November',
+          'Desember'
+          ];
+      $scope.datass.dataset = [$scope.datass.dataset.Januari, 
+          $scope.datass.dataset.Februari,
+          $scope.datass.dataset.Maret,
+          $scope.datass.dataset.April,
+          $scope.datass.dataset.Mei,
+          $scope.datass.dataset.Juni,
+          $scope.datass.dataset.Juli,
+          $scope.datass.dataset.Augustus,
+          $scope.datass.dataset.September,
+          $scope.datass.dataset.October,
+          $scope.datass.dataset.November,
+          $scope.datass.dataset.Desember
+          ];
+
+      var ctx = document.getElementById('userChart').getContext('2d');
+      
+      var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels:  $scope.datass.labels,
+          datasets: [
+          {
+            label: 'Total Transaksi',
+            backgroundColor: '#59c2e6',
+            data:  $scope.datass.dataset,
+          },
+          ]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+                callback: function(value) {if (value % 1 === 0) {return value;}}
+              },
+              scaleLabel: {
+                display: false
+              }
+            }]
+          },
+          legend: {
+            labels: {
+              fontColor: '#122C4B',
+              fontFamily: "'Muli', sans-serif",
+              padding: 25,
+              boxWidth: 25,
+              fontSize: 14,
+            }
+          },
+          layout: {
+            padding: {
+              left: 10,
+              right: 10,
+              top: 0,
+              bottom: 10
+            }
+          }
+        }
+      });
+    }, function(x) {
+      notify({ message:'Server Error',position:'right',duration:'10000',classes: 'alert-danger'});
+    });
+  };
+
+  
+
+}]);
+

@@ -118,6 +118,10 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 	// Push Notifikasi
 	Route::post('notifikasi/{id}','admin\NotifikasiController@push_notif');
+
+	// 
+	Route::post('penjualan/data','admin\PenjualanController@penjualan_data');
+	Route::post('grafik','admin\PenjualanController@grafik');
 	
 });
 

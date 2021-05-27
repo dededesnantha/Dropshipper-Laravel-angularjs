@@ -430,7 +430,27 @@ angular.module('app')
                                 }
                             ]
                         }
-                    })      
+                    }).state('app.setting.data_penjualan', {
+                        url: '/data_penjualan',
+                        templateUrl: 'partials/setting/data_penjualan.html',
+                        resolve: {
+                            deps: ['uiLoad',
+                            function(uiLoad) {
+                                return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css']);
+                            }
+                            ]
+                        }
+                    }).state('app.setting.demografi_penjualan', {
+                        url: '/demografi_penjualan',
+                        templateUrl: 'partials/setting/grafik.html',
+                        resolve: {
+                            deps: ['uiLoad',
+                            function(uiLoad) {
+                                return uiLoad.load(['bower_components/font-awesome/css/font-awesome.css']);
+                            }
+                            ]
+                        }
+                    })   
                     .state('access', {
                         abstract: true,
                         url: '/access',

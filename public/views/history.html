@@ -1,4 +1,4 @@
-<div ng-controller="TrackController">
+<div ng-controller="TrackControllers">
 	<div class="preloader" id="preloader" ng-show="loading">
         <div class="spinner-grow text-secondary" role="status">
             <div class="sr-only">Loading...</div>
@@ -58,29 +58,8 @@
 									</table>
 
 									<div class="row">
-										<div class="col-12 col-md-6 col-lg-6">
-											<table class="table mb-0">
-												<tbody>
-													<tr>
-														<td style="border-bottom: none;font-size: 16px"><strong>Alamat Pengirim</strong></td>
-														<td style="border-bottom: none"></td>
-													</tr>
-													<tr style="font-size: 14px">
-														<td style="border-bottom: none;">
-															{{ item.nama }}
-															<br>
-															{{ item.address }}, {{item.provinsi}}, {{item.kabupaten}}, {{item.kecamatan}}
-															<br>
-															{{item.telephone}}
-														</td>
-														<td style="border-bottom: none;"></td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-										<div class="col-12 col-md-6 col-lg-6">
-											<a class="btn btn-warning" href="#!order/{{item.id_transaksi}}" ng-if="item.status_transaksi == 'pembayaran'" ng-click="pembayaran()" style="float: right;margin: 20px 0px;">Konfirmasi Pembayaran</a>
-											<a class="btn btn-success" ng-if="item.status_transaksi !== 'pembayaran'" ng-click="tracking(item.id_transaksi)" style="float: right;margin: 20px 0px;">Lihat Tracking</a>
+										<div class="col-12 col-md-12 col-lg-12">
+											<a class="btn btn-success" href="#!home" style="float: right;margin: 20px 0px;">Belanja Lagi</a>
 										</div>
 									</div>
 								</div>

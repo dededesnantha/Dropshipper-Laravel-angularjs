@@ -58,6 +58,7 @@ class UserDropshipperController extends Controller
                     ->whereNotNull('metode_transaksi')
                     ->whereNotNull('tgl_transkasi')
                     ->orderBy('id_transaksi','DESC')
+                    ->where('tb_transaksi.status_transaksi','!=','Diterima')
                     ->where(function ($transaksi) {
                             $transaksi->where('tgl_expired', '>=', date('Y-m-d'))
                             ->orWhereNull('tgl_expired');

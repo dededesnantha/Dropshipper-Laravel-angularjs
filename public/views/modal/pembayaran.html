@@ -34,7 +34,7 @@
     		</div>
     	</div>
     </div>
-    <div ng-click="bayar(id_transaksi)" class=" col-12 col-md-12 btn btn-success" style="margin: 10px 0px">
-    	<a>Bayar</a>
-    </div>
+    <button ng-disabled="disabled" class="btn btn-success btn-lg btn-block w-100" ng-click="bayar(id_transaksi)"><span ng-show="text_kurir">Bayar</span> 
+      <div class="spinner-border text-light" role="status" ng-show="showload" style="width: 20px;height: 20px"><span class="sr-only">Loading...</span></div>
+    </button>
 </div>

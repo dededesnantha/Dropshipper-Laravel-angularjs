@@ -105,6 +105,11 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
         templateUrl:'../views/components/404.html',
     });
 
+    $routeProvider.when('/history',{
+        templateUrl:'../views/history.html',
+    });
+    
+
     $routeProvider.otherwise('/home');
     // $locationProvider.html5Mode({
     //   enabled: true,
