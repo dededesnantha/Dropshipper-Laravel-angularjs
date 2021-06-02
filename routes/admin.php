@@ -68,6 +68,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 	Route::post('all_kurir','admin\AdminController@all_kurir');
 	Route::get('get_kurir/{id}','admin\AdminController@get_kurir');
 	Route::post('update_kurir/{id}','admin\AdminController@update_kurir');
+	Route::delete('delete_kurir/{id}','admin\AdminController@delete_kurir');
 	
 	// ongkir
 	Route::post('add_ongkir','admin\AdminController@add_ongkir');

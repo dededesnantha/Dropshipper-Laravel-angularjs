@@ -62,7 +62,7 @@ app.controller('OngkirAll', ['$scope', '$http','$log','$uibModal','notify',
       modalInstance.result.then(function () {
           $scope.init();
           }, function () {
-            $scope.init();
+          $scope.init();
       });
     };
 
@@ -83,19 +83,55 @@ app.controller('OngkirAll', ['$scope', '$http','$log','$uibModal','notify',
             $scope.init();
       });
     };
+
+    // hapusongkir
+    $scope.hapus = function(id_kurir) {
+      $scope.datass = {}
+      var modalInstance = $modal.open({
+            templateUrl: 'partials/Hapusmodal.html',
+            controller: 'Hapus',
+            resolve: {
+              items: function () {
+                return id_kurir;
+              }
+            }
+          });
+          modalInstance.result.then(function () {
+            $http.delete(baseurl+'admin/delete_kurir/'+id_kurir,$scope.auth_config)
+            .then(function successCallback(response) {
+              notify({ message:'Berhasil Menghapus Data', 
+                      position:'right',
+                      duration:'10000',
+                      classes: 'alert-success'
+                    });   
+              $scope.init();
+            }, function errorCallback(response) {   
+              $scope.init();             
+                notify({ message:'Data Error', 
+                        position:'right',
+                        duration:'10000',
+                        classes: 'alert-danger'
+                });       
+            });   
+
+          }, function () {
+            
+          });
+    };
+
 }]);
 
 app.controller('AddKurir', ['$scope','$uibModalInstance','items','$http','$location','notify','$uibModal', function($scope, $modalInstance, items,$http,$location,notify,$modal) { 
     $scope.form ={};
 
     $scope.save = function () {
-      $http.post(baseurl+'admin/add_kurir/',$scope.form,$scope.auth_config)
+      $http.post(baseurl+'admin/add_kurir',$scope.form,$scope.auth_config)
           .then(function (response){
             notify({ message:'Berhasil Ditambah Kurir ', position:'right', duration:'10000', classes: 'alert-success' }); 
+            $modalInstance.close($scope.items);
            },function (error){
             notify({ message:'Data Error',  position:'right', duration:'10000', classes: 'alert-danger' }); 
            });
-      $modalInstance.close($scope.items);
     };
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');

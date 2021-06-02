@@ -757,6 +757,13 @@ class AdminController extends Controller
             'judul' => $post['judul']
         ]);
     }
+
+    public function delete_kurir(Request $request, $id)
+    {
+        tb_kurir::where('id_kurir', $id)->delete();
+        tb_ongkir::where('id_kurir', $id)->delete();
+       return response()->json(['status'=>'success'],200);
+    }
     
     public function add_ongkir(Request $request)
     {

@@ -164,7 +164,7 @@ app.controller('FormKabupaten', ['$scope','$stateParams', '$filter', '$http', 'e
       }
 
       $scope.maxSize = 20;
-    $http.post(baseurl+'admin/all_kabupaten/'+$stateParams.id+'/?page='+$scope.currentPage,$scope.form,$scope.auth_config)
+    $http.post(baseurl+'admin/all_kabupaten/'+$stateParams.id+'?page='+$scope.currentPage,$scope.form,$scope.auth_config)
           .then(function(data) {
               $scope.list=data.data
               $scope.users=$scope.list.data
@@ -295,7 +295,7 @@ app.controller('FormKecamatan', ['$scope','$stateParams', '$filter', '$http', 'e
       }
 
       $scope.maxSize = 20;
-    $http.post(baseurl+'admin/all_kecamatan/'+$stateParams.id+'/?page='+$scope.currentPage,$scope.form,$scope.auth_config)
+    $http.post(baseurl+'admin/all_kecamatan/'+$stateParams.id+'?page='+$scope.currentPage,$scope.form,$scope.auth_config)
           .then(function(data) {
               $scope.list=data.data
               $scope.users=$scope.list.data
