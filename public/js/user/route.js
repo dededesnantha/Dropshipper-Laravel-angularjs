@@ -109,6 +109,9 @@ myApp.config(['$routeProvider','$locationProvider',function($routeProvider,$loca
         templateUrl:'../views/history.html',
     });
     
+    $routeProvider.when('/register',{
+        templateUrl:'../views/register.html',
+    });
 
     $routeProvider.otherwise('/home');
     // $locationProvider.html5Mode({

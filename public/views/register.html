@@ -1,0 +1,63 @@
+<div class="login-wrapper d-flex align-items-center justify-content-center text-center" ng-controller="Register">
+      <!-- Background Shape-->
+      <div class="background-shape"></div>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 col-sm-9 col-md-7 col-lg-6 col-xl-5">
+            <!-- Register Form-->
+            <div class="register-form mt-5 px-4">
+              <form ng-submit="save()" name="profile">
+                <div class="form-group text-start mb-4"><span>Nama</span>
+                  <label for="nama"><i class="lni lni-user"></i></label>
+                  <input class="form-control" id="nama" name="nama" type="text" placeholder="example" ng-model="form.nama" required>
+                    <div ng-show="profile.nama.$error.required">
+                      <span class="notif-card" style="font-weight: none;font-size: 12px;position: relative;color: red">
+                       Nama Tidak Boleh Kosong
+                     </span>
+                   </div>
+                </div>
+                <div class="form-group text-start mb-4"><span>Email</span>
+                  <label for="email"><i class="lni lni-envelope"></i></label>
+                  <input class="form-control" id="email" type="email" name="email" placeholder="example@gmail.com" ng-model="form.email" required>
+                  <div ng-show="profile.email.$error.email || profile.email.$error.required">
+                      <span ng-show="profile.email.$error.required" class="notif-card" style="font-weight: none;font-size: 12px;position: relative;color: red">
+                       Email Tidak Boleh Kosong
+                     </span>
+                     <span ng-show="profile.email.$error.email" class="notif-card" style="font-weight: none;font-size: 12px;position: relative;color: red">
+                       Email Tidak Valid
+                     </span>
+                   </div>
+                </div>
+                <div class="form-group text-start mb-4"><span>Username</span>
+                  <label for="username"><i class="lni lni-user"></i></label>
+                  <input class="form-control" id="username" name="username" type="text" placeholder="example" ng-model="form.username" required>
+                    <div ng-show="profile.username.$error.required">
+                        <span class="notif-card" style="font-weight: none;font-size: 12px;position: relative;color: red">
+                         Username Tidak Boleh Kosong
+                       </span>
+                    </div>
+                </div>
+                <div class="form-group text-start mb-4"><span>Password</span>
+                  <label for="password"><i class="lni lni-lock"></i></label>
+                  <!-- <input class="form-control" id="password" type="password" placeholder="********************" ng-model="form.password"> -->
+                  <input class="form-control" type="password" name="password" id="password" placeholder="********************" ng-model="form.password" ng-minlength= "5" ng-maxlength= "20" ng-required="true">
+                  <div>
+                    <span ng-show="profile.password.$invalid" class="notif-card" style="font-weight: none;font-size: 12px;position: relative;color: red">
+                         Password harus minimal 5 karakter
+                    </span>
+                  </div>
+
+                </div>
+                <button class="btn btn-success btn-lg w-100" type="submit" ng-disabled="profile.password.$invalid">
+                  <span style="color: #fff;font-size: 16px" ng-hide="text">Daftar</span> 
+                  <div class="spinner-border text-black" role="status" style="width: 20px;height: 20px" ng-hide="load"><span class="sr-only">Loading...</span></div> 
+                </button>
+              </form>
+              <div style="margin-top: 10px">
+                <span>Kembali ke <a href="#!login" style="color: #ffaf00">Login</a> </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

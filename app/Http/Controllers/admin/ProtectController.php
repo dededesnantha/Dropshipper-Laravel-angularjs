@@ -42,23 +42,6 @@ class ProtectController extends Controller
         }
     }
 
-    public function register(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255',
-        'password' => 'required|string',
-        ]);
-        if ($validator->fails())
-        {
-            return response(['errors'=>$validator->errors()->all()], 422);
-        }
-        $request['password']=Hash::make($request['password']);
-        $user = User::create($request->toArray());
-        $response = ['success' => 'success'];
-        return response($response, 200);
-    }
-
     public function all_admin(Request $request)
     {
         $post = $request->input();

@@ -23,6 +23,42 @@ class UserDropshipperController extends Controller
     	return view('login');
     }
 
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+        'nama' => 'required|string|max:255',
+        'username' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255',
+        'password' => 'required|string',
+        ]);
+        if ($validator->fails()){
+            return response(['errors'=>$validator->errors()->all()], 422);
+        }else{
+            $cek = tb_user::where('username', $request['username'])->count();
+            if ($cek == 0) {
+                $details = [
+                    'nama' => $request['nama'],
+                    'email' => $request['email'],
+                    'username' => $request['username'],
+                    'password' => $request['password'],
+                    'profile_web' => $this->profile_web(),
+                ];
+                \Mail::to($request['email'])->send(new \App\Mail\MailSendLogin($details));
+                tb_user::create([
+                    'nama' => $request['nama'],
+                    'email' => $request['email'],
+                    'username' => $request['username'],
+                    'password' => bcrypt($request['password'])
+                ]);
+                $response = ['success' => 'Register Berhasil'];
+                return response($response, 200);
+            }else{  
+                $response = ['erorr' => 'Username dan Password Sudah Ada'];
+                return response($response, 200);
+            }
+        }
+    }
+
     public function login_send(Request $request)
     {
     	$post = $request->input();

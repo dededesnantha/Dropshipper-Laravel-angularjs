@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     });
 });
 
+Route::post('register_user', 'UserDropshipperController@register');
 Route::post('login_user', 'UserDropshipperController@login_send');
 Route::post('logout', 'UserDropshipperController@logout');
 

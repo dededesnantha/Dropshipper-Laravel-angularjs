@@ -33,6 +33,54 @@ myApp.controller('login', ['$scope', '$http','SweetAlert', function($scope, $htt
 	}
 }]);
 
+myApp.controller('Register', ['$scope', '$http','SweetAlert','$location','$window', function($scope, $http, SweetAlert, $location, $window){
+	$scope.form = {};
+	$scope.load = true;
+	$scope.text = false;
+	$scope.save = function () {
+		$scope.load = false;
+		$scope.text = true;
+		$http.post(base_url+'api/register_user', {nama:$scope.form.nama, email: $scope.form.email, username: $scope.form.username, password: $scope.form.password})
+      	.then(function(response) {
+      		$scope.load = true;
+			$scope.text = false;
+			if (response.data.success) {
+				SweetAlert.swal({
+					  title: 'Register Berhasil',
+					  text: 'Anda Akan Dialihkan Kehalaman Login',
+					  timer: 3000,
+					  buttons: false,
+					  type: "success",
+					  showCancelButton: false,
+					  showConfirmButton: false,
+					})
+				setTimeout(function () {
+			       $location.path('/login').replace();
+          			$scope.$apply();
+			        $scope.load = true;
+					$scope.text = false;
+			    }, 3000);
+			}else if (response.data.erorr) {
+				SweetAlert.swal({
+					  title: 'Register Gagal',
+					  text: response.data.erorr,
+					  timer: 3000,
+					  buttons: false,
+					  type: "warning",
+					  showCancelButton: false,
+					  showConfirmButton: false,
+					})
+			}
+
+      }, function(x) {
+      		$scope.load = true;
+			$scope.text = false;
+      		SweetAlert.swal("Register Gagal!", "Terjadi Kesalahan", "error")
+      });
+
+	}
+}]);
+
 myApp.controller('HomeController', ['$scope', '$http','SweetAlert','$location','$route','$uibModal','$rootScope',
 	function($scope, $http, SweetAlert, $location, $route, $uibModal, $rootScope){
 
