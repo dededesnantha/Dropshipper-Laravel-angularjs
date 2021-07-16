@@ -16,6 +16,9 @@ use App\Models\tb_transaksi;
 use Illuminate\Support\Facades\Crypt;
 use Response;
 
+use Cookie;
+
+use Kavist\RajaOngkir\Facades\RajaOngkir;
 
 class HomeController extends Controller
 {
@@ -196,14 +199,43 @@ class HomeController extends Controller
 
     public function get_ongkir(Request $request)
     {
-       $post = $request->input();
+        $post = $request->input();
         $get_user = tb_user::where('id_user', $post['id_user'])->select('id_provinsi','id_kabupaten','id_kecamatan')->first();
-        $data['kurir'] = tb_ongkir::where('tb_ongkir.id_kecamatan','=',$get_user->id_kecamatan)
-                                    ->join('tb_kecamatan', 'tb_ongkir.id_kecamatan','=','tb_kecamatan.id_kecamatan')
-                                    ->join('tb_kurir','tb_ongkir.id_kurir','=','tb_kurir.id_kurir')
-                                    ->select('tb_ongkir.id_ongkir','tb_ongkir.harga','tb_kurir.judul')
-                                    ->get();
-       return Response::json($data,200);
+        
+        if (Cookie::get('cart')) {
+            $cookie_data = stripslashes(Cookie::get('cart'));
+            $cart_data = json_decode($cookie_data, true);
+            
+            $produk = [];
+            
+            foreach ($cart_data as $key => $datas) {
+                $produk['qty'] = $datas['kuantitas'];
+            }
+            $data['jne'] = RajaOngkir::ongkosKirim([
+                'origin'        => 128,    
+                'destination'   => $get_user->id_kabupaten,     
+                'weight'        => 150 * $produk['qty'],   
+                'courier'       => 'jne'   
+            ])->get();
+            
+            $data['tiki'] = RajaOngkir::ongkosKirim([
+                'origin'        => 128,
+                'destination'   => $get_user->id_kabupaten,
+                'weight'        => 150 * $produk['qty'], 
+                'courier'       => 'tiki'
+            ])->get();
+            $data['pos'] = RajaOngkir::ongkosKirim([
+                'origin'        => 128,   
+                'destination'   => $get_user->id_kabupaten,    
+                'weight'        => 150 * $produk['qty'],  
+                'courier'       => 'pos'  
+            ])->get();
+
+        return Response::json($data,200);
+        }else{
+        $data = [];
+        return Response::json($data,400);
+        }
     }
 
     public function search($search)

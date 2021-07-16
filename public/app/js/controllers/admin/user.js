@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('UserAll', ['$scope', '$http','$log','$uibModal','notify','$timeout',
-  function ($scope, $http, $log, $modal,notify,$timeout) {
+app.controller('UserAll', ['$scope', '$http','$log','$uibModal','notify',
+  function ($scope, $http, $log, $modal,notify) {
   	$scope.datass = [];
 
     $scope.form={
@@ -66,18 +66,23 @@ app.controller('UserAll', ['$scope', '$http','$log','$uibModal','notify','$timeo
 
           modalInstance.result.then(function () {
             $http.delete(baseurl+'admin/user_delete/'+id,$scope.auth_config)
-            .then(function successCallback(response) {
-              $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');
+            .then(function(response) {
               $scope.init();
-              notify({ message:'Berhasil Menghapus Data', 
-                      position:'right',
-                      duration:'10000',
-                      classes: 'alert-success'
-                    });   
-              $scope.init();  
-            }, function errorCallback(response) {   
-              $scope.init();
-            $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');                 
+               if (response.data.status == 'error') {
+                notify({ message:'Data Tidak Boleh Dihapus Dikarenakan Data User Masih Ada Transaksi', 
+                  position:'right',
+                  duration:'10000',
+                  classes: 'alert-warning'
+                });  
+              }else{
+                notify({ message:'Data User Berhasil Dihapus', 
+                  position:'right',
+                  duration:'10000',
+                  classes: 'alert-success'
+                }); 
+              }   
+            }, function(response) {   
+              $scope.init();          
                 notify({ message:'Data Error', 
                         position:'right',
                         duration:'10000',

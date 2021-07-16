@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\admin;
 
+use Kavist\RajaOngkir\Facades\RajaOngkir;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\kategori;
@@ -325,14 +327,19 @@ class AdminController extends Controller
 
     public function produk_delete($id)
     {
-        $gambar_check = tb_produk_gambar::select('gambar')->where('id_produk',$id)->get();  
-        foreach ($gambar_check as $key => $rows) {
-            if (file_exists(public_path('image/'.$rows['gambar']))) {
-                @unlink(public_path('image/'.$rows['gambar']));
-            }        
-        }      
-        tb_produk_gambar::where('id_produk',$id)->delete();
-        return produk::where('id',$id)->delete();
+        $cek_transaksi = tb_order::join('tb_produk', 'tb_order.id_produk','=','tb_produk.id')->where('tb_order.id_produk',$id)->count();
+        if ($cek_transaksi == 0) {
+            $gambar_check = tb_produk_gambar::select('gambar')->where('id_produk',$id)->get();  
+            foreach ($gambar_check as $key => $rows) {
+                if (file_exists(public_path('image/'.$rows['gambar']))) {
+                    @unlink(public_path('image/'.$rows['gambar']));
+                }        
+            }      
+            tb_produk_gambar::where('id_produk',$id)->delete();
+            return produk::where('id',$id)->delete();
+        }else{
+            return response()->json(['status'=>'error'],402);
+        }
     }
 
     // produk gambar
@@ -563,6 +570,24 @@ class AdminController extends Controller
 
     public function all_provinsi(Request $request)
     {
+        // $daftarProvinsi = RajaOngkir::dariProvinsi()->all();
+        
+        // // foreach ($daftarProvinsi as $provinceRow) {
+        // //     tb_provinsi::create([
+        // //         'id_provinsi' => $provinceRow['province_id'],
+        // //         'provinsi'=> $provinceRow['province'],
+        // //     ]);
+
+        // //     $daftarKota = RajaOngkir::kota()->dariProvinsi($provinceRow['province_id'])->get();
+        // //     foreach ($daftarKota as $cityRow) {
+        // //         tb_kabupaten::create([
+        // //             'id_kabupaten'  => $cityRow['city_id'],
+        // //             'id_provinsi'   => $provinceRow['province_id'],
+        // //             'kabupaten'          => $cityRow['city_name'],
+        // //         ]);
+        // //     }
+        // // }
+
         $post = $request->input();
         
         if ($post['search'] == NULL) {

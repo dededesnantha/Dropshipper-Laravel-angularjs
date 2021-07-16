@@ -290,15 +290,7 @@ angular.module('app')
                     })
                     .state('app.user.list', {
                         url: '/user-all',
-                        templateUrl: 'partials/user/user-all.html',
-                        resolve: {
-                            deps: ['$ocLazyLoad',
-                                function($ocLazyLoad) {
-                                    return $ocLazyLoad.load('cgNotify').then(
-                                    );
-                                }
-                            ]
-                        }
+                        templateUrl: 'partials/user/user-all.html'
                     })
                     .state('app.user.user_add', {
                         url: '/user_add',

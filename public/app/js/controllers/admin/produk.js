@@ -70,7 +70,6 @@ app.controller('ProdukAll', ['$scope', '$http','$log','$uibModal','notify',
           modalInstance.result.then(function () {
             $http.delete(baseurl+'admin/produk_delete/'+id,$scope.auth_config)
             .then(function successCallback(response) {
-              $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');
               $scope.init();
               notify({ message:'Berhasil Menghapus Data', 
                       position:'right',
@@ -79,13 +78,22 @@ app.controller('ProdukAll', ['$scope', '$http','$log','$uibModal','notify',
                     });   
               $scope.init();  
             }, function errorCallback(response) {   
-              $scope.init();
-            $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');                 
+              if (response.data.status == 'error') {
+                $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');                 
+                notify({ message:'Data Tidak Boleh Dihapus Dikarenakan Data Produk Masih Ada Transaksi', 
+                  position:'right',
+                  duration:'10000',
+                  classes: 'alert-warning'
+                });  
+              }else{
+                $('#load').addClass('glyphicon glyphicon-floppy-saved').removeClass('fa fa-circle-o-notch fa-spin');                 
                 notify({ message:'Data Error', 
-                        position:'right',
-                        duration:'10000',
-                        classes: 'alert-danger'
+                  position:'right',
+                  duration:'10000',
+                  classes: 'alert-danger'
                 });       
+              }
+              $scope.init();
             });   
 
           }, function () {

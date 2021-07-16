@@ -78,16 +78,53 @@
                   </div>
                     <div ng-if="ongkirs" class="list_ongkir">
                       <div class="add_kurir">
-                        <p><strong>Kurir Pilihan</strong></p>
-                        <p class="font-size-ongkir">{{ongkirs.ongkir}} (Rp. {{ongkirs.harga | currency : "" : 0}})</p>
+                        <p><strong>Kurir Pilihan : <span class="font-size-ongkir" style="text-transform: uppercase;">{{ongkirs.ongkir}}</span></strong></p>
+                        <p><b>{{ongkirs.service}}</b></p>
+                        <p>(Rp. {{ongkirs.harga | currency : "" : 0}}) ({{ongkirs.hari}}) <span ng-if="ongkirs.ongkir !== 'pos'"> Hari</span></p>
                       </div>
                     </div>
                     <div class="height-ongkir">
                       <div class="list-ongkris">
-                        <ul class="list-group menu" ng-show="showJne" ng-repeat="items in kurir">
-                          <li class="list-group-item list-kurir"  ng-click='get_kurir(items.id_ongkir)'>
-                            <strong>{{items.judul}}</strong>
-                            <p>Rp. {{items.harga | currency : "" : 0}}</p>
+                        <!-- JNE -->
+                        <ul class="list-group menu" ng-show="showJne" ng-repeat="kurir in kurir.jne">
+                          <li>
+                              <li ng-repeat="servicess in kurir.costs">
+                                  <span class="list-group-item list-kurir" ng-repeat="price in servicess.cost" ng-click='get_kurir(kurir.code, servicess.service, price.value, price.etd)'>
+                                   <span style="text-transform: uppercase;">{{kurir.code}} :</span> 
+                                   <div>
+                                      <strong>{{servicess.service}}</strong>
+                                   </div>
+                                   <p>Rp. {{price.value | currency : "" : 0}} ({{price.etd}} Hari)</p>
+                                 </span>
+                              </li>
+                          </li>
+                        </ul>
+                        <!-- POS -->
+                        <ul class="list-group menu" ng-show="showJne" ng-repeat="kurir in kurir.pos">
+                          <li>
+                              <li ng-repeat="servicess in kurir.costs">
+                                  <span class="list-group-item list-kurir" ng-repeat="price in servicess.cost" ng-click='get_kurir(kurir.code, servicess.service, price.value, price.etd)'>
+                                   <span style="text-transform: uppercase;">{{kurir.code}} :</span> 
+                                   <div>
+                                      <strong>{{servicess.service}}</strong>
+                                   </div>
+                                   <p>Rp. {{price.value | currency : "" : 0}} ({{price.etd}})</p>
+                                 </span>
+                              </li>
+                          </li>
+                        </ul>
+                        <!-- Tiki -->
+                        <ul class="list-group menu" ng-show="showJne" ng-repeat="kurir in kurir.tiki">
+                          <li>
+                              <li ng-repeat="servicess in kurir.costs">
+                                  <span class="list-group-item list-kurir" ng-repeat="price in servicess.cost" ng-click='get_kurir(kurir.code, servicess.service, price.value, price.etd)'>
+                                   <span style="text-transform: uppercase;">{{kurir.code}} :</span> 
+                                   <div>
+                                      <strong>{{servicess.service}}</strong>
+                                   </div>
+                                   <p>Rp. {{price.value | currency : "" : 0}} ({{price.etd}} Hari)</p>
+                                 </span>
+                              </li>
                           </li>
                         </ul>
                       </div>

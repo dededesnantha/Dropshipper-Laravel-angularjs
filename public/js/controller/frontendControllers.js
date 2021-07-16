@@ -624,13 +624,14 @@ myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$loc
 	});
 
 	$scope.get_kurir = function(id) {
+		$scope.loading = true;
 		$http.post(base_url+'ongkos_kirim/kurir/'+id).then(function(data) {
 			$scope.kurir = data.data;
-			$scope.getTotal()
 			angular.forEach($scope.kurir, function (values, key) {
 				values['totals'] = values['harga'] + $scope.produks.totals;
             });
 			$scope.list_kurirs = true;
+			$scope.loading = false;
 		}, function(x) {
 			SweetAlert.swal("Terjadi Kesalahan!","","error")
 		});
@@ -687,7 +688,6 @@ myApp.controller('SingleProdukController', ['$scope', '$http','SweetAlert','$loc
 	    	$scope.produks.totals += $scope.produks.harga * $scope.datass.qty;
 	    }
 	}
-
 	$scope.addchart = function(){
 	if ($scope.produks.warna.length === 0 && $scope.produks.size.length === 0) {
   		$scope.datass.colors = '';
@@ -1146,14 +1146,6 @@ myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$locatio
 		$scope.text_kurir = false
 		$scope.showload = true
 
-		$http.post(base_url+'get_ongkir',$scope.user).then(function(data) {
-				$scope.text_kurir = true
-				$scope.showload = false
-				$scope.kurir = data.data.kurir;
-		}, function(x) {
-		     SweetAlert.swal("Terjadi Kesalahan!","","error")
-		});
-
 		$event.stopPropagation()
 		if (!$scope.showJne) {
 			var closeMe = function(scope) { 
@@ -1165,7 +1157,14 @@ myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$locatio
 					closeMe($scope)
 				})
 			}); 
-		$scope.showJne = true;
+			$http.post(base_url+'get_ongkir',$scope.user).then(function(data) {
+					$scope.text_kurir = true
+					$scope.showload = false
+					$scope.kurir = data.data;
+					$scope.showJne = true;
+			}, function(x) {
+			     SweetAlert.swal("Terjadi Kesalahan!","","error")
+			});
 		} else {
 			$scope.showJne = false;
 			$scope.text_kurir = true
@@ -1173,42 +1172,43 @@ myApp.controller('CheckoutController', ['$scope', '$http','SweetAlert','$locatio
 		} 
 	}
 	
-	$http.post(base_url+'get_ongkir',$scope.user).then(function(data) {
-		$scope.kurir = data.data.kurir;
-		$scope.cookies_kurir();
-		$scope.getTotal();
-	}, function(x) {
-	});
+	// $http.post(base_url+'get_ongkir',$scope.user).then(function(data) {
+	// 	$scope.kurir = data.data;
+	// 	//$scope.cookies_kurir();
+	// 	$scope.getTotal();
+	// }, function(x) {
+	// });
 
-	$scope.cookies_kurir = function($event){
-	if ($cookies.get('ongkirs') !=='') {
-		angular.forEach($scope.kurir, function (values, key) {
-			if (values.id_ongkir == $cookies.get('ongkirs')) {
-				$scope.ongkirs = {
-					id_ongkir: values['id_ongkir'],
-					ongkir: values['judul'],
-					harga: values['harga']
-				}
-			}
-		});
-	$scope.subtotal = $scope.totals_produk + $scope.ongkirs.harga
-		}
-	};
+	// $scope.cookies_kurir = function($event){
+	// if ($cookies.get('ongkirs') !=='') {
+	// 	angular.forEach($scope.kurir, function (values, key) {
+	// 		if (values.id_ongkir == $cookies.get('ongkirs')) {
+	// 			$scope.ongkirs = {
+	// 				id_ongkir: values['id_ongkir'],
+	// 				ongkir: values['judul'],
+	// 				harga: values['harga']
+	// 			}
+	// 		}
+	// 	});
+	// $scope.subtotal = $scope.totals_produk + $scope.ongkirs.harga
+	// 	}
+	// };
 	
 
-	$scope.get_kurir = function (e) {
+	$scope.get_kurir = function ($kurir,$service, $harga, $hari) {
 		$scope.notif.kurir = true;
-    	angular.forEach($scope.kurir, function (values, key) {
-			if (values.id_ongkir == e) {
+  //   	angular.forEach($scope.kurir, function (values, key) {
+		// 	if (values.id_ongkir == e) {
 				$scope.ongkirs = {
-					id_ongkir: values['id_ongkir'],
-					ongkir: values['judul'],
-					harga: values['harga']
+					ongkir: $kurir,
+					service: $service,
+					harga: $harga,
+					hari: $hari
 				}
-				$cookies.put('ongkirs', $scope.ongkirs.id_ongkir);
-    		}
-	    });
-		$scope.subtotal = $scope.totals_produk + $scope.ongkirs.harga
+		$cookies.put('j_ongkirs', $scope.ongkirs);
+  //   		}
+	 //    });
+	$scope.subtotal = $scope.totals_produk + $scope.ongkirs.harga
 	};
 	
 

@@ -91,7 +91,13 @@ class UserController extends Controller
 
     public function delete_user($id)
     {
-        return tb_user::where('id_user', $id)->delete();
+        $cek_transaksi = DB::table('tb_transaksi')->join('tb_user', 'tb_transaksi.id_user','=','tb_user.id_user')->where('tb_transaksi.id_user',$id)->count();
+        if ($cek_transaksi == 0) {
+            return tb_user::where('id_user', $id)->delete();
+        }else {
+            return response(['status'=>'error']);
+
+        }
     }
     
 }
